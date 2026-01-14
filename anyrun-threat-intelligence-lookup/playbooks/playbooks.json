@@ -1,0 +1,2645 @@
+{
+  "type": "workflow_collections",
+  "data": [
+    {
+      "@type": "WorkflowCollection",
+      "name": "Sample - ANY.RUN Threat Intelligence Lookup - 1.0.0",
+      "description": "Sample playbooks for \"ANY.RUN Threat Intelligence Lookup\" connector. If you are planning to use any of the sample playbooks in your environment, ensure that you clone those playbooks and move them to a different collection, since the sample playbook collection gets deleted during connector upgrade and delete.",
+      "visible": true,
+      "image": null,
+      "uuid": "6ebc7102-7fa9-40d0-bfdc-2762aa5c9cd7",
+      "id": 138,
+      "deletedAt": null,
+      "importedBy": [],
+      "recordTags": [
+        "anyrun-threat-intelligence-lookup"
+      ],
+      "workflows": [
+        {
+          "@type": "Workflow",
+          "triggerLimit": null,
+          "name": "File > ANY.RUN > Enrichment",
+          "aliasName": null,
+          "tag": "#ANY.RUN Threat Intelligence Lookup",
+          "description": "Retrieve the reputation of file using ANY.RUN Threat Intelligence Lookup",
+          "isActive": false,
+          "debug": false,
+          "singleRecordExecution": false,
+          "remoteExecutableFlag": false,
+          "parameters": [],
+          "synchronous": false,
+          "lastModifyDate": 1768383694,
+          "collection": "/api/3/workflow_collections/6ebc7102-7fa9-40d0-bfdc-2762aa5c9cd7",
+          "versions": [],
+          "triggerStep": "/api/3/workflow_steps/a123ecd3-33fd-41fc-8a88-380a7a77d04b",
+          "steps": [
+            {
+              "@type": "WorkflowStep",
+              "name": "Compute Hash",
+              "description": null,
+              "arguments": {
+                "params": {
+                  "iri": "{{vars.input.records[0]['@id']}}"
+                },
+                "version": "3.7.0",
+                "connector": "cyops_utilities",
+                "operation": "download_file_from_cyops",
+                "operationTitle": "File: Compute Hash",
+                "step_variables": []
+              },
+              "status": null,
+              "top": "403",
+              "left": "300",
+              "stepType": "/api/3/workflow_step_types/0109f35d-090b-4a2b-bd8a-94cbc3508562",
+              "group": null,
+              "uuid": "58b2a566-98f1-4434-aabc-7d4734e85b69"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Configuration",
+              "description": null,
+              "arguments": {
+                "indicator_IRI": "{{vars.input.params['indicator_IRI'] | ternary(vars.input.params['indicator_IRI'],vars.input.records[0]['@id'])}}",
+                "indicator_value": "{{vars.steps.Compute_Hash.data.sha256}}"
+              },
+              "status": null,
+              "top": "538",
+              "left": "300",
+              "stepType": "/api/3/workflow_step_types/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
+              "group": null,
+              "uuid": "4576ff74-ca77-4d29-b6a2-6d0658a34583"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Create Summary",
+              "description": null,
+              "arguments": {
+                "params": {
+                  "value": "<table class=\"table\" border=\"1\">\n<tbody>\n<tr>\n        <th colspan=\"5\" class=\"no-background padding-0\">\n            <div class=\"font-size-11 ng-binding padding-bottom-sm\">\n                <h4 style=\"color: orange;\"\n                    class=\"body-default-bgcolor margin-bottom-0 padding-bottom-md padding-left-md padding-top-md text-align-left\">\n                    ANY.RUN TI Lookup Summary</h4>\n            </div>\n        </th>\n    </tr>\n<tr>\n<td width=\"200\">Indicator</td>\n<td>{{vars.indicator_value}}</td>\n</tr>\n<tr>\n<tr>\n<td width=\"200\">Verdict</td>\n<td>{{vars.threat_level}}</td>\n</tr>\n<tr>\n<td>LastSeen</td>\n<td>{{vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.lastSeen}}</td>\n</tr>\n<tr>\n<td>Tags</td>\n<td>{{vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.tags}}</td>\n</tr>\n<td>Affected industries</td>\n<td>{{vars.steps.Submit_Indicator_To_TI_Lookup.data.industries\n   | map(attribute='industryName')\n   | list }}</td>\n</tr>\n<tr>\n<td>Link to TI Lookup request</td>\n<td><a href=\"https://intelligence.any.run/analysis/lookup#{% raw %}{%22query%22:%22{% endraw %}{{ vars.indicator_value | default(vars.steps.Compute_Hash.data.sha256, true) }}{% raw %}%22,%22dateRange%22:180}{% endraw %}\">Open ANY.RUN</td> \n</tr>\n</tbody>\n</table>"
+                },
+                "version": "3.7.0",
+                "connector": "cyops_utilities",
+                "operation": "format_richtext",
+                "operationTitle": "Utils: Format as RichText",
+                "step_variables": []
+              },
+              "status": null,
+              "top": "1078",
+              "left": "475",
+              "stepType": "/api/3/workflow_step_types/0109f35d-090b-4a2b-bd8a-94cbc3508562",
+              "group": null,
+              "uuid": "27de45dc-1836-4719-a3c9-8974c414c40f"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Find Existing Description",
+              "description": null,
+              "arguments": {
+                "query": {
+                  "sort": [],
+                  "limit": 30,
+                  "logic": "AND",
+                  "filters": [
+                    {
+                      "type": "primitive",
+                      "field": "id",
+                      "value": "{{vars.input.records[0].id}}",
+                      "operator": "eq",
+                      "_operator": "eq"
+                    }
+                  ],
+                  "__selectFields": [
+                    "description"
+                  ]
+                },
+                "module": "indicators?$limit=30",
+                "ignore_errors": true,
+                "checkboxFields": true,
+                "step_variables": []
+              },
+              "status": null,
+              "top": "1213",
+              "left": "475",
+              "stepType": "/api/3/workflow_step_types/b593663d-7d13-40ce-a3a3-96dece928770",
+              "group": null,
+              "uuid": "d066b3c5-d128-445c-97bc-0b955b8b8767"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Is Connector Health Check Available",
+              "description": null,
+              "arguments": {
+                "conditions": [
+                  {
+                    "option": "No",
+                    "default": true,
+                    "step_iri": "/api/3/workflow_steps/606b9a58-5179-47e4-bf0b-0c0394a25dad",
+                    "step_name": "No Operation"
+                  },
+                  {
+                    "option": "Yes",
+                    "step_iri": "/api/3/workflow_steps/a47943ec-7982-4492-90dc-f736adf2fef3",
+                    "condition": "{{ vars.steps.Submit_Indicator_To_TI_Lookup.status== \"Success\" }}",
+                    "step_name": "Set Parameters"
+                  }
+                ],
+                "step_variables": []
+              },
+              "status": null,
+              "top": "808",
+              "left": "300",
+              "stepType": "/api/3/workflow_step_types/12254cf5-5db7-4b1a-8cb1-3af081924b28",
+              "group": null,
+              "uuid": "f9cf2458-6b09-41e3-87e0-71bfc22192bd"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "No Operation",
+              "description": null,
+              "arguments": {
+                "params": [],
+                "version": "3.7.0",
+                "connector": "cyops_utilities",
+                "operation": "no_op",
+                "operationTitle": "Utils: No Operation",
+                "step_variables": []
+              },
+              "status": null,
+              "top": "943",
+              "left": "125",
+              "stepType": "/api/3/workflow_step_types/0109f35d-090b-4a2b-bd8a-94cbc3508562",
+              "group": null,
+              "uuid": "606b9a58-5179-47e4-bf0b-0c0394a25dad"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Return Output Data",
+              "description": null,
+              "arguments": {
+                "verdict": "{{vars.Reputation}}",
+                "cti_name": "ANY.RUN",
+                "cti_score": "{{vars.threat_level}}",
+                "source_data": "{{vars.source_data}}",
+                "field_mapping": "{ \"country\": {% if vars.steps.Submit_Indicator_To_TI_Lookup.data.destinationIPgeo[0] %}\"{{vars.steps.Submit_Indicator_To_TI_Lookup.data.destinationIPgeo[0]}}\"{% else %}{{None}}{% endif %}\n}",
+                "enrichment_summary": "{{vars.steps.Create_Summary.data['formatted_string']}}"
+              },
+              "status": null,
+              "top": "1483",
+              "left": "475",
+              "stepType": "/api/3/workflow_step_types/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
+              "group": null,
+              "uuid": "96a02f68-a533-4ab9-baca-998cb3ffbaef"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Set Parameters",
+              "description": null,
+              "arguments": {
+                "Reputation": "{%- set v = vars.threatlevel|string -%}\n{%- if v == '2' -%}Malicious{%- elif v == '1' -%}Suspicious{%- elif v == '3' -%}Good{%- else -%}No Reputation Available{%- endif -%}",
+                "source_data": "{\"ANY.RUN Threat Intelligence\": {{vars.steps.Submit_Indicator_To_TI_Lookup.data}}}",
+                "threat_level": "{%- set v = vars.threatlevel|string -%}\n{%- if v == '2' -%}Malicious{%- elif v == '1' -%}Suspicious{%- elif v == '3' -%}Whitelisted\n{%- elif v == '0' -%}Unknown{%- else -%}No TI Data for this request{%- endif -%}"
+              },
+              "status": null,
+              "top": "943",
+              "left": "475",
+              "stepType": "/api/3/workflow_step_types/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
+              "group": null,
+              "uuid": "a47943ec-7982-4492-90dc-f736adf2fef3"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Start",
+              "description": null,
+              "arguments": {
+                "__triggerLimit": true,
+                "step_variables": {
+                  "input": {
+                    "params": []
+                  }
+                },
+                "triggerOnSource": true,
+                "triggerOnReplicate": false
+              },
+              "status": null,
+              "top": "149",
+              "left": "300",
+              "stepType": "/api/3/workflow_step_types/b348f017-9a94-471f-87f8-ce88b6a7ad62",
+              "group": null,
+              "uuid": "a123ecd3-33fd-41fc-8a88-380a7a77d04b"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Submit Indicator To TI Lookup",
+              "description": null,
+              "arguments": {
+                "name": "ANY.RUN Threat Intelligence Lookup",
+                "config": "7d0efacc-7eda-4dd7-8b82-b85eebd70e7f",
+                "params": {
+                  "query": "{{vars.indicator_value}}",
+                  "lookup_depth": "180"
+                },
+                "version": "1.0.0",
+                "connector": "anyrun-threat-intelligence-lookup",
+                "operation": "get_intelligence",
+                "operationTitle": "Threat Intelligence IoC Lookup",
+                "pickFromTenant": false,
+                "step_variables": {
+                  "threatlevel": "{{vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.threatLevel}}"
+                }
+              },
+              "status": null,
+              "top": "673",
+              "left": "300",
+              "stepType": "/api/3/workflow_step_types/0bfed618-0316-11e7-93ae-92361f002671",
+              "group": null,
+              "uuid": "8c64c6de-8b47-4b8b-8025-ccf54d787959"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Update Indicator Description",
+              "description": null,
+              "arguments": {
+                "resource": {
+                  "__link": {
+                    "recordTags": "{{vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.tags | list }}"
+                  },
+                  "country": "{% if vars.steps.Submit_Indicator_To_TI_Lookup.data.destinationIPgeo[0] %}\n{{ vars.steps.Submit_Indicator_To_TI_Lookup.data.destinationIPgeo[0] }}\n {% endif %}",
+                  "reputation": "{{(\"IndicatorReputation\" | picklist(vars.Reputation))[\"@id\"]}}",
+                  "sourceData": "{{vars.source_data |toJSON}}",
+                  "description": "{%- set parts = [] -%}\n\n{%- if vars.item.description -%}\n  {%- set _ = parts.append(vars.item.description) -%}\n{%- endif -%}\n\n{%- if vars.steps.Find_Existing_Description\n      and vars.steps.Find_Existing_Description[0].description\n      and vars.steps.Find_Existing_Description[0].description not in parts -%}\n  {%- set _ = parts.append(vars.steps.Find_Existing_Description[0].description) -%}\n{%- endif -%}\n\n{%- if vars.steps.Create_Summary.data['formatted_string'] -%}\n  {%- set _ = parts.append(vars.steps.Create_Summary.data['formatted_string']) -%}\n{%- endif -%}\n\n{{ parts | unique | join('<br>') }}",
+                  "filehashMD5": "{% if vars.steps.Compute_Hash.data.sha256 is defined %} {{ vars.steps.Compute_Hash.data.md5 }} {% endif %}",
+                  "filehashSHA1": "{% if vars.steps.Compute_Hash.data.sha256 is defined %} {{ vars.steps.Compute_Hash.data.sha1 }} {% endif %}",
+                  "filehashSHA256": "{% if vars.steps.Compute_Hash.data.sha256 is defined %} {{ vars.steps.Compute_Hash.data.sha256 }} {% endif %}"
+                },
+                "_showJson": false,
+                "operation": "Append",
+                "collection": "{{vars.indicator_IRI}}",
+                "__recommend": [],
+                "ignore_errors": true,
+                "collectionType": "/api/3/indicators",
+                "fieldOperation": {
+                  "recordTags": "Append"
+                },
+                "step_variables": []
+              },
+              "status": null,
+              "top": "1348",
+              "left": "475",
+              "stepType": "/api/3/workflow_step_types/b593663d-7d13-40ce-a3a3-96dece928722",
+              "group": null,
+              "uuid": "5db5f2e8-5832-4d8b-8d65-be8531ab2d97"
+            }
+          ],
+          "routes": [
+            {
+              "@type": "WorkflowRoute",
+              "name": "Compute Hash -> Configuration",
+              "targetStep": "/api/3/workflow_steps/4576ff74-ca77-4d29-b6a2-6d0658a34583",
+              "sourceStep": "/api/3/workflow_steps/58b2a566-98f1-4434-aabc-7d4734e85b69",
+              "label": null,
+              "isExecuted": false,
+              "group": null,
+              "uuid": "400204d5-7c26-46b8-821e-73f10ebca39a"
+            },
+            {
+              "@type": "WorkflowRoute",
+              "name": "Configuration -> Submit Indicator To TI Lookup",
+              "targetStep": "/api/3/workflow_steps/8c64c6de-8b47-4b8b-8025-ccf54d787959",
+              "sourceStep": "/api/3/workflow_steps/4576ff74-ca77-4d29-b6a2-6d0658a34583",
+              "label": null,
+              "isExecuted": false,
+              "group": null,
+              "uuid": "0624df73-fa01-4fd7-b913-275950e37426"
+            },
+            {
+              "@type": "WorkflowRoute",
+              "name": "Create Summary -> Find Existing Description",
+              "targetStep": "/api/3/workflow_steps/d066b3c5-d128-445c-97bc-0b955b8b8767",
+              "sourceStep": "/api/3/workflow_steps/27de45dc-1836-4719-a3c9-8974c414c40f",
+              "label": null,
+              "isExecuted": false,
+              "group": null,
+              "uuid": "76ab089f-c470-4bd7-bff7-7b97c9ea6224"
+            },
+            {
+              "@type": "WorkflowRoute",
+              "name": "Find Existing Description -> Update Indicator Description",
+              "targetStep": "/api/3/workflow_steps/5db5f2e8-5832-4d8b-8d65-be8531ab2d97",
+              "sourceStep": "/api/3/workflow_steps/d066b3c5-d128-445c-97bc-0b955b8b8767",
+              "label": null,
+              "isExecuted": false,
+              "group": null,
+              "uuid": "1b396c81-47db-42b8-b343-4ba0ecb151ee"
+            },
+            {
+              "@type": "WorkflowRoute",
+              "name": "Is Connector Health Check Available -> No Operation",
+              "targetStep": "/api/3/workflow_steps/606b9a58-5179-47e4-bf0b-0c0394a25dad",
+              "sourceStep": "/api/3/workflow_steps/f9cf2458-6b09-41e3-87e0-71bfc22192bd",
+              "label": null,
+              "isExecuted": false,
+              "group": null,
+              "uuid": "f9d3725a-12ac-4948-8080-4132e94d3b8f"
+            },
+            {
+              "@type": "WorkflowRoute",
+              "name": "Is Connector Health Check Available -> Set Parameters",
+              "targetStep": "/api/3/workflow_steps/a47943ec-7982-4492-90dc-f736adf2fef3",
+              "sourceStep": "/api/3/workflow_steps/f9cf2458-6b09-41e3-87e0-71bfc22192bd",
+              "label": null,
+              "isExecuted": false,
+              "group": null,
+              "uuid": "96118460-d502-4125-93bd-c58c5f2b5219"
+            },
+            {
+              "@type": "WorkflowRoute",
+              "name": "Set Parameters -> Create Summary",
+              "targetStep": "/api/3/workflow_steps/27de45dc-1836-4719-a3c9-8974c414c40f",
+              "sourceStep": "/api/3/workflow_steps/a47943ec-7982-4492-90dc-f736adf2fef3",
+              "label": null,
+              "isExecuted": false,
+              "group": null,
+              "uuid": "3a3da6c4-fe74-4cdd-9dbd-d7f6ce9ab94c"
+            },
+            {
+              "@type": "WorkflowRoute",
+              "name": "Start -> Compute Hash",
+              "targetStep": "/api/3/workflow_steps/58b2a566-98f1-4434-aabc-7d4734e85b69",
+              "sourceStep": "/api/3/workflow_steps/a123ecd3-33fd-41fc-8a88-380a7a77d04b",
+              "label": null,
+              "isExecuted": false,
+              "group": null,
+              "uuid": "e595b6e6-2391-41f3-8178-6f1517e429ea"
+            },
+            {
+              "@type": "WorkflowRoute",
+              "name": "Submit Indicator To TI Lookup -> Is Connector Health Check Available",
+              "targetStep": "/api/3/workflow_steps/f9cf2458-6b09-41e3-87e0-71bfc22192bd",
+              "sourceStep": "/api/3/workflow_steps/8c64c6de-8b47-4b8b-8025-ccf54d787959",
+              "label": null,
+              "isExecuted": false,
+              "group": null,
+              "uuid": "c44a5b33-e062-4be6-9531-5c3fe559662b"
+            },
+            {
+              "@type": "WorkflowRoute",
+              "name": "Update Indicator Description -> Return Output Data",
+              "targetStep": "/api/3/workflow_steps/96a02f68-a533-4ab9-baca-998cb3ffbaef",
+              "sourceStep": "/api/3/workflow_steps/5db5f2e8-5832-4d8b-8d65-be8531ab2d97",
+              "label": null,
+              "isExecuted": false,
+              "group": null,
+              "uuid": "a65ba245-fb9a-4564-9c17-e2ef4897702f"
+            }
+          ],
+          "groups": [
+            {
+              "@type": "WorkflowGroup",
+              "name": "ANY.RUN TI Lookup",
+              "description": "This workflow automatically enriches your IOCs using ANY.RUN's Threat Intelligence Lookup, providing fresh, actionable context from sandbox analyses of the latest malware & phishing attacks across 15,000+ organizations.  \n\nThe playbook lets you pull behavioral details, TTPs, attack patterns, OS events, threat classifications, entity relationships, and metadata (threat level, OS, submission country) directly into your FortiSOAR indicator fields. \n\nAs a result, you get greater incident clarity from precise attack context, broader threat insight through IOC/IOA/IOB relationships, and enhanced threat hunting as enriched IOCs reveal hidden threats. \n\nTo use this workflow, you need a TI Lookup Premium subscription. \n\nFor more information about ANY.RUN’s Threat Intelligence Lookup and query syntax, please visit https://intelligence.any.run/analysis/lookup",
+              "type": "note",
+              "isCollapsed": false,
+              "hasTriggerStep": false,
+              "hideInLogs": true,
+              "metadata": [],
+              "reusable": false,
+              "top": "140",
+              "left": "620",
+              "height": "298",
+              "width": "498",
+              "uuid": "8ea5c7ed-7e49-4947-be6f-e055db0b4cfc",
+              "recordTags": []
+            }
+          ],
+          "priority": null,
+          "playbookOrigin": "/api/3/picklists/15c1e8c9-22bf-4e66-8fbb-0a502d4a4a3f",
+          "isEditable": true,
+          "uuid": "3384e2b1-c9c4-44d3-b4ea-f2180e6e1ccc",
+          "id": 1368,
+          "owners": [],
+          "isPrivate": false,
+          "deletedAt": null,
+          "importedBy": [],
+          "recordTags": [
+            "anyrun-threat-intelligence-lookup",
+            "Enrichment",
+            "File_Enrichment",
+            "Playbook"
+          ]
+        },
+        {
+          "@type": "Workflow",
+          "triggerLimit": null,
+          "name": "URL > ANY.RUN > Enrichment",
+          "aliasName": null,
+          "tag": "#ANY.RUN Threat Intelligence Lookup",
+          "description": "Retrieve the reputation of URL using ANY.RUN Threat Intelligence Lookup",
+          "isActive": false,
+          "debug": false,
+          "singleRecordExecution": false,
+          "remoteExecutableFlag": false,
+          "parameters": [],
+          "synchronous": false,
+          "lastModifyDate": 1768383715,
+          "collection": "/api/3/workflow_collections/6ebc7102-7fa9-40d0-bfdc-2762aa5c9cd7",
+          "versions": [],
+          "triggerStep": "/api/3/workflow_steps/d0059ded-eb1a-455e-9821-dd5f6f04e936",
+          "steps": [
+            {
+              "@type": "WorkflowStep",
+              "name": "Configuration",
+              "description": null,
+              "arguments": {
+                "indicator_IRI": "{{vars.input.params['indicator_IRI'] | ternary(vars.input.params['indicator_IRI'],vars.input.records[0]['@id'])}}",
+                "indicator_value": "{{vars.input.params['indicator_value'] | ternary(vars.input.params['indicator_value'],vars.input.records[0].value)}}"
+              },
+              "status": null,
+              "top": "403",
+              "left": "300",
+              "stepType": "/api/3/workflow_step_types/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
+              "group": null,
+              "uuid": "e91c24dd-ad4f-4aa9-8305-a4967f24c600"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Create Summary",
+              "description": null,
+              "arguments": {
+                "params": {
+                  "value": "<table class=\"table\" border=\"1\">\n<tbody>\n<tr>\n        <th colspan=\"5\" class=\"no-background padding-0\">\n            <div class=\"font-size-11 ng-binding padding-bottom-sm\">\n                <h4 style=\"color: orange;\"\n                    class=\"body-default-bgcolor margin-bottom-0 padding-bottom-md padding-left-md padding-top-md text-align-left\">\n                    ANY.RUN TI Lookup Summary</h4>\n            </div>\n        </th>\n    </tr>\n<tr>\n<td width=\"200\">Indicator</td>\n<td>{{vars.indicator_value}}</td>\n</tr>\n<tr>\n<tr>\n<td width=\"200\">Verdict</td>\n<td>{{vars.threat_level}}</td>\n</tr>\n<tr>\n<td>LastSeen</td>\n<td>{{vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.lastSeen}}</td>\n</tr>\n<tr>\n<td>Tags</td>\n<td>{{vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.tags}}</td>\n</tr>\n<td>Affected industries</td>\n<td>{{vars.steps.Submit_Indicator_To_TI_Lookup.data.industries\n   | map(attribute='industryName')\n   | list }}</td>\n</tr>\n<tr>\n<td>Link to TI Lookup request</td>\n<td><a href=\"https://intelligence.any.run/analysis/lookup#{% raw %}{%22query%22:%22{% endraw %}{{ vars.indicator_value | default(vars.steps.Compute_Hash.data.sha256, true) }}{% raw %}%22,%22dateRange%22:180}{% endraw %}\">Open ANY.RUN</td> \n</tr>\n</tbody>\n</table>"
+                },
+                "version": "3.7.0",
+                "connector": "cyops_utilities",
+                "operation": "format_richtext",
+                "operationTitle": "Utils: Format as RichText",
+                "step_variables": []
+              },
+              "status": null,
+              "top": "943",
+              "left": "475",
+              "stepType": "/api/3/workflow_step_types/0109f35d-090b-4a2b-bd8a-94cbc3508562",
+              "group": null,
+              "uuid": "31aff5c1-c347-4794-a5f1-728691ca775a"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Find Existing Description",
+              "description": null,
+              "arguments": {
+                "query": {
+                  "sort": [],
+                  "limit": 30,
+                  "logic": "AND",
+                  "filters": [
+                    {
+                      "type": "primitive",
+                      "field": "id",
+                      "value": "{{vars.input.records[0].id}}",
+                      "operator": "eq",
+                      "_operator": "eq"
+                    }
+                  ],
+                  "__selectFields": [
+                    "description"
+                  ]
+                },
+                "module": "indicators?$limit=30",
+                "ignore_errors": true,
+                "checkboxFields": true,
+                "step_variables": []
+              },
+              "status": null,
+              "top": "1078",
+              "left": "475",
+              "stepType": "/api/3/workflow_step_types/b593663d-7d13-40ce-a3a3-96dece928770",
+              "group": null,
+              "uuid": "035bcb0c-ec4a-46c4-85a7-d22bfc13b511"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Is Connector Health Check Available",
+              "description": null,
+              "arguments": {
+                "conditions": [
+                  {
+                    "option": "No",
+                    "default": true,
+                    "step_iri": "/api/3/workflow_steps/4574d0a6-ca02-4172-a950-798191a8d1ba",
+                    "step_name": "No Operation"
+                  },
+                  {
+                    "option": "Yes",
+                    "step_iri": "/api/3/workflow_steps/0d49de6a-91a0-4027-8d6a-260b46f52e8f",
+                    "condition": "{{ vars.steps.Submit_Indicator_To_TI_Lookup.status== \"Success\" }}",
+                    "step_name": "Set Parameters"
+                  }
+                ],
+                "step_variables": []
+              },
+              "status": null,
+              "top": "673",
+              "left": "300",
+              "stepType": "/api/3/workflow_step_types/12254cf5-5db7-4b1a-8cb1-3af081924b28",
+              "group": null,
+              "uuid": "e1cbd553-6542-4553-ad28-6e5758e545a8"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "No Operation",
+              "description": null,
+              "arguments": {
+                "params": [],
+                "version": "3.7.0",
+                "connector": "cyops_utilities",
+                "operation": "no_op",
+                "operationTitle": "Utils: No Operation",
+                "step_variables": []
+              },
+              "status": null,
+              "top": "808",
+              "left": "125",
+              "stepType": "/api/3/workflow_step_types/0109f35d-090b-4a2b-bd8a-94cbc3508562",
+              "group": null,
+              "uuid": "4574d0a6-ca02-4172-a950-798191a8d1ba"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Return Output Data",
+              "description": null,
+              "arguments": {
+                "verdict": "{{vars.Reputation}}",
+                "cti_name": "ANY.RUN",
+                "cti_score": "{{vars.threat_level}}",
+                "source_data": "{{vars.source_data}}",
+                "field_mapping": "{ \"country\": {% if vars.steps.Submit_Indicator_To_TI_Lookup.data.destinationIPgeo[0] %}\"{{vars.steps.Submit_Indicator_To_TI_Lookup.data.destinationIPgeo[0]}}\"{% else %}{{None}}{% endif %},\n\"tags\": {% if vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.tags %}\"{{vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.tags[0]}}\"{% else %}{{None}}{% endif %}\n}",
+                "enrichment_summary": "{{vars.steps.Create_Summary.data['formatted_string']}}"
+              },
+              "status": null,
+              "top": "1348",
+              "left": "475",
+              "stepType": "/api/3/workflow_step_types/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
+              "group": null,
+              "uuid": "d8cfd142-f1da-4698-b02c-faa2fe900d45"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Set Parameters",
+              "description": null,
+              "arguments": {
+                "Reputation": "{%- set v = vars.threatlevel|string -%}\n{%- if v == '2' -%}Malicious{%- elif v == '1' -%}Suspicious{%- elif v == '3' -%}Good{%- else -%}No Reputation Available{%- endif -%}",
+                "source_data": "{\"ANY.RUN Threat Intelligence\": {{vars.steps.Submit_Indicator_To_TI_Lookup.data}}}",
+                "threat_level": "{%- set v = vars.threatlevel|string -%}\n{%- if v == '2' -%}Malicious{%- elif v == '1' -%}Suspicious{%- elif v == '3' -%}Whitelisted\n{%- elif v == '0' -%}Unknown{%- else -%}No TI Data for this request{%- endif -%}"
+              },
+              "status": null,
+              "top": "808",
+              "left": "475",
+              "stepType": "/api/3/workflow_step_types/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
+              "group": null,
+              "uuid": "0d49de6a-91a0-4027-8d6a-260b46f52e8f"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Start",
+              "description": null,
+              "arguments": {
+                "__triggerLimit": true,
+                "step_variables": {
+                  "input": {
+                    "params": []
+                  }
+                },
+                "triggerOnSource": true,
+                "triggerOnReplicate": false
+              },
+              "status": null,
+              "top": "149",
+              "left": "300",
+              "stepType": "/api/3/workflow_step_types/b348f017-9a94-471f-87f8-ce88b6a7ad62",
+              "group": null,
+              "uuid": "d0059ded-eb1a-455e-9821-dd5f6f04e936"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Submit Indicator To TI Lookup",
+              "description": null,
+              "arguments": {
+                "name": "ANY.RUN Threat Intelligence Lookup",
+                "config": "7d0efacc-7eda-4dd7-8b82-b85eebd70e7f",
+                "params": {
+                  "query": "{{vars.indicator_value}}",
+                  "lookup_depth": "180"
+                },
+                "version": "1.0.0",
+                "connector": "anyrun-threat-intelligence-lookup",
+                "operation": "get_intelligence",
+                "operationTitle": "Threat Intelligence IoC Lookup",
+                "pickFromTenant": false,
+                "step_variables": {
+                  "threatlevel": "{{vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.threatLevel}}"
+                }
+              },
+              "status": null,
+              "top": "538",
+              "left": "300",
+              "stepType": "/api/3/workflow_step_types/0bfed618-0316-11e7-93ae-92361f002671",
+              "group": null,
+              "uuid": "16446be0-3fe4-4c17-a1c9-6146db377bbf"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Update Indicator Description",
+              "description": null,
+              "arguments": {
+                "resource": {
+                  "__link": {
+                    "recordTags": "{{vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.tags | list }}"
+                  },
+                  "country": "{% if vars.steps.Submit_Indicator_To_TI_Lookup.data.destinationIPgeo[0] %}\n{{ vars.steps.Submit_Indicator_To_TI_Lookup.data.destinationIPgeo[0] }}\n {% endif %}",
+                  "reputation": "{{(\"IndicatorReputation\" | picklist(vars.Reputation))[\"@id\"]}}",
+                  "sourceData": "{{vars.source_data |toJSON}}",
+                  "description": "{%- set parts = [] -%}\n\n{%- if vars.item.description -%}\n  {%- set _ = parts.append(vars.item.description) -%}\n{%- endif -%}\n\n{%- if vars.steps.Find_Existing_Description\n      and vars.steps.Find_Existing_Description[0].description\n      and vars.steps.Find_Existing_Description[0].description not in parts -%}\n  {%- set _ = parts.append(vars.steps.Find_Existing_Description[0].description) -%}\n{%- endif -%}\n\n{%- if vars.steps.Create_Summary.data['formatted_string'] -%}\n  {%- set _ = parts.append(vars.steps.Create_Summary.data['formatted_string']) -%}\n{%- endif -%}\n\n{{ parts | unique | join('<br>') }}",
+                  "filehashMD5": "{% if vars.steps.Compute_Hash.data.sha256 is defined %} {{ vars.steps.Compute_Hash.data.md5 }} {% endif %}",
+                  "filehashSHA1": "{% if vars.steps.Compute_Hash.data.sha256 is defined %} {{ vars.steps.Compute_Hash.data.sha1 }} {% endif %}",
+                  "filehashSHA256": "{% if vars.steps.Compute_Hash.data.sha256 is defined %} {{ vars.steps.Compute_Hash.data.sha256 }} {% endif %}"
+                },
+                "_showJson": false,
+                "operation": "Append",
+                "collection": "{{vars.indicator_IRI}}",
+                "__recommend": [],
+                "ignore_errors": true,
+                "collectionType": "/api/3/indicators",
+                "fieldOperation": {
+                  "recordTags": "Append"
+                },
+                "step_variables": []
+              },
+              "status": null,
+              "top": "1213",
+              "left": "475",
+              "stepType": "/api/3/workflow_step_types/b593663d-7d13-40ce-a3a3-96dece928722",
+              "group": null,
+              "uuid": "eaa8dc67-1d4e-4329-9503-8bc5259c98ff"
+            }
+          ],
+          "routes": [
+            {
+              "@type": "WorkflowRoute",
+              "name": "Configuration -> Submit Indicator To TI Lookup",
+              "targetStep": "/api/3/workflow_steps/16446be0-3fe4-4c17-a1c9-6146db377bbf",
+              "sourceStep": "/api/3/workflow_steps/e91c24dd-ad4f-4aa9-8305-a4967f24c600",
+              "label": null,
+              "isExecuted": false,
+              "group": null,
+              "uuid": "3217b9b9-c8ea-47a0-b354-6343c8406587"
+            },
+            {
+              "@type": "WorkflowRoute",
+              "name": "Create Summary -> Find Existing Description",
+              "targetStep": "/api/3/workflow_steps/035bcb0c-ec4a-46c4-85a7-d22bfc13b511",
+              "sourceStep": "/api/3/workflow_steps/31aff5c1-c347-4794-a5f1-728691ca775a",
+              "label": null,
+              "isExecuted": false,
+              "group": null,
+              "uuid": "89e1b05f-1c6f-4bce-87d0-9f9573fa2962"
+            },
+            {
+              "@type": "WorkflowRoute",
+              "name": "Find Existing Description -> Update Indicator Description",
+              "targetStep": "/api/3/workflow_steps/eaa8dc67-1d4e-4329-9503-8bc5259c98ff",
+              "sourceStep": "/api/3/workflow_steps/035bcb0c-ec4a-46c4-85a7-d22bfc13b511",
+              "label": null,
+              "isExecuted": false,
+              "group": null,
+              "uuid": "fa33f10f-d799-4c9c-96c7-e238be1c32fb"
+            },
+            {
+              "@type": "WorkflowRoute",
+              "name": "Is Connector Health Check Available -> No Operation",
+              "targetStep": "/api/3/workflow_steps/4574d0a6-ca02-4172-a950-798191a8d1ba",
+              "sourceStep": "/api/3/workflow_steps/e1cbd553-6542-4553-ad28-6e5758e545a8",
+              "label": null,
+              "isExecuted": false,
+              "group": null,
+              "uuid": "da653a11-2481-4574-be87-dafa7ce3c230"
+            },
+            {
+              "@type": "WorkflowRoute",
+              "name": "Is Connector Health Check Available -> Set Parameters",
+              "targetStep": "/api/3/workflow_steps/0d49de6a-91a0-4027-8d6a-260b46f52e8f",
+              "sourceStep": "/api/3/workflow_steps/e1cbd553-6542-4553-ad28-6e5758e545a8",
+              "label": null,
+              "isExecuted": false,
+              "group": null,
+              "uuid": "80228215-ef70-4241-891a-31550f992fe9"
+            },
+            {
+              "@type": "WorkflowRoute",
+              "name": "Set Parameters -> Create Summary",
+              "targetStep": "/api/3/workflow_steps/31aff5c1-c347-4794-a5f1-728691ca775a",
+              "sourceStep": "/api/3/workflow_steps/0d49de6a-91a0-4027-8d6a-260b46f52e8f",
+              "label": null,
+              "isExecuted": false,
+              "group": null,
+              "uuid": "80045b61-37a2-4e2c-bdaf-ab9377690e04"
+            },
+            {
+              "@type": "WorkflowRoute",
+              "name": "Start -> Configuration",
+              "targetStep": "/api/3/workflow_steps/e91c24dd-ad4f-4aa9-8305-a4967f24c600",
+              "sourceStep": "/api/3/workflow_steps/d0059ded-eb1a-455e-9821-dd5f6f04e936",
+              "label": null,
+              "isExecuted": false,
+              "group": null,
+              "uuid": "e661950e-72ad-4520-a88e-aa5a9afdd403"
+            },
+            {
+              "@type": "WorkflowRoute",
+              "name": "Submit Indicator To TI Lookup -> Is Connector Health Check Available",
+              "targetStep": "/api/3/workflow_steps/e1cbd553-6542-4553-ad28-6e5758e545a8",
+              "sourceStep": "/api/3/workflow_steps/16446be0-3fe4-4c17-a1c9-6146db377bbf",
+              "label": null,
+              "isExecuted": false,
+              "group": null,
+              "uuid": "37570042-8242-4127-8a6a-a900f244155e"
+            },
+            {
+              "@type": "WorkflowRoute",
+              "name": "Update Indicator Description -> Return Output Data",
+              "targetStep": "/api/3/workflow_steps/d8cfd142-f1da-4698-b02c-faa2fe900d45",
+              "sourceStep": "/api/3/workflow_steps/eaa8dc67-1d4e-4329-9503-8bc5259c98ff",
+              "label": null,
+              "isExecuted": false,
+              "group": null,
+              "uuid": "0e6e2ea8-b4d0-46c2-9a10-43672e52eeb2"
+            }
+          ],
+          "groups": [
+            {
+              "@type": "WorkflowGroup",
+              "name": "ANY.RUN TI Lookup",
+              "description": "This workflow automatically enriches your IOCs using ANY.RUN's Threat Intelligence Lookup, providing fresh, actionable context from sandbox analyses of the latest malware & phishing attacks across 15,000+ organizations.  \n\nThe playbook lets you pull behavioral details, TTPs, attack patterns, OS events, threat classifications, entity relationships, and metadata (threat level, OS, submission country) directly into your FortiSOAR indicator fields. \n\nAs a result, you get greater incident clarity from precise attack context, broader threat insight through IOC/IOA/IOB relationships, and enhanced threat hunting as enriched IOCs reveal hidden threats. \n\nTo use this workflow, you need a TI Lookup Premium subscription. \n\nFor more information about ANY.RUN’s Threat Intelligence Lookup and query syntax, please visit https://intelligence.any.run/analysis/lookup",
+              "type": "note",
+              "isCollapsed": false,
+              "hasTriggerStep": false,
+              "hideInLogs": true,
+              "metadata": [],
+              "reusable": false,
+              "top": "140",
+              "left": "580",
+              "height": "298",
+              "width": "498",
+              "uuid": "d1f7f774-8c38-45c1-b825-a629440b8d4a",
+              "recordTags": []
+            }
+          ],
+          "priority": null,
+          "playbookOrigin": "/api/3/picklists/15c1e8c9-22bf-4e66-8fbb-0a502d4a4a3f",
+          "isEditable": true,
+          "uuid": "5d6b48f7-f8ed-4a71-b9d8-f3fb9618e2c1",
+          "id": 1369,
+          "owners": [],
+          "isPrivate": false,
+          "deletedAt": null,
+          "importedBy": [],
+          "recordTags": [
+            "anyrun-threat-intelligence-lookup",
+            "Enrichment",
+            "Playbook",
+            "URL_Enrichment"
+          ]
+        },
+        {
+          "@type": "Workflow",
+          "triggerLimit": null,
+          "name": "File/Domain/IP/URL > ANY.RUN > Enrichment",
+          "aliasName": null,
+          "tag": "#ANY.RUN Threat Intelligence Lookup",
+          "description": "Retrieve the reputation of indicator using ANY.RUN Threat Intelligence Lookup",
+          "isActive": true,
+          "debug": false,
+          "singleRecordExecution": false,
+          "remoteExecutableFlag": false,
+          "parameters": [],
+          "synchronous": false,
+          "lastModifyDate": 1768383531,
+          "collection": "/api/3/workflow_collections/6ebc7102-7fa9-40d0-bfdc-2762aa5c9cd7",
+          "versions": [],
+          "triggerStep": "/api/3/workflow_steps/e18f131d-4c65-4fe1-851f-4a5e66d8548c",
+          "steps": [
+            {
+              "@type": "WorkflowStep",
+              "name": "Compute Hash",
+              "description": null,
+              "arguments": {
+                "params": {
+                  "iri": "{{vars.input.records[0]['@id']}}"
+                },
+                "version": "3.7.0",
+                "connector": "cyops_utilities",
+                "operation": "download_file_from_cyops",
+                "operationTitle": "File: Compute Hash",
+                "step_variables": []
+              },
+              "status": null,
+              "top": "538",
+              "left": "475",
+              "stepType": "/api/3/workflow_step_types/0109f35d-090b-4a2b-bd8a-94cbc3508562",
+              "group": null,
+              "uuid": "573d4b97-bf16-4764-90fa-dfbbc629a03c"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Configuration",
+              "description": null,
+              "arguments": {
+                "indicator_IRI": "{{vars.input.params['indicator_IRI'] | ternary(vars.input.params['indicator_IRI'],vars.input.records[0]['@id'])}}",
+                "indicator_value": "{{vars.input.params['indicator_value'] | ternary(vars.input.params['indicator_value'],vars.input.records[0].value)}}"
+              },
+              "status": null,
+              "top": "673",
+              "left": "125",
+              "stepType": "/api/3/workflow_step_types/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
+              "group": null,
+              "uuid": "21784224-366b-4600-800a-afabf3efffd4"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Create Summary",
+              "description": null,
+              "arguments": {
+                "params": {
+                  "value": "<table class=\"table\" border=\"1\">\n<tbody>\n<tr>\n        <th colspan=\"5\" class=\"no-background padding-0\">\n            <div class=\"font-size-11 ng-binding padding-bottom-sm\">\n                <h4 style=\"color: orange;\"\n                    class=\"body-default-bgcolor margin-bottom-0 padding-bottom-md padding-left-md padding-top-md text-align-left\">\n                    ANY.RUN TI Lookup Summary</h4>\n            </div>\n        </th>\n    </tr>\n<tr>\n<td width=\"200\">Indicator</td>\n<td>{{vars.indicator_value}}</td>\n</tr>\n<tr>\n<tr>\n<td width=\"200\">Verdict</td>\n<td>{{vars.threat_level}}</td>\n</tr>\n<tr>\n<td>LastSeen</td>\n<td>{{vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.lastSeen}}</td>\n</tr>\n<tr>\n<td>Tags</td>\n<td>{{vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.tags}}</td>\n</tr>\n<td>Affected industries</td>\n<td>{{vars.steps.Submit_Indicator_To_TI_Lookup.data.industries\n   | map(attribute='industryName')\n   | list }}</td>\n</tr>\n<tr>\n<td>Link to TI Lookup request</td>\n<td><a href=\"https://intelligence.any.run/analysis/lookup#{% raw %}{%22query%22:%22{% endraw %}{{ vars.indicator_value | default(vars.steps.Compute_Hash.data.sha256, true) }}{% raw %}%22,%22dateRange%22:180}{% endraw %}\">Open ANY.RUN</td> \n</tr>\n</tbody>\n</table>"
+                },
+                "version": "3.7.0",
+                "connector": "cyops_utilities",
+                "operation": "format_richtext",
+                "operationTitle": "Utils: Format as RichText",
+                "step_variables": []
+              },
+              "status": null,
+              "top": "1213",
+              "left": "475",
+              "stepType": "/api/3/workflow_step_types/0109f35d-090b-4a2b-bd8a-94cbc3508562",
+              "group": null,
+              "uuid": "04117c76-a4db-46dc-b13b-6252b2a9ca57"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Find Existing Description",
+              "description": null,
+              "arguments": {
+                "query": {
+                  "sort": [],
+                  "limit": 30,
+                  "logic": "AND",
+                  "filters": [
+                    {
+                      "type": "primitive",
+                      "field": "id",
+                      "value": "{{vars.input.records[0].id}}",
+                      "operator": "eq",
+                      "_operator": "eq"
+                    }
+                  ],
+                  "__selectFields": [
+                    "description"
+                  ]
+                },
+                "module": "indicators?$limit=30",
+                "ignore_errors": true,
+                "checkboxFields": true,
+                "step_variables": []
+              },
+              "status": null,
+              "top": "1348",
+              "left": "475",
+              "stepType": "/api/3/workflow_step_types/b593663d-7d13-40ce-a3a3-96dece928770",
+              "group": null,
+              "uuid": "3a4ffbf3-8869-4c25-9e4d-5339881a3458"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Hash Configuration",
+              "description": null,
+              "arguments": {
+                "indicator_IRI": "{{vars.input.params['indicator_IRI'] | ternary(vars.input.params['indicator_IRI'],vars.input.records[0]['@id'])}}",
+                "indicator_value": "{{vars.steps.Compute_Hash.data.sha256}}"
+              },
+              "status": null,
+              "top": "673",
+              "left": "475",
+              "stepType": "/api/3/workflow_step_types/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
+              "group": null,
+              "uuid": "632235db-8b4c-49c1-93b1-5ab0df44d51e"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Indicator Type Check",
+              "description": null,
+              "arguments": {
+                "conditions": [
+                  {
+                    "option": "Yes",
+                    "step_iri": "/api/3/workflow_steps/573d4b97-bf16-4764-90fa-dfbbc629a03c",
+                    "condition": "{{ vars.input.records[0].typeofindicator['@id'] == '/api/3/picklists/0162241b-f5bf-4917-a150-00e920be47bd' }}",
+                    "step_name": "Compute Hash"
+                  },
+                  {
+                    "option": "No",
+                    "default": true,
+                    "step_iri": "/api/3/workflow_steps/21784224-366b-4600-800a-afabf3efffd4",
+                    "step_name": "Configuration"
+                  }
+                ],
+                "step_variables": []
+              },
+              "status": null,
+              "top": "403",
+              "left": "300",
+              "stepType": "/api/3/workflow_step_types/12254cf5-5db7-4b1a-8cb1-3af081924b28",
+              "group": null,
+              "uuid": "c1a1d973-ce92-4bd5-9def-ca69964066f7"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Is Connector Health Check Available",
+              "description": null,
+              "arguments": {
+                "conditions": [
+                  {
+                    "option": "No",
+                    "default": true,
+                    "step_iri": "/api/3/workflow_steps/e7ff5c94-567a-4c22-8c45-2850da51179f",
+                    "step_name": "No Operation"
+                  },
+                  {
+                    "option": "Yes",
+                    "step_iri": "/api/3/workflow_steps/6fdca6b3-6692-47cb-a0b9-6da82a344676",
+                    "condition": "{{ vars.steps.Submit_Indicator_To_TI_Lookup.status== \"Success\" }}",
+                    "step_name": "Set Parameters"
+                  }
+                ],
+                "step_variables": []
+              },
+              "status": null,
+              "top": "943",
+              "left": "300",
+              "stepType": "/api/3/workflow_step_types/12254cf5-5db7-4b1a-8cb1-3af081924b28",
+              "group": null,
+              "uuid": "c9a1727d-f867-409f-bbd5-b13f4f0d7a07"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "No Operation",
+              "description": null,
+              "arguments": {
+                "params": [],
+                "version": "3.7.0",
+                "connector": "cyops_utilities",
+                "operation": "no_op",
+                "operationTitle": "Utils: No Operation",
+                "step_variables": []
+              },
+              "status": null,
+              "top": "1078",
+              "left": "125",
+              "stepType": "/api/3/workflow_step_types/0109f35d-090b-4a2b-bd8a-94cbc3508562",
+              "group": null,
+              "uuid": "e7ff5c94-567a-4c22-8c45-2850da51179f"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Return Output Data",
+              "description": null,
+              "arguments": {
+                "verdict": "{{vars.Reputation}}",
+                "cti_name": "ANY.RUN",
+                "source_data": "{{vars.source_data}}",
+                "field_mapping": "{ \"country\": {% if vars.steps.Submit_Indicator_To_TI_Lookup.data.destinationIPgeo[0] %}\"{{vars.steps.Submit_Indicator_To_TI_Lookup.data.destinationIPgeo[0]}}\"{% else %}{{None}}{% endif %},\n\"tags\": {% if vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.tags %}\"{{vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.tags[0]}}\"{% else %}{{None}}{% endif %}\n}",
+                "enrichment_summary": "{{vars.steps.Create_Summary.data['formatted_string']}}"
+              },
+              "status": null,
+              "top": "1618",
+              "left": "475",
+              "stepType": "/api/3/workflow_step_types/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
+              "group": null,
+              "uuid": "0b64201f-075e-4a28-b2e7-8ece3a2e17fb"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Set Parameters",
+              "description": null,
+              "arguments": {
+                "Reputation": "{%- set v = vars.threatlevel|string -%}\n{%- if v == '2' -%}Malicious{%- elif v == '1' -%}Suspicious{%- elif v == '3' -%}Good{%- else -%}No Reputation Available{%- endif -%}",
+                "source_data": "{\"ANY.RUN Threat Intelligence\": {{vars.steps.Submit_Indicator_To_TI_Lookup.data}}}",
+                "threat_level": "{%- set v = vars.threatlevel|string -%}\n{%- if v == '2' -%}Malicious{%- elif v == '1' -%}Suspicious{%- elif v == '3' -%}Whitelisted\n{%- elif v == '0' -%}Unknown{%- else -%}No TI Data for this request{%- endif -%}"
+              },
+              "status": null,
+              "top": "1078",
+              "left": "475",
+              "stepType": "/api/3/workflow_step_types/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
+              "group": null,
+              "uuid": "6fdca6b3-6692-47cb-a0b9-6da82a344676"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Start",
+              "description": null,
+              "arguments": {
+                "route": "b4c05388-4c4d-4aa2-a71d-d8997faf4584",
+                "title": "File/Domain/IP/URL > ANY.RUN > Enrichment",
+                "resources": [
+                  "indicators"
+                ],
+                "__triggerLimit": true,
+                "inputVariables": [],
+                "step_variables": {
+                  "input": {
+                    "params": [],
+                    "records": "{{vars.input.records}}"
+                  }
+                },
+                "triggerOnSource": true,
+                "displayConditions": {
+                  "indicators": {
+                    "sort": [],
+                    "limit": 30,
+                    "logic": "OR",
+                    "filters": [
+                      {
+                        "type": "object",
+                        "field": "typeofindicator",
+                        "value": "/api/3/picklists/0ca054f2-d923-4992-a4a7-c516e6df281e",
+                        "_value": {
+                          "@id": "/api/3/picklists/0ca054f2-d923-4992-a4a7-c516e6df281e",
+                          "display": "FileHash-MD5",
+                          "itemValue": "FileHash-MD5"
+                        },
+                        "operator": "eq"
+                      },
+                      {
+                        "type": "object",
+                        "field": "typeofindicator",
+                        "value": "/api/3/picklists/143e40b0-e643-468d-b968-a542fc85f08d",
+                        "_value": {
+                          "@id": "/api/3/picklists/143e40b0-e643-468d-b968-a542fc85f08d",
+                          "display": "FileHash-SHA1",
+                          "itemValue": "FileHash-SHA1"
+                        },
+                        "operator": "eq"
+                      },
+                      {
+                        "type": "object",
+                        "field": "typeofindicator",
+                        "value": "/api/3/picklists/4ea7b083-a0af-41ea-8d7c-7ace16021722",
+                        "_value": {
+                          "@id": "/api/3/picklists/4ea7b083-a0af-41ea-8d7c-7ace16021722",
+                          "display": "FileHash-SHA256",
+                          "itemValue": "FileHash-SHA256"
+                        },
+                        "operator": "eq"
+                      },
+                      {
+                        "type": "object",
+                        "field": "typeofindicator",
+                        "value": "/api/3/picklists/0162241b-f5bf-4917-a150-00e920be47bd",
+                        "_value": {
+                          "@id": "/api/3/picklists/0162241b-f5bf-4917-a150-00e920be47bd",
+                          "display": "File",
+                          "itemValue": "File"
+                        },
+                        "operator": "eq"
+                      },
+                      {
+                        "type": "object",
+                        "field": "typeofindicator",
+                        "value": "/api/3/picklists/c0beeda4-2c7a-4214-b7e5-53ba1649539c",
+                        "_value": {
+                          "@id": "/api/3/picklists/c0beeda4-2c7a-4214-b7e5-53ba1649539c",
+                          "display": "IP Address",
+                          "itemValue": "IP Address"
+                        },
+                        "operator": "eq"
+                      },
+                      {
+                        "type": "object",
+                        "field": "typeofindicator",
+                        "value": "/api/3/picklists/5a5a7d42-be27-4903-858a-19909ebfa1eb",
+                        "_value": {
+                          "@id": "/api/3/picklists/5a5a7d42-be27-4903-858a-19909ebfa1eb",
+                          "display": "Domain",
+                          "itemValue": "Domain"
+                        },
+                        "operator": "eq"
+                      },
+                      {
+                        "type": "object",
+                        "field": "typeofindicator",
+                        "value": "/api/3/picklists/353a37b4-3eeb-43ee-aac6-64806422cfec",
+                        "_value": {
+                          "@id": "/api/3/picklists/353a37b4-3eeb-43ee-aac6-64806422cfec",
+                          "display": "URL",
+                          "itemValue": "URL"
+                        },
+                        "operator": "eq"
+                      }
+                    ]
+                  }
+                },
+                "executeButtonText": "Execute",
+                "noRecordExecution": false,
+                "showToasterMessage": {
+                  "visible": false,
+                  "messageVisible": true
+                },
+                "triggerOnReplicate": false,
+                "singleRecordExecution": true
+              },
+              "status": null,
+              "top": "149",
+              "left": "300",
+              "stepType": "/api/3/workflow_step_types/f414d039-bb0d-4e59-9c39-a8f1e880b18a",
+              "group": null,
+              "uuid": "e18f131d-4c65-4fe1-851f-4a5e66d8548c"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Submit Indicator To TI Lookup",
+              "description": null,
+              "arguments": {
+                "name": "ANY.RUN Threat Intelligence Lookup",
+                "config": "7d0efacc-7eda-4dd7-8b82-b85eebd70e7f",
+                "params": {
+                  "query": "{{vars.indicator_value}}",
+                  "lookup_depth": "180"
+                },
+                "version": "1.0.0",
+                "connector": "anyrun-threat-intelligence-lookup",
+                "operation": "get_intelligence",
+                "operationTitle": "Threat Intelligence IoC Lookup",
+                "pickFromTenant": false,
+                "step_variables": {
+                  "threatlevel": "{{vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.threatLevel}}"
+                }
+              },
+              "status": null,
+              "top": "808",
+              "left": "300",
+              "stepType": "/api/3/workflow_step_types/0bfed618-0316-11e7-93ae-92361f002671",
+              "group": null,
+              "uuid": "bc17fbf5-3d65-466d-bac0-f2c532aef1b1"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Update Indicator Description",
+              "description": null,
+              "arguments": {
+                "resource": {
+                  "__link": {
+                    "recordTags": "{{vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.tags | list }}"
+                  },
+                  "country": "{% if vars.steps.Submit_Indicator_To_TI_Lookup.data.destinationIPgeo[0] %}\n{{ vars.steps.Submit_Indicator_To_TI_Lookup.data.destinationIPgeo[0] }}\n {% endif %}",
+                  "reputation": "{{(\"IndicatorReputation\" | picklist(vars.Reputation))[\"@id\"]}}",
+                  "sourceData": "{{vars.source_data |toJSON}}",
+                  "description": "{%- set parts = [] -%}\n\n{%- if vars.item.description -%}\n  {%- set _ = parts.append(vars.item.description) -%}\n{%- endif -%}\n\n{%- if vars.steps.Find_Existing_Description\n      and vars.steps.Find_Existing_Description[0].description\n      and vars.steps.Find_Existing_Description[0].description not in parts -%}\n  {%- set _ = parts.append(vars.steps.Find_Existing_Description[0].description) -%}\n{%- endif -%}\n\n{%- if vars.steps.Create_Summary.data['formatted_string'] -%}\n  {%- set _ = parts.append(vars.steps.Create_Summary.data['formatted_string']) -%}\n{%- endif -%}\n\n{{ parts | unique | join('<br>') }}",
+                  "filehashMD5": "{% if vars.steps.Compute_Hash.data.sha256 is defined %} {{ vars.steps.Compute_Hash.data.md5 }} {% endif %}",
+                  "filehashSHA1": "{% if vars.steps.Compute_Hash.data.sha256 is defined %} {{ vars.steps.Compute_Hash.data.sha1 }} {% endif %}",
+                  "filehashSHA256": "{% if vars.steps.Compute_Hash.data.sha256 is defined %} {{ vars.steps.Compute_Hash.data.sha256 }} {% endif %}"
+                },
+                "_showJson": false,
+                "operation": "Append",
+                "collection": "{{vars.indicator_IRI}}",
+                "__recommend": [],
+                "ignore_errors": true,
+                "collectionType": "/api/3/indicators",
+                "fieldOperation": {
+                  "recordTags": "Append"
+                },
+                "step_variables": []
+              },
+              "status": null,
+              "top": "1483",
+              "left": "475",
+              "stepType": "/api/3/workflow_step_types/b593663d-7d13-40ce-a3a3-96dece928722",
+              "group": null,
+              "uuid": "04d40721-bb3a-48ad-bbf2-3ad22657b8ec"
+            }
+          ],
+          "routes": [
+            {
+              "@type": "WorkflowRoute",
+              "name": "Compute Hash -> Hash Configuration",
+              "targetStep": "/api/3/workflow_steps/632235db-8b4c-49c1-93b1-5ab0df44d51e",
+              "sourceStep": "/api/3/workflow_steps/573d4b97-bf16-4764-90fa-dfbbc629a03c",
+              "label": null,
+              "isExecuted": false,
+              "group": null,
+              "uuid": "7ce195e5-39e9-492b-b2a7-2a373a94b001"
+            },
+            {
+              "@type": "WorkflowRoute",
+              "name": "Configuration -> Submit Indicator To TI Lookup",
+              "targetStep": "/api/3/workflow_steps/bc17fbf5-3d65-466d-bac0-f2c532aef1b1",
+              "sourceStep": "/api/3/workflow_steps/21784224-366b-4600-800a-afabf3efffd4",
+              "label": null,
+              "isExecuted": false,
+              "group": null,
+              "uuid": "577b0314-c7e7-4ea1-b1ee-fc8d9dd03162"
+            },
+            {
+              "@type": "WorkflowRoute",
+              "name": "Create Summary -> Find Existing Description",
+              "targetStep": "/api/3/workflow_steps/3a4ffbf3-8869-4c25-9e4d-5339881a3458",
+              "sourceStep": "/api/3/workflow_steps/04117c76-a4db-46dc-b13b-6252b2a9ca57",
+              "label": null,
+              "isExecuted": false,
+              "group": null,
+              "uuid": "f7555e58-6bff-4198-b145-ad79b3f59b38"
+            },
+            {
+              "@type": "WorkflowRoute",
+              "name": "Find Existing Description -> Update Indicator Description",
+              "targetStep": "/api/3/workflow_steps/04d40721-bb3a-48ad-bbf2-3ad22657b8ec",
+              "sourceStep": "/api/3/workflow_steps/3a4ffbf3-8869-4c25-9e4d-5339881a3458",
+              "label": null,
+              "isExecuted": false,
+              "group": null,
+              "uuid": "aaaec5e5-2149-462d-9794-6dc31878e0e2"
+            },
+            {
+              "@type": "WorkflowRoute",
+              "name": "Hash Configuration -> Submit Indicator To TI Lookup",
+              "targetStep": "/api/3/workflow_steps/bc17fbf5-3d65-466d-bac0-f2c532aef1b1",
+              "sourceStep": "/api/3/workflow_steps/632235db-8b4c-49c1-93b1-5ab0df44d51e",
+              "label": null,
+              "isExecuted": false,
+              "group": null,
+              "uuid": "5e48b469-9d7a-4c94-9d85-fc339cf4c5e9"
+            },
+            {
+              "@type": "WorkflowRoute",
+              "name": "Indicator Type Check -> Compute Hash",
+              "targetStep": "/api/3/workflow_steps/573d4b97-bf16-4764-90fa-dfbbc629a03c",
+              "sourceStep": "/api/3/workflow_steps/c1a1d973-ce92-4bd5-9def-ca69964066f7",
+              "label": null,
+              "isExecuted": false,
+              "group": null,
+              "uuid": "48b6c166-3bd9-48f0-a389-f007824ed1b6"
+            },
+            {
+              "@type": "WorkflowRoute",
+              "name": "Indicator Type Check -> Configuration",
+              "targetStep": "/api/3/workflow_steps/21784224-366b-4600-800a-afabf3efffd4",
+              "sourceStep": "/api/3/workflow_steps/c1a1d973-ce92-4bd5-9def-ca69964066f7",
+              "label": null,
+              "isExecuted": false,
+              "group": null,
+              "uuid": "c2137688-33e5-445f-98f0-fbbb5de5414a"
+            },
+            {
+              "@type": "WorkflowRoute",
+              "name": "Is Connector Health Check Available -> No Operation",
+              "targetStep": "/api/3/workflow_steps/e7ff5c94-567a-4c22-8c45-2850da51179f",
+              "sourceStep": "/api/3/workflow_steps/c9a1727d-f867-409f-bbd5-b13f4f0d7a07",
+              "label": null,
+              "isExecuted": false,
+              "group": null,
+              "uuid": "d9abcef6-b58e-4ea7-926f-7198d4079ed5"
+            },
+            {
+              "@type": "WorkflowRoute",
+              "name": "Is Connector Health Check Available -> Set Parameters",
+              "targetStep": "/api/3/workflow_steps/6fdca6b3-6692-47cb-a0b9-6da82a344676",
+              "sourceStep": "/api/3/workflow_steps/c9a1727d-f867-409f-bbd5-b13f4f0d7a07",
+              "label": null,
+              "isExecuted": false,
+              "group": null,
+              "uuid": "d20dd0c7-e0da-44b6-9d46-487f9981ef05"
+            },
+            {
+              "@type": "WorkflowRoute",
+              "name": "Set Parameters -> Create Summary",
+              "targetStep": "/api/3/workflow_steps/04117c76-a4db-46dc-b13b-6252b2a9ca57",
+              "sourceStep": "/api/3/workflow_steps/6fdca6b3-6692-47cb-a0b9-6da82a344676",
+              "label": null,
+              "isExecuted": false,
+              "group": null,
+              "uuid": "215e1821-345b-4857-86e0-195566e44931"
+            },
+            {
+              "@type": "WorkflowRoute",
+              "name": "Start -> Indicator Type Check",
+              "targetStep": "/api/3/workflow_steps/c1a1d973-ce92-4bd5-9def-ca69964066f7",
+              "sourceStep": "/api/3/workflow_steps/e18f131d-4c65-4fe1-851f-4a5e66d8548c",
+              "label": null,
+              "isExecuted": false,
+              "group": null,
+              "uuid": "70ebd557-57af-4629-9e80-b6512c3d96ee"
+            },
+            {
+              "@type": "WorkflowRoute",
+              "name": "Submit Indicator To TI Lookup -> Is Connector Health Check Available",
+              "targetStep": "/api/3/workflow_steps/c9a1727d-f867-409f-bbd5-b13f4f0d7a07",
+              "sourceStep": "/api/3/workflow_steps/bc17fbf5-3d65-466d-bac0-f2c532aef1b1",
+              "label": null,
+              "isExecuted": false,
+              "group": null,
+              "uuid": "77db1251-2552-4846-9ae9-91da7e97d423"
+            },
+            {
+              "@type": "WorkflowRoute",
+              "name": "Update Indicator Description -> Return Output Data",
+              "targetStep": "/api/3/workflow_steps/0b64201f-075e-4a28-b2e7-8ece3a2e17fb",
+              "sourceStep": "/api/3/workflow_steps/04d40721-bb3a-48ad-bbf2-3ad22657b8ec",
+              "label": null,
+              "isExecuted": false,
+              "group": null,
+              "uuid": "3d16b2ee-3ac9-4a26-8654-5debbbb7c310"
+            }
+          ],
+          "groups": [
+            {
+              "@type": "WorkflowGroup",
+              "name": "ANY.RUN TI Lookup",
+              "description": "This workflow automatically enriches your IOCs using ANY.RUN's Threat Intelligence Lookup, providing fresh, actionable context from sandbox analyses of the latest malware & phishing attacks across 15,000+ organizations.  \n\nThe playbook lets you pull behavioral details, TTPs, attack patterns, OS events, threat classifications, entity relationships, and metadata (threat level, OS, submission country) directly into your FortiSOAR indicator fields. \n\nAs a result, you get greater incident clarity from precise attack context, broader threat insight through IOC/IOA/IOB relationships, and enhanced threat hunting as enriched IOCs reveal hidden threats. \n\nTo use this workflow, you need a TI Lookup Premium subscription. \n\nFor more information about ANY.RUN’s Threat Intelligence Lookup and query syntax, please visit https://intelligence.any.run/analysis/lookup",
+              "type": "note",
+              "isCollapsed": false,
+              "hasTriggerStep": false,
+              "hideInLogs": true,
+              "metadata": [],
+              "reusable": false,
+              "top": "149",
+              "left": "774",
+              "height": "298",
+              "width": "498",
+              "uuid": "7e7fcd3a-e839-48cd-8252-7cf655733c90",
+              "recordTags": []
+            }
+          ],
+          "priority": null,
+          "playbookOrigin": "/api/3/picklists/15c1e8c9-22bf-4e66-8fbb-0a502d4a4a3f",
+          "isEditable": true,
+          "uuid": "6aa9ad58-bbba-4038-aea3-a5b7aac1615a",
+          "id": 1370,
+          "owners": [],
+          "isPrivate": false,
+          "deletedAt": null,
+          "importedBy": [],
+          "recordTags": [
+            "anyrun-threat-intelligence-lookup",
+            "Enrichment",
+            "ManualTrigger",
+            "Playbook"
+          ]
+        },
+        {
+          "@type": "Workflow",
+          "triggerLimit": null,
+          "name": "IP > ANY.RUN > Enrichment",
+          "aliasName": null,
+          "tag": "#ANY.RUN Threat Intelligence Lookup",
+          "description": "Retrieve the reputation of IP Address using ANY.RUN Threat Intelligence Lookup",
+          "isActive": false,
+          "debug": false,
+          "singleRecordExecution": false,
+          "remoteExecutableFlag": false,
+          "parameters": [
+            "indicator_value"
+          ],
+          "synchronous": false,
+          "lastModifyDate": 1768387206,
+          "collection": "/api/3/workflow_collections/6ebc7102-7fa9-40d0-bfdc-2762aa5c9cd7",
+          "versions": [],
+          "triggerStep": "/api/3/workflow_steps/89514bcc-0aa8-480a-9967-b44b1fd6a94e",
+          "steps": [
+            {
+              "@type": "WorkflowStep",
+              "name": "Configuration",
+              "description": null,
+              "arguments": {
+                "indicator_IRI": "{{vars.input.params['indicator_IRI'] | ternary(vars.input.params['indicator_IRI'],vars.input.records[0]['@id'])}}",
+                "indicator_value": "{{vars.input.params['indicator_value'] | ternary(vars.input.params['indicator_value'],vars.input.records[0].value)}}"
+              },
+              "status": null,
+              "top": "403",
+              "left": "300",
+              "stepType": "/api/3/workflow_step_types/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
+              "group": null,
+              "uuid": "17c66f72-fc65-4b77-b6e7-8bde1d3693a6"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Create Summary",
+              "description": null,
+              "arguments": {
+                "params": {
+                  "value": "<table class=\"table\" border=\"1\">\n<tbody>\n<tr>\n        <th colspan=\"5\" class=\"no-background padding-0\">\n            <div class=\"font-size-11 ng-binding padding-bottom-sm\">\n                <h4 style=\"color: orange;\"\n                    class=\"body-default-bgcolor margin-bottom-0 padding-bottom-md padding-left-md padding-top-md text-align-left\">\n                    ANY.RUN TI Lookup Summary</h4>\n            </div>\n        </th>\n    </tr>\n<tr>\n<td width=\"200\">Indicator</td>\n<td>{{vars.indicator_value}}</td>\n</tr>\n<tr>\n<tr>\n<td width=\"200\">Verdict</td>\n<td>{{vars.threat_level}}</td>\n</tr>\n<tr>\n<td>LastSeen</td>\n<td>{{vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.lastSeen}}</td>\n</tr>\n<tr>\n<td>Tags</td>\n<td>{{vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.tags}}</td>\n</tr>\n<td>Affected industries</td>\n<td>{{vars.steps.Submit_Indicator_To_TI_Lookup.data.industries\n   | map(attribute='industryName')\n   | list }}</td>\n</tr>\n<tr>\n<td>Link to TI Lookup request</td>\n<td><a href=\"https://intelligence.any.run/analysis/lookup#{% raw %}{%22query%22:%22{% endraw %}{{ vars.indicator_value | default(vars.steps.Compute_Hash.data.sha256, true) }}{% raw %}%22,%22dateRange%22:180}{% endraw %}\">Open ANY.RUN</td> \n</tr>\n</tbody>\n</table>"
+                },
+                "version": "3.7.0",
+                "connector": "cyops_utilities",
+                "operation": "format_richtext",
+                "operationTitle": "Utils: Format as RichText",
+                "step_variables": []
+              },
+              "status": null,
+              "top": "943",
+              "left": "475",
+              "stepType": "/api/3/workflow_step_types/0109f35d-090b-4a2b-bd8a-94cbc3508562",
+              "group": null,
+              "uuid": "095e27e6-54db-4898-b5fa-e804012b441c"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Find Existing Description",
+              "description": null,
+              "arguments": {
+                "query": {
+                  "sort": [],
+                  "limit": 30,
+                  "logic": "AND",
+                  "filters": [
+                    {
+                      "type": "primitive",
+                      "field": "id",
+                      "value": "{{vars.input.records[0].id}}",
+                      "operator": "eq",
+                      "_operator": "eq"
+                    }
+                  ],
+                  "__selectFields": [
+                    "description"
+                  ]
+                },
+                "module": "indicators?$limit=30",
+                "ignore_errors": true,
+                "checkboxFields": true,
+                "step_variables": []
+              },
+              "status": null,
+              "top": "1078",
+              "left": "475",
+              "stepType": "/api/3/workflow_step_types/b593663d-7d13-40ce-a3a3-96dece928770",
+              "group": null,
+              "uuid": "019268d6-1f81-4d6b-8c6f-4e3b8b38f115"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Is Connector Health Check Available",
+              "description": null,
+              "arguments": {
+                "conditions": [
+                  {
+                    "option": "No",
+                    "default": true,
+                    "step_iri": "/api/3/workflow_steps/a6608250-8085-40e1-b41e-0ecbfa2980d7",
+                    "step_name": "No Operation"
+                  },
+                  {
+                    "option": "Yes",
+                    "step_iri": "/api/3/workflow_steps/79a9a497-b153-4845-b8bd-720e51969862",
+                    "condition": "{{ vars.steps.Submit_Indicator_To_TI_Lookup.status== \"Success\" }}",
+                    "step_name": "Set Parameters"
+                  }
+                ],
+                "step_variables": []
+              },
+              "status": null,
+              "top": "673",
+              "left": "300",
+              "stepType": "/api/3/workflow_step_types/12254cf5-5db7-4b1a-8cb1-3af081924b28",
+              "group": null,
+              "uuid": "da8a94ec-92f5-4d76-90f9-3272e8af90f0"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "No Operation",
+              "description": null,
+              "arguments": {
+                "params": [],
+                "version": "3.7.0",
+                "connector": "cyops_utilities",
+                "operation": "no_op",
+                "operationTitle": "Utils: No Operation",
+                "step_variables": []
+              },
+              "status": null,
+              "top": "808",
+              "left": "125",
+              "stepType": "/api/3/workflow_step_types/0109f35d-090b-4a2b-bd8a-94cbc3508562",
+              "group": null,
+              "uuid": "a6608250-8085-40e1-b41e-0ecbfa2980d7"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Return Output Data",
+              "description": null,
+              "arguments": {
+                "verdict": "{{vars.Reputation}}",
+                "cti_name": "ANY.RUN",
+                "cti_score": "{{vars.threat_level}}",
+                "source_data": "{{vars.source_data}}",
+                "field_mapping": "{ \"country\": {% if vars.steps.Submit_Indicator_To_TI_Lookup.data.destinationIPgeo[0] %}\"{{vars.steps.Submit_Indicator_To_TI_Lookup.data.destinationIPgeo[0]}}\"{% else %}{{None}}{% endif %},\n\"tags\": {% if vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.tags %}\"{{vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.tags[0]}}\"{% else %}{{None}}{% endif %}\n}",
+                "enrichment_summary": "{{vars.steps.Create_Summary.data['formatted_string']}}"
+              },
+              "status": null,
+              "top": "1348",
+              "left": "475",
+              "stepType": "/api/3/workflow_step_types/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
+              "group": null,
+              "uuid": "7ff8a051-da83-4363-a479-dac0657c2790"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Set Parameters",
+              "description": null,
+              "arguments": {
+                "Reputation": "{%- set v = vars.threatlevel|string -%}\n{%- if v == '2' -%}Malicious{%- elif v == '1' -%}Suspicious{%- elif v == '3' -%}Good{%- else -%}No Reputation Available{%- endif -%}",
+                "source_data": "{\"ANY.RUN Threat Intelligence\": {{vars.steps.Submit_Indicator_To_TI_Lookup.data}}}",
+                "threat_level": "{%- set v = vars.threatlevel|string -%}\n{%- if v == '2' -%}Malicious{%- elif v == '1' -%}Suspicious{%- elif v == '3' -%}Whitelisted\n{%- elif v == '0' -%}Unknown{%- else -%}No TI Data for this request{%- endif -%}"
+              },
+              "status": null,
+              "top": "808",
+              "left": "475",
+              "stepType": "/api/3/workflow_step_types/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
+              "group": null,
+              "uuid": "79a9a497-b153-4845-b8bd-720e51969862"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Start",
+              "description": null,
+              "arguments": {
+                "__triggerLimit": true,
+                "step_variables": {
+                  "input": {
+                    "params": []
+                  }
+                },
+                "triggerOnSource": true,
+                "triggerOnReplicate": false
+              },
+              "status": null,
+              "top": "149",
+              "left": "300",
+              "stepType": "/api/3/workflow_step_types/b348f017-9a94-471f-87f8-ce88b6a7ad62",
+              "group": null,
+              "uuid": "89514bcc-0aa8-480a-9967-b44b1fd6a94e"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Submit Indicator To TI Lookup",
+              "description": null,
+              "arguments": {
+                "name": "ANY.RUN Threat Intelligence Lookup",
+                "config": "7d0efacc-7eda-4dd7-8b82-b85eebd70e7f",
+                "params": {
+                  "query": "{{vars.indicator_value}}",
+                  "lookup_depth": "180"
+                },
+                "version": "1.0.0",
+                "connector": "anyrun-threat-intelligence-lookup",
+                "operation": "get_intelligence",
+                "operationTitle": "Threat Intelligence IoC Lookup",
+                "pickFromTenant": false,
+                "step_variables": {
+                  "threatlevel": "{{vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.threatLevel}}"
+                }
+              },
+              "status": null,
+              "top": "538",
+              "left": "300",
+              "stepType": "/api/3/workflow_step_types/0bfed618-0316-11e7-93ae-92361f002671",
+              "group": null,
+              "uuid": "c1e9fd7d-e074-476d-b1ce-590892e7bcac"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Update Indicator Description",
+              "description": null,
+              "arguments": {
+                "resource": {
+                  "__link": {
+                    "recordTags": "{{vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.tags | list }}"
+                  },
+                  "country": "{% if vars.steps.Submit_Indicator_To_TI_Lookup.data.destinationIPgeo[0] %}\n{{ vars.steps.Submit_Indicator_To_TI_Lookup.data.destinationIPgeo[0] }}\n {% endif %}",
+                  "reputation": "{{(\"IndicatorReputation\" | picklist(vars.Reputation))[\"@id\"]}}",
+                  "sourceData": "{{vars.source_data |toJSON}}",
+                  "description": "{%- set parts = [] -%}\n\n{%- if vars.item.description -%}\n  {%- set _ = parts.append(vars.item.description) -%}\n{%- endif -%}\n\n{%- if vars.steps.Find_Existing_Description\n      and vars.steps.Find_Existing_Description[0].description\n      and vars.steps.Find_Existing_Description[0].description not in parts -%}\n  {%- set _ = parts.append(vars.steps.Find_Existing_Description[0].description) -%}\n{%- endif -%}\n\n{%- if vars.steps.Create_Summary.data['formatted_string'] -%}\n  {%- set _ = parts.append(vars.steps.Create_Summary.data['formatted_string']) -%}\n{%- endif -%}\n\n{{ parts | unique | join('<br>') }}",
+                  "filehashMD5": "{% if vars.steps.Compute_Hash.data.sha256 is defined %} {{ vars.steps.Compute_Hash.data.md5 }} {% endif %}",
+                  "filehashSHA1": "{% if vars.steps.Compute_Hash.data.sha256 is defined %} {{ vars.steps.Compute_Hash.data.sha1 }} {% endif %}",
+                  "filehashSHA256": "{% if vars.steps.Compute_Hash.data.sha256 is defined %} {{ vars.steps.Compute_Hash.data.sha256 }} {% endif %}"
+                },
+                "_showJson": false,
+                "operation": "Append",
+                "collection": "{{vars.indicator_IRI}}",
+                "__recommend": [],
+                "ignore_errors": true,
+                "collectionType": "/api/3/indicators",
+                "fieldOperation": {
+                  "recordTags": "Append"
+                },
+                "step_variables": []
+              },
+              "status": null,
+              "top": "1213",
+              "left": "475",
+              "stepType": "/api/3/workflow_step_types/b593663d-7d13-40ce-a3a3-96dece928722",
+              "group": null,
+              "uuid": "125011fb-54da-4e75-a080-cfde8d6643ec"
+            }
+          ],
+          "routes": [
+            {
+              "@type": "WorkflowRoute",
+              "name": "Configuration -> Submit Indicator To TI Lookup",
+              "targetStep": "/api/3/workflow_steps/c1e9fd7d-e074-476d-b1ce-590892e7bcac",
+              "sourceStep": "/api/3/workflow_steps/17c66f72-fc65-4b77-b6e7-8bde1d3693a6",
+              "label": null,
+              "isExecuted": false,
+              "group": null,
+              "uuid": "45849a6b-9a86-4a89-987f-ce4ed4bdce2d"
+            },
+            {
+              "@type": "WorkflowRoute",
+              "name": "Create Summary -> Find Existing Description",
+              "targetStep": "/api/3/workflow_steps/019268d6-1f81-4d6b-8c6f-4e3b8b38f115",
+              "sourceStep": "/api/3/workflow_steps/095e27e6-54db-4898-b5fa-e804012b441c",
+              "label": null,
+              "isExecuted": false,
+              "group": null,
+              "uuid": "57d83b48-5e0b-4783-ac3a-049d8021f0de"
+            },
+            {
+              "@type": "WorkflowRoute",
+              "name": "Find Existing Description -> Update Indicator Description",
+              "targetStep": "/api/3/workflow_steps/125011fb-54da-4e75-a080-cfde8d6643ec",
+              "sourceStep": "/api/3/workflow_steps/019268d6-1f81-4d6b-8c6f-4e3b8b38f115",
+              "label": null,
+              "isExecuted": false,
+              "group": null,
+              "uuid": "63e8987f-a4e9-4014-ba21-01d6e75f9931"
+            },
+            {
+              "@type": "WorkflowRoute",
+              "name": "Is Connector Health Check Available -> No Operation",
+              "targetStep": "/api/3/workflow_steps/a6608250-8085-40e1-b41e-0ecbfa2980d7",
+              "sourceStep": "/api/3/workflow_steps/da8a94ec-92f5-4d76-90f9-3272e8af90f0",
+              "label": null,
+              "isExecuted": false,
+              "group": null,
+              "uuid": "75e16555-7d9c-4f86-92cf-197ad2cf3b15"
+            },
+            {
+              "@type": "WorkflowRoute",
+              "name": "Is Connector Health Check Available -> Set Parameters",
+              "targetStep": "/api/3/workflow_steps/79a9a497-b153-4845-b8bd-720e51969862",
+              "sourceStep": "/api/3/workflow_steps/da8a94ec-92f5-4d76-90f9-3272e8af90f0",
+              "label": null,
+              "isExecuted": false,
+              "group": null,
+              "uuid": "9d06f7a8-e06f-4b65-b0b4-edd51db66fbf"
+            },
+            {
+              "@type": "WorkflowRoute",
+              "name": "Set Parameters -> Create Summary",
+              "targetStep": "/api/3/workflow_steps/095e27e6-54db-4898-b5fa-e804012b441c",
+              "sourceStep": "/api/3/workflow_steps/79a9a497-b153-4845-b8bd-720e51969862",
+              "label": null,
+              "isExecuted": false,
+              "group": null,
+              "uuid": "bd91e0dc-2bef-48b6-9be9-f2c436202069"
+            },
+            {
+              "@type": "WorkflowRoute",
+              "name": "Start -> Configuration",
+              "targetStep": "/api/3/workflow_steps/17c66f72-fc65-4b77-b6e7-8bde1d3693a6",
+              "sourceStep": "/api/3/workflow_steps/89514bcc-0aa8-480a-9967-b44b1fd6a94e",
+              "label": null,
+              "isExecuted": false,
+              "group": null,
+              "uuid": "74da781b-615d-4f94-b256-e5d6411d91e3"
+            },
+            {
+              "@type": "WorkflowRoute",
+              "name": "Submit Indicator To TI Lookup -> Is Connector Health Check Available",
+              "targetStep": "/api/3/workflow_steps/da8a94ec-92f5-4d76-90f9-3272e8af90f0",
+              "sourceStep": "/api/3/workflow_steps/c1e9fd7d-e074-476d-b1ce-590892e7bcac",
+              "label": null,
+              "isExecuted": false,
+              "group": null,
+              "uuid": "8d8b7b98-8ea9-4540-9606-9e93f3e3e02a"
+            },
+            {
+              "@type": "WorkflowRoute",
+              "name": "Update Indicator Description -> Return Output Data",
+              "targetStep": "/api/3/workflow_steps/7ff8a051-da83-4363-a479-dac0657c2790",
+              "sourceStep": "/api/3/workflow_steps/125011fb-54da-4e75-a080-cfde8d6643ec",
+              "label": null,
+              "isExecuted": false,
+              "group": null,
+              "uuid": "1e60ce36-9833-40d7-9f52-c28e841d519b"
+            }
+          ],
+          "groups": [
+            {
+              "@type": "WorkflowGroup",
+              "name": "ANY.RUN TI Lookup",
+              "description": "This workflow automatically enriches your IOCs using ANY.RUN's Threat Intelligence Lookup, providing fresh, actionable context from sandbox analyses of the latest malware & phishing attacks across 15,000+ organizations.  \n\nThe playbook lets you pull behavioral details, TTPs, attack patterns, OS events, threat classifications, entity relationships, and metadata (threat level, OS, submission country) directly into your FortiSOAR indicator fields. \n\nAs a result, you get greater incident clarity from precise attack context, broader threat insight through IOC/IOA/IOB relationships, and enhanced threat hunting as enriched IOCs reveal hidden threats. \n\nTo use this workflow, you need a TI Lookup Premium subscription. \n\nFor more information about ANY.RUN’s Threat Intelligence Lookup and query syntax, please visit https://intelligence.any.run/analysis/lookup",
+              "type": "note",
+              "isCollapsed": false,
+              "hasTriggerStep": false,
+              "hideInLogs": true,
+              "metadata": [],
+              "reusable": false,
+              "top": "140",
+              "left": "620",
+              "height": "298",
+              "width": "498",
+              "uuid": "c0d1c7ff-e99d-4b09-9c4f-20785e19ebde",
+              "recordTags": []
+            }
+          ],
+          "priority": null,
+          "playbookOrigin": "/api/3/picklists/15c1e8c9-22bf-4e66-8fbb-0a502d4a4a3f",
+          "isEditable": true,
+          "uuid": "9c2c37b9-4759-468b-87de-eb1112ed0413",
+          "id": 1371,
+          "owners": [],
+          "isPrivate": false,
+          "deletedAt": null,
+          "importedBy": [],
+          "recordTags": [
+            "anyrun-threat-intelligence-lookup",
+            "Enrichment",
+            "IP_Enrichment",
+            "Playbook"
+          ]
+        },
+        {
+          "@type": "Workflow",
+          "triggerLimit": null,
+          "name": "Threat Intelligence IOC Lookup",
+          "aliasName": null,
+          "tag": "#ANY.RUN Threat Intelligence Lookup",
+          "description": "Perform threat intelligence using specified IOC",
+          "isActive": false,
+          "debug": false,
+          "singleRecordExecution": false,
+          "remoteExecutableFlag": false,
+          "parameters": [],
+          "synchronous": false,
+          "lastModifyDate": 1768383890,
+          "collection": "/api/3/workflow_collections/6ebc7102-7fa9-40d0-bfdc-2762aa5c9cd7",
+          "versions": [],
+          "triggerStep": "/api/3/workflow_steps/1d12fa43-0af0-4454-adc3-4be14fa8ed92",
+          "steps": [
+            {
+              "@type": "WorkflowStep",
+              "name": "Start",
+              "description": null,
+              "arguments": {
+                "__triggerLimit": true,
+                "step_variables": {
+                  "input": {
+                    "params": []
+                  }
+                },
+                "triggerOnSource": true,
+                "triggerOnReplicate": false
+              },
+              "status": null,
+              "top": "20",
+              "left": "20",
+              "stepType": "/api/3/workflow_step_types/b348f017-9a94-471f-87f8-ce88b6a7ad62",
+              "group": null,
+              "uuid": "1d12fa43-0af0-4454-adc3-4be14fa8ed92"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Threat Intelligence IOC Lookup",
+              "description": null,
+              "arguments": {
+                "name": "ANY.RUN Threat Intelligence Lookup",
+                "config": "''",
+                "params": {
+                  "lookup_depth": "180"
+                },
+                "version": "1.0.0",
+                "connector": "anyrun-threat-intelligence-lookup",
+                "operation": "get_intelligence",
+                "operationTitle": "Threat Intelligence IOC Lookup",
+                "step_variables": {
+                  "output_data": "{{vars.result}}"
+                }
+              },
+              "status": null,
+              "top": "120",
+              "left": "188",
+              "stepType": "/api/3/workflow_step_types/0bfed618-0316-11e7-93ae-92361f002671",
+              "group": null,
+              "uuid": "90803239-6d93-414e-948d-f95a30c8e218"
+            }
+          ],
+          "routes": [
+            {
+              "@type": "WorkflowRoute",
+              "name": "Start -> Threat Intelligence IOC Lookup",
+              "targetStep": "/api/3/workflow_steps/90803239-6d93-414e-948d-f95a30c8e218",
+              "sourceStep": "/api/3/workflow_steps/1d12fa43-0af0-4454-adc3-4be14fa8ed92",
+              "label": null,
+              "isExecuted": false,
+              "group": null,
+              "uuid": "d8e4183a-c6ec-4584-9e47-d471f713db0e"
+            }
+          ],
+          "groups": [],
+          "priority": null,
+          "playbookOrigin": "/api/3/picklists/15c1e8c9-22bf-4e66-8fbb-0a502d4a4a3f",
+          "isEditable": true,
+          "uuid": "c9afe8c7-8f50-4e1b-8916-586c4b9bd930",
+          "id": 1372,
+          "owners": [],
+          "isPrivate": false,
+          "deletedAt": null,
+          "importedBy": [],
+          "recordTags": [
+            "anyrun-threat-intelligence-lookup"
+          ]
+        },
+        {
+          "@type": "Workflow",
+          "triggerLimit": null,
+          "name": "Domain > ANY.RUN > Enrichment",
+          "aliasName": null,
+          "tag": "#ANY.RUN Threat Intelligence Lookup",
+          "description": "Retrieve the reputation of Domain using ANY.RUN Threat Intelligence Lookup",
+          "isActive": false,
+          "debug": false,
+          "singleRecordExecution": false,
+          "remoteExecutableFlag": false,
+          "parameters": [],
+          "synchronous": false,
+          "lastModifyDate": 1768383858,
+          "collection": "/api/3/workflow_collections/6ebc7102-7fa9-40d0-bfdc-2762aa5c9cd7",
+          "versions": [],
+          "triggerStep": "/api/3/workflow_steps/d17d72cb-0b25-42cf-8bd3-1aa1885724aa",
+          "steps": [
+            {
+              "@type": "WorkflowStep",
+              "name": "Configuration",
+              "description": null,
+              "arguments": {
+                "indicator_IRI": "{{vars.input.params['indicator_IRI'] | ternary(vars.input.params['indicator_IRI'],vars.input.records[0]['@id'])}}",
+                "indicator_value": "{{vars.input.params['indicator_value'] | ternary(vars.input.params['indicator_value'],vars.input.records[0].value)}}"
+              },
+              "status": null,
+              "top": "403",
+              "left": "300",
+              "stepType": "/api/3/workflow_step_types/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
+              "group": null,
+              "uuid": "03719a82-dbfa-4688-8c21-d38c8dc22142"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Create Summary",
+              "description": null,
+              "arguments": {
+                "params": {
+                  "value": "<table class=\"table\" border=\"1\">\n<tbody>\n<tr>\n        <th colspan=\"5\" class=\"no-background padding-0\">\n            <div class=\"font-size-11 ng-binding padding-bottom-sm\">\n                <h4 style=\"color: orange;\"\n                    class=\"body-default-bgcolor margin-bottom-0 padding-bottom-md padding-left-md padding-top-md text-align-left\">\n                    ANY.RUN TI Lookup Summary</h4>\n            </div>\n        </th>\n    </tr>\n<tr>\n<td width=\"200\">Indicator</td>\n<td>{{vars.indicator_value}}</td>\n</tr>\n<tr>\n<tr>\n<td width=\"200\">Verdict</td>\n<td>{{vars.threat_level}}</td>\n</tr>\n<tr>\n<td>LastSeen</td>\n<td>{{vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.lastSeen}}</td>\n</tr>\n<tr>\n<td>Tags</td>\n<td>{{vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.tags}}</td>\n</tr>\n<td>Affected industries</td>\n<td>{{vars.steps.Submit_Indicator_To_TI_Lookup.data.industries\n   | map(attribute='industryName')\n   | list }}</td>\n</tr>\n<tr>\n<td>Link to TI Lookup request</td>\n<td><a href=\"https://intelligence.any.run/analysis/lookup#{% raw %}{%22query%22:%22{% endraw %}{{ vars.indicator_value | default(vars.steps.Compute_Hash.data.sha256, true) }}{% raw %}%22,%22dateRange%22:180}{% endraw %}\">Open ANY.RUN</td> \n</tr>\n</tbody>\n</table>"
+                },
+                "version": "3.7.0",
+                "connector": "cyops_utilities",
+                "operation": "format_richtext",
+                "operationTitle": "Utils: Format as RichText",
+                "step_variables": []
+              },
+              "status": null,
+              "top": "943",
+              "left": "475",
+              "stepType": "/api/3/workflow_step_types/0109f35d-090b-4a2b-bd8a-94cbc3508562",
+              "group": null,
+              "uuid": "a634c5a1-c995-41d8-999a-f074f5db1056"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Find Existing Description",
+              "description": null,
+              "arguments": {
+                "query": {
+                  "sort": [],
+                  "limit": 30,
+                  "logic": "AND",
+                  "filters": [
+                    {
+                      "type": "primitive",
+                      "field": "id",
+                      "value": "{{vars.input.records[0].id}}",
+                      "operator": "eq",
+                      "_operator": "eq"
+                    }
+                  ],
+                  "__selectFields": [
+                    "description"
+                  ]
+                },
+                "module": "indicators?$limit=30",
+                "ignore_errors": true,
+                "checkboxFields": true,
+                "step_variables": []
+              },
+              "status": null,
+              "top": "1078",
+              "left": "475",
+              "stepType": "/api/3/workflow_step_types/b593663d-7d13-40ce-a3a3-96dece928770",
+              "group": null,
+              "uuid": "355ca731-905c-4a93-896b-ca465dadb47b"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Is Connector Health Check Available",
+              "description": null,
+              "arguments": {
+                "conditions": [
+                  {
+                    "option": "No",
+                    "default": true,
+                    "step_iri": "/api/3/workflow_steps/b80ae01a-2f45-4a4b-97c8-b21ae0143321",
+                    "step_name": "No Operation"
+                  },
+                  {
+                    "option": "Yes",
+                    "step_iri": "/api/3/workflow_steps/0361de68-e3c9-4048-b56e-fe5b5d64663d",
+                    "condition": "{{ vars.steps.Submit_Indicator_To_TI_Lookup.status== \"Success\" }}",
+                    "step_name": "Set Parameters"
+                  }
+                ],
+                "step_variables": []
+              },
+              "status": null,
+              "top": "673",
+              "left": "300",
+              "stepType": "/api/3/workflow_step_types/12254cf5-5db7-4b1a-8cb1-3af081924b28",
+              "group": null,
+              "uuid": "5047fcaa-c3ad-41ce-81cb-31c511f62903"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "No Operation",
+              "description": null,
+              "arguments": {
+                "params": [],
+                "version": "3.7.0",
+                "connector": "cyops_utilities",
+                "operation": "no_op",
+                "operationTitle": "Utils: No Operation",
+                "step_variables": []
+              },
+              "status": null,
+              "top": "808",
+              "left": "125",
+              "stepType": "/api/3/workflow_step_types/0109f35d-090b-4a2b-bd8a-94cbc3508562",
+              "group": null,
+              "uuid": "b80ae01a-2f45-4a4b-97c8-b21ae0143321"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Return Output Data",
+              "description": null,
+              "arguments": {
+                "verdict": "{{vars.Reputation}}",
+                "cti_name": "ANY.RUN",
+                "cti_score": "{{vars.threat_level}}",
+                "source_data": "{{vars.source_data}}",
+                "field_mapping": "{ \"country\": {% if vars.steps.Submit_Indicator_To_TI_Lookup.data.destinationIPgeo[0] %}\"{{vars.steps.Submit_Indicator_To_TI_Lookup.data.destinationIPgeo[0]}}\"{% else %}{{None}}{% endif %},\n\"tags\": {% if vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.tags %}\"{{vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.tags[0]}}\"{% else %}{{None}}{% endif %}\n}",
+                "enrichment_summary": "{{vars.steps.Create_Summary.data['formatted_string']}}"
+              },
+              "status": null,
+              "top": "1348",
+              "left": "475",
+              "stepType": "/api/3/workflow_step_types/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
+              "group": null,
+              "uuid": "f04d7c7d-7924-4e2f-953c-351828f6e723"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Set Parameters",
+              "description": null,
+              "arguments": {
+                "Reputation": "{%- set v = vars.threatlevel|string -%}\n{%- if v == '2' -%}Malicious{%- elif v == '1' -%}Suspicious{%- elif v == '3' -%}Good{%- else -%}No Reputation Available{%- endif -%}",
+                "source_data": "{\"ANY.RUN Threat Intelligence\": {{vars.steps.Submit_Indicator_To_TI_Lookup.data}}}",
+                "threat_level": "{%- set v = vars.threatlevel|string -%}\n{%- if v == '2' -%}Malicious{%- elif v == '1' -%}Suspicious{%- elif v == '3' -%}Whitelisted\n{%- elif v == '0' -%}Unknown{%- else -%}No TI Data for this request{%- endif -%}"
+              },
+              "status": null,
+              "top": "808",
+              "left": "475",
+              "stepType": "/api/3/workflow_step_types/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
+              "group": null,
+              "uuid": "0361de68-e3c9-4048-b56e-fe5b5d64663d"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Start",
+              "description": null,
+              "arguments": {
+                "__triggerLimit": true,
+                "step_variables": {
+                  "input": {
+                    "params": []
+                  }
+                },
+                "triggerOnSource": true,
+                "triggerOnReplicate": false
+              },
+              "status": null,
+              "top": "149",
+              "left": "300",
+              "stepType": "/api/3/workflow_step_types/b348f017-9a94-471f-87f8-ce88b6a7ad62",
+              "group": null,
+              "uuid": "d17d72cb-0b25-42cf-8bd3-1aa1885724aa"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Submit Indicator To TI Lookup",
+              "description": null,
+              "arguments": {
+                "name": "ANY.RUN Threat Intelligence Lookup",
+                "config": "7d0efacc-7eda-4dd7-8b82-b85eebd70e7f",
+                "params": {
+                  "query": "{{vars.indicator_value}}",
+                  "lookup_depth": "180"
+                },
+                "version": "1.0.0",
+                "connector": "anyrun-threat-intelligence-lookup",
+                "operation": "get_intelligence",
+                "operationTitle": "Threat Intelligence IoC Lookup",
+                "pickFromTenant": false,
+                "step_variables": {
+                  "threatlevel": "{{vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.threatLevel}}"
+                }
+              },
+              "status": null,
+              "top": "538",
+              "left": "300",
+              "stepType": "/api/3/workflow_step_types/0bfed618-0316-11e7-93ae-92361f002671",
+              "group": null,
+              "uuid": "d85eb4b8-90f1-4350-80c2-5f2754d3c1ce"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Update Indicator Description",
+              "description": null,
+              "arguments": {
+                "resource": {
+                  "__link": {
+                    "recordTags": "{{vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.tags | list }}"
+                  },
+                  "country": "{% if vars.steps.Submit_Indicator_To_TI_Lookup.data.destinationIPgeo[0] %}\n{{ vars.steps.Submit_Indicator_To_TI_Lookup.data.destinationIPgeo[0] }}\n {% endif %}",
+                  "reputation": "{{(\"IndicatorReputation\" | picklist(vars.Reputation))[\"@id\"]}}",
+                  "sourceData": "{{vars.source_data |toJSON}}",
+                  "description": "{%- set parts = [] -%}\n\n{%- if vars.item.description -%}\n  {%- set _ = parts.append(vars.item.description) -%}\n{%- endif -%}\n\n{%- if vars.steps.Find_Existing_Description\n      and vars.steps.Find_Existing_Description[0].description\n      and vars.steps.Find_Existing_Description[0].description not in parts -%}\n  {%- set _ = parts.append(vars.steps.Find_Existing_Description[0].description) -%}\n{%- endif -%}\n\n{%- if vars.steps.Create_Summary.data['formatted_string'] -%}\n  {%- set _ = parts.append(vars.steps.Create_Summary.data['formatted_string']) -%}\n{%- endif -%}\n\n{{ parts | unique | join('<br>') }}",
+                  "filehashMD5": "{% if vars.steps.Compute_Hash.data.sha256 is defined %} {{ vars.steps.Compute_Hash.data.md5 }} {% endif %}",
+                  "filehashSHA1": "{% if vars.steps.Compute_Hash.data.sha256 is defined %} {{ vars.steps.Compute_Hash.data.sha1 }} {% endif %}",
+                  "filehashSHA256": "{% if vars.steps.Compute_Hash.data.sha256 is defined %} {{ vars.steps.Compute_Hash.data.sha256 }} {% endif %}"
+                },
+                "_showJson": false,
+                "operation": "Append",
+                "collection": "{{vars.indicator_IRI}}",
+                "__recommend": [],
+                "ignore_errors": true,
+                "collectionType": "/api/3/indicators",
+                "fieldOperation": {
+                  "recordTags": "Append"
+                },
+                "step_variables": []
+              },
+              "status": null,
+              "top": "1213",
+              "left": "475",
+              "stepType": "/api/3/workflow_step_types/b593663d-7d13-40ce-a3a3-96dece928722",
+              "group": null,
+              "uuid": "cec18a0b-f89f-4963-b1ac-4450a50f0ce0"
+            }
+          ],
+          "routes": [
+            {
+              "@type": "WorkflowRoute",
+              "name": "Configuration -> Submit Indicator To TI Lookup",
+              "targetStep": "/api/3/workflow_steps/d85eb4b8-90f1-4350-80c2-5f2754d3c1ce",
+              "sourceStep": "/api/3/workflow_steps/03719a82-dbfa-4688-8c21-d38c8dc22142",
+              "label": null,
+              "isExecuted": false,
+              "group": null,
+              "uuid": "83e1a968-6535-4d9a-a1fa-9e82fa3c2065"
+            },
+            {
+              "@type": "WorkflowRoute",
+              "name": "Create Summary -> Find Existing Description",
+              "targetStep": "/api/3/workflow_steps/355ca731-905c-4a93-896b-ca465dadb47b",
+              "sourceStep": "/api/3/workflow_steps/a634c5a1-c995-41d8-999a-f074f5db1056",
+              "label": null,
+              "isExecuted": false,
+              "group": null,
+              "uuid": "0b9bf830-a49e-4475-ae11-d8f2f761507b"
+            },
+            {
+              "@type": "WorkflowRoute",
+              "name": "Find Existing Description -> Update Indicator Description",
+              "targetStep": "/api/3/workflow_steps/cec18a0b-f89f-4963-b1ac-4450a50f0ce0",
+              "sourceStep": "/api/3/workflow_steps/355ca731-905c-4a93-896b-ca465dadb47b",
+              "label": null,
+              "isExecuted": false,
+              "group": null,
+              "uuid": "1c6ea40c-44fc-4d9a-b5c7-e34ce16ac0a6"
+            },
+            {
+              "@type": "WorkflowRoute",
+              "name": "Is Connector Health Check Available -> No Operation",
+              "targetStep": "/api/3/workflow_steps/b80ae01a-2f45-4a4b-97c8-b21ae0143321",
+              "sourceStep": "/api/3/workflow_steps/5047fcaa-c3ad-41ce-81cb-31c511f62903",
+              "label": null,
+              "isExecuted": false,
+              "group": null,
+              "uuid": "22dd0f72-b8c5-410f-bb4a-5f00f0004577"
+            },
+            {
+              "@type": "WorkflowRoute",
+              "name": "Is Connector Health Check Available -> Set Parameters",
+              "targetStep": "/api/3/workflow_steps/0361de68-e3c9-4048-b56e-fe5b5d64663d",
+              "sourceStep": "/api/3/workflow_steps/5047fcaa-c3ad-41ce-81cb-31c511f62903",
+              "label": null,
+              "isExecuted": false,
+              "group": null,
+              "uuid": "797465df-9fdf-4278-b020-e5dff57fdd5d"
+            },
+            {
+              "@type": "WorkflowRoute",
+              "name": "Set Parameters -> Create Summary",
+              "targetStep": "/api/3/workflow_steps/a634c5a1-c995-41d8-999a-f074f5db1056",
+              "sourceStep": "/api/3/workflow_steps/0361de68-e3c9-4048-b56e-fe5b5d64663d",
+              "label": null,
+              "isExecuted": false,
+              "group": null,
+              "uuid": "f55bbc74-31ab-4ebe-b3be-d990bad532f3"
+            },
+            {
+              "@type": "WorkflowRoute",
+              "name": "Start -> Configuration",
+              "targetStep": "/api/3/workflow_steps/03719a82-dbfa-4688-8c21-d38c8dc22142",
+              "sourceStep": "/api/3/workflow_steps/d17d72cb-0b25-42cf-8bd3-1aa1885724aa",
+              "label": null,
+              "isExecuted": false,
+              "group": null,
+              "uuid": "5acda6b8-49ae-4372-9db2-f2847fe1c249"
+            },
+            {
+              "@type": "WorkflowRoute",
+              "name": "Submit Indicator To TI Lookup -> Is Connector Health Check Available",
+              "targetStep": "/api/3/workflow_steps/5047fcaa-c3ad-41ce-81cb-31c511f62903",
+              "sourceStep": "/api/3/workflow_steps/d85eb4b8-90f1-4350-80c2-5f2754d3c1ce",
+              "label": null,
+              "isExecuted": false,
+              "group": null,
+              "uuid": "a74ba61b-4370-4ade-94b1-434fc4d3a273"
+            },
+            {
+              "@type": "WorkflowRoute",
+              "name": "Update Indicator Description -> Return Output Data",
+              "targetStep": "/api/3/workflow_steps/f04d7c7d-7924-4e2f-953c-351828f6e723",
+              "sourceStep": "/api/3/workflow_steps/cec18a0b-f89f-4963-b1ac-4450a50f0ce0",
+              "label": null,
+              "isExecuted": false,
+              "group": null,
+              "uuid": "fabf8483-051e-4d38-8699-0938f8050afc"
+            }
+          ],
+          "groups": [
+            {
+              "@type": "WorkflowGroup",
+              "name": "ANY.RUN TI Lookup",
+              "description": "This workflow automatically enriches your IOCs using ANY.RUN's Threat Intelligence Lookup, providing fresh, actionable context from sandbox analyses of the latest malware & phishing attacks across 15,000+ organizations.  \n\nThe playbook lets you pull behavioral details, TTPs, attack patterns, OS events, threat classifications, entity relationships, and metadata (threat level, OS, submission country) directly into your FortiSOAR indicator fields. \n\nAs a result, you get greater incident clarity from precise attack context, broader threat insight through IOC/IOA/IOB relationships, and enhanced threat hunting as enriched IOCs reveal hidden threats. \n\nTo use this workflow, you need a TI Lookup Premium subscription. \n\nFor more information about ANY.RUN’s Threat Intelligence Lookup and query syntax, please visit https://intelligence.any.run/analysis/lookup",
+              "type": "note",
+              "isCollapsed": false,
+              "hasTriggerStep": false,
+              "hideInLogs": true,
+              "metadata": [],
+              "reusable": false,
+              "top": "140",
+              "left": "620",
+              "height": "298",
+              "width": "498",
+              "uuid": "ab655514-4d92-4b57-b49e-ad1992af8187",
+              "recordTags": []
+            }
+          ],
+          "priority": null,
+          "playbookOrigin": "/api/3/picklists/15c1e8c9-22bf-4e66-8fbb-0a502d4a4a3f",
+          "isEditable": true,
+          "uuid": "e7ccbb71-ca7b-42a1-821f-9f518a956e35",
+          "id": 1373,
+          "owners": [],
+          "isPrivate": false,
+          "deletedAt": null,
+          "importedBy": [],
+          "recordTags": [
+            "anyrun-threat-intelligence-lookup",
+            "Domain_Enrichment",
+            "Enrichment",
+            "Playbook"
+          ]
+        },
+        {
+          "@type": "Workflow",
+          "triggerLimit": null,
+          "name": "File Hash > ANY.RUN > Enrichment",
+          "aliasName": null,
+          "tag": "#ANY.RUN Threat Intelligence Lookup",
+          "description": "Retrieve the reputation of file hash using ANY.RUN Threat Intelligence Lookup",
+          "isActive": false,
+          "debug": false,
+          "singleRecordExecution": false,
+          "remoteExecutableFlag": false,
+          "parameters": [],
+          "synchronous": false,
+          "lastModifyDate": 1768383341,
+          "collection": "/api/3/workflow_collections/6ebc7102-7fa9-40d0-bfdc-2762aa5c9cd7",
+          "versions": [],
+          "triggerStep": "/api/3/workflow_steps/9e36a233-4d9b-46c6-9492-b4ff01961238",
+          "steps": [
+            {
+              "@type": "WorkflowStep",
+              "name": "Configuration",
+              "description": null,
+              "arguments": {
+                "indicator_IRI": "{{vars.input.params['indicator_IRI'] | ternary(vars.input.params['indicator_IRI'],vars.input.records[0]['@id'])}}",
+                "indicator_value": "{{vars.input.params['indicator_value'] | ternary(vars.input.params['indicator_value'],vars.input.records[0].value)}}"
+              },
+              "status": null,
+              "top": "403",
+              "left": "300",
+              "stepType": "/api/3/workflow_step_types/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
+              "group": null,
+              "uuid": "789e9b35-f002-4525-acee-f026d0048a6b"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Create Summary",
+              "description": null,
+              "arguments": {
+                "params": {
+                  "value": "<table class=\"table\" border=\"1\">\n<tbody>\n<tr>\n        <th colspan=\"5\" class=\"no-background padding-0\">\n            <div class=\"font-size-11 ng-binding padding-bottom-sm\">\n                <h4 style=\"color: orange;\"\n                    class=\"body-default-bgcolor margin-bottom-0 padding-bottom-md padding-left-md padding-top-md text-align-left\">\n                    ANY.RUN TI Lookup Summary</h4>\n            </div>\n        </th>\n    </tr>\n<tr>\n<td width=\"200\">Indicator</td>\n<td>{{vars.indicator_value}}</td>\n</tr>\n<tr>\n<tr>\n<td width=\"200\">Verdict</td>\n<td>{{vars.threat_level}}</td>\n</tr>\n<tr>\n<td>LastSeen</td>\n<td>{{vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.lastSeen}}</td>\n</tr>\n<tr>\n<td>Tags</td>\n<td>{{vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.tags}}</td>\n</tr>\n<td>Affected industries</td>\n<td>{{vars.steps.Submit_Indicator_To_TI_Lookup.data.industries\n   | map(attribute='industryName')\n   | list }}</td>\n</tr>\n<tr>\n<td>Link to TI Lookup request</td>\n<td><a href=\"https://intelligence.any.run/analysis/lookup#{% raw %}{%22query%22:%22{% endraw %}{{ vars.indicator_value | default(vars.steps.Compute_Hash.data.sha256, true) }}{% raw %}%22,%22dateRange%22:180}{% endraw %}\">Open ANY.RUN</td> \n</tr>\n</tbody>\n</table>"
+                },
+                "version": "3.7.0",
+                "connector": "cyops_utilities",
+                "operation": "format_richtext",
+                "operationTitle": "Utils: Format as RichText",
+                "step_variables": []
+              },
+              "status": null,
+              "top": "943",
+              "left": "475",
+              "stepType": "/api/3/workflow_step_types/0109f35d-090b-4a2b-bd8a-94cbc3508562",
+              "group": null,
+              "uuid": "3fe6d129-056b-4649-93e6-a5094b3e9a65"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Find Existing Description",
+              "description": null,
+              "arguments": {
+                "query": {
+                  "sort": [],
+                  "limit": 30,
+                  "logic": "AND",
+                  "filters": [
+                    {
+                      "type": "primitive",
+                      "field": "id",
+                      "value": "{{vars.input.records[0].id}}",
+                      "operator": "eq",
+                      "_operator": "eq"
+                    }
+                  ],
+                  "__selectFields": [
+                    "description"
+                  ]
+                },
+                "module": "indicators?$limit=30",
+                "ignore_errors": true,
+                "checkboxFields": true,
+                "step_variables": []
+              },
+              "status": null,
+              "top": "1078",
+              "left": "475",
+              "stepType": "/api/3/workflow_step_types/b593663d-7d13-40ce-a3a3-96dece928770",
+              "group": null,
+              "uuid": "445b3308-45c2-42e6-9893-8f02ecb36a12"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Is Connector Health Check Available",
+              "description": null,
+              "arguments": {
+                "conditions": [
+                  {
+                    "option": "No",
+                    "default": true,
+                    "step_iri": "/api/3/workflow_steps/83e725f5-18dd-47b8-be60-1272fdcdaa34",
+                    "step_name": "No Operation"
+                  },
+                  {
+                    "option": "Yes",
+                    "step_iri": "/api/3/workflow_steps/c5e58728-55ed-4571-ace4-4c6f187c8112",
+                    "condition": "{{ vars.steps.Submit_Indicator_To_TI_Lookup.status== \"Success\" }}",
+                    "step_name": "Set Parameters"
+                  }
+                ],
+                "step_variables": []
+              },
+              "status": null,
+              "top": "673",
+              "left": "300",
+              "stepType": "/api/3/workflow_step_types/12254cf5-5db7-4b1a-8cb1-3af081924b28",
+              "group": null,
+              "uuid": "6693abb3-0b6a-4df2-8ee0-84064e811a53"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "No Operation",
+              "description": null,
+              "arguments": {
+                "params": [],
+                "version": "3.7.0",
+                "connector": "cyops_utilities",
+                "operation": "no_op",
+                "operationTitle": "Utils: No Operation",
+                "step_variables": []
+              },
+              "status": null,
+              "top": "808",
+              "left": "125",
+              "stepType": "/api/3/workflow_step_types/0109f35d-090b-4a2b-bd8a-94cbc3508562",
+              "group": null,
+              "uuid": "83e725f5-18dd-47b8-be60-1272fdcdaa34"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Return Output Data",
+              "description": null,
+              "arguments": {
+                "verdict": "{{vars.Reputation}}",
+                "cti_name": "ANY.RUN",
+                "cti_score": "{{vars.threat_level}}",
+                "source_data": "{{vars.source_data}}",
+                "field_mapping": "{ \"country\": {% if vars.steps.Submit_Indicator_To_TI_Lookup.data.destinationIPgeo[0] %}\"{{vars.steps.Submit_Indicator_To_TI_Lookup.data.destinationIPgeo[0]}}\"{% else %}{{None}}{% endif %},\n\"tags\": {% if vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.tags %}\"{{vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.tags[0]}}\"{% else %}{{None}}{% endif %}\n}",
+                "enrichment_summary": "{{vars.steps.Create_Summary.data['formatted_string']}}"
+              },
+              "status": null,
+              "top": "1348",
+              "left": "475",
+              "stepType": "/api/3/workflow_step_types/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
+              "group": null,
+              "uuid": "98d4fc85-aff8-40c9-8d8a-900ab0fb2f1b"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Set Parameters",
+              "description": null,
+              "arguments": {
+                "Reputation": "{%- set v = vars.threatlevel|string -%}\n{%- if v == '2' -%}Malicious{%- elif v == '1' -%}Suspicious{%- elif v == '3' -%}Good{%- else -%}No Reputation Available{%- endif -%}",
+                "source_data": "{\"ANY.RUN Threat Intelligence\": {{vars.steps.Submit_Indicator_To_TI_Lookup.data}}}",
+                "threat_level": "{%- set v = vars.threatlevel|string -%}\n{%- if v == '2' -%}Malicious{%- elif v == '1' -%}Suspicious{%- elif v == '3' -%}Whitelisted\n{%- elif v == '0' -%}Unknown{%- else -%}No TI Data for this request{%- endif -%}"
+              },
+              "status": null,
+              "top": "808",
+              "left": "475",
+              "stepType": "/api/3/workflow_step_types/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
+              "group": null,
+              "uuid": "c5e58728-55ed-4571-ace4-4c6f187c8112"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Start",
+              "description": null,
+              "arguments": {
+                "__triggerLimit": true,
+                "step_variables": {
+                  "input": {
+                    "params": []
+                  }
+                },
+                "triggerOnSource": true,
+                "triggerOnReplicate": false
+              },
+              "status": null,
+              "top": "149",
+              "left": "300",
+              "stepType": "/api/3/workflow_step_types/b348f017-9a94-471f-87f8-ce88b6a7ad62",
+              "group": null,
+              "uuid": "9e36a233-4d9b-46c6-9492-b4ff01961238"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Submit Indicator To TI Lookup",
+              "description": null,
+              "arguments": {
+                "name": "ANY.RUN Threat Intelligence Lookup",
+                "config": "7d0efacc-7eda-4dd7-8b82-b85eebd70e7f",
+                "params": {
+                  "query": "{{vars.indicator_value}}",
+                  "lookup_depth": "180"
+                },
+                "version": "1.0.0",
+                "connector": "anyrun-threat-intelligence-lookup",
+                "operation": "get_intelligence",
+                "operationTitle": "Threat Intelligence IoC Lookup",
+                "pickFromTenant": false,
+                "step_variables": {
+                  "threatlevel": "{{vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.threatLevel}}"
+                }
+              },
+              "status": null,
+              "top": "538",
+              "left": "300",
+              "stepType": "/api/3/workflow_step_types/0bfed618-0316-11e7-93ae-92361f002671",
+              "group": null,
+              "uuid": "c2a6a872-4f13-41f1-a019-7c13fcc5db1c"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Update Indicator Description",
+              "description": null,
+              "arguments": {
+                "resource": {
+                  "__link": {
+                    "recordTags": "{{vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.tags | list }}"
+                  },
+                  "country": "{% if vars.steps.Submit_Indicator_To_TI_Lookup.data.destinationIPgeo[0] %}\n{{ vars.steps.Submit_Indicator_To_TI_Lookup.data.destinationIPgeo[0] }}\n {% endif %}",
+                  "reputation": "{{(\"IndicatorReputation\" | picklist(vars.Reputation))[\"@id\"]}}",
+                  "sourceData": "{{vars.source_data |toJSON}}",
+                  "description": "{%- set parts = [] -%}\n\n{%- if vars.item.description -%}\n  {%- set _ = parts.append(vars.item.description) -%}\n{%- endif -%}\n\n{%- if vars.steps.Find_Existing_Description\n      and vars.steps.Find_Existing_Description[0].description\n      and vars.steps.Find_Existing_Description[0].description not in parts -%}\n  {%- set _ = parts.append(vars.steps.Find_Existing_Description[0].description) -%}\n{%- endif -%}\n\n{%- if vars.steps.Create_Summary.data['formatted_string'] -%}\n  {%- set _ = parts.append(vars.steps.Create_Summary.data['formatted_string']) -%}\n{%- endif -%}\n\n{{ parts | unique | join('<br>') }}",
+                  "filehashMD5": "{% if vars.steps.Compute_Hash.data.sha256 is defined %} {{ vars.steps.Compute_Hash.data.md5 }} {% endif %}",
+                  "filehashSHA1": "{% if vars.steps.Compute_Hash.data.sha256 is defined %} {{ vars.steps.Compute_Hash.data.sha1 }} {% endif %}",
+                  "filehashSHA256": "{% if vars.steps.Compute_Hash.data.sha256 is defined %} {{ vars.steps.Compute_Hash.data.sha256 }} {% endif %}"
+                },
+                "_showJson": false,
+                "operation": "Append",
+                "collection": "{{vars.indicator_IRI}}",
+                "__recommend": [],
+                "ignore_errors": true,
+                "collectionType": "/api/3/indicators",
+                "fieldOperation": {
+                  "recordTags": "Append"
+                },
+                "step_variables": []
+              },
+              "status": null,
+              "top": "1213",
+              "left": "475",
+              "stepType": "/api/3/workflow_step_types/b593663d-7d13-40ce-a3a3-96dece928722",
+              "group": null,
+              "uuid": "e259fc49-a358-4f49-b9bd-4afdf782d8c8"
+            }
+          ],
+          "routes": [
+            {
+              "@type": "WorkflowRoute",
+              "name": "Configuration -> Submit Indicator To TI Lookup",
+              "targetStep": "/api/3/workflow_steps/c2a6a872-4f13-41f1-a019-7c13fcc5db1c",
+              "sourceStep": "/api/3/workflow_steps/789e9b35-f002-4525-acee-f026d0048a6b",
+              "label": null,
+              "isExecuted": false,
+              "group": null,
+              "uuid": "c527852b-8ac2-4c1b-bd86-086ea2020124"
+            },
+            {
+              "@type": "WorkflowRoute",
+              "name": "Create Summary -> Find Existing Description",
+              "targetStep": "/api/3/workflow_steps/445b3308-45c2-42e6-9893-8f02ecb36a12",
+              "sourceStep": "/api/3/workflow_steps/3fe6d129-056b-4649-93e6-a5094b3e9a65",
+              "label": null,
+              "isExecuted": false,
+              "group": null,
+              "uuid": "7e85f03e-1fbe-4c26-9e94-da57b292d128"
+            },
+            {
+              "@type": "WorkflowRoute",
+              "name": "Find Existing Description -> Update Indicator Description",
+              "targetStep": "/api/3/workflow_steps/e259fc49-a358-4f49-b9bd-4afdf782d8c8",
+              "sourceStep": "/api/3/workflow_steps/445b3308-45c2-42e6-9893-8f02ecb36a12",
+              "label": null,
+              "isExecuted": false,
+              "group": null,
+              "uuid": "dcfbef52-f47a-4023-8739-87d51dad5978"
+            },
+            {
+              "@type": "WorkflowRoute",
+              "name": "Is Connector Health Check Available -> No Operation",
+              "targetStep": "/api/3/workflow_steps/83e725f5-18dd-47b8-be60-1272fdcdaa34",
+              "sourceStep": "/api/3/workflow_steps/6693abb3-0b6a-4df2-8ee0-84064e811a53",
+              "label": null,
+              "isExecuted": false,
+              "group": null,
+              "uuid": "f5e6c358-5331-4cd0-bc14-1cb6b75d01ba"
+            },
+            {
+              "@type": "WorkflowRoute",
+              "name": "Is Connector Health Check Available -> Set Parameters",
+              "targetStep": "/api/3/workflow_steps/c5e58728-55ed-4571-ace4-4c6f187c8112",
+              "sourceStep": "/api/3/workflow_steps/6693abb3-0b6a-4df2-8ee0-84064e811a53",
+              "label": null,
+              "isExecuted": false,
+              "group": null,
+              "uuid": "433be264-e319-49f3-9073-b55f35631836"
+            },
+            {
+              "@type": "WorkflowRoute",
+              "name": "Set Parameters -> Create Summary",
+              "targetStep": "/api/3/workflow_steps/3fe6d129-056b-4649-93e6-a5094b3e9a65",
+              "sourceStep": "/api/3/workflow_steps/c5e58728-55ed-4571-ace4-4c6f187c8112",
+              "label": null,
+              "isExecuted": false,
+              "group": null,
+              "uuid": "a2c722a0-1a3e-4118-9760-24949ea0efc3"
+            },
+            {
+              "@type": "WorkflowRoute",
+              "name": "Start -> Configuration",
+              "targetStep": "/api/3/workflow_steps/789e9b35-f002-4525-acee-f026d0048a6b",
+              "sourceStep": "/api/3/workflow_steps/9e36a233-4d9b-46c6-9492-b4ff01961238",
+              "label": null,
+              "isExecuted": false,
+              "group": null,
+              "uuid": "4806ea66-a5f7-4838-9239-84f78468278d"
+            },
+            {
+              "@type": "WorkflowRoute",
+              "name": "Submit Indicator To TI Lookup -> Is Connector Health Check Available",
+              "targetStep": "/api/3/workflow_steps/6693abb3-0b6a-4df2-8ee0-84064e811a53",
+              "sourceStep": "/api/3/workflow_steps/c2a6a872-4f13-41f1-a019-7c13fcc5db1c",
+              "label": null,
+              "isExecuted": false,
+              "group": null,
+              "uuid": "5ad5000a-776a-46f0-b7fd-5541288424a5"
+            },
+            {
+              "@type": "WorkflowRoute",
+              "name": "Update Indicator Description -> Return Output Data",
+              "targetStep": "/api/3/workflow_steps/98d4fc85-aff8-40c9-8d8a-900ab0fb2f1b",
+              "sourceStep": "/api/3/workflow_steps/e259fc49-a358-4f49-b9bd-4afdf782d8c8",
+              "label": null,
+              "isExecuted": false,
+              "group": null,
+              "uuid": "d17e9eab-aad1-4264-bec3-cc10b5a6662e"
+            }
+          ],
+          "groups": [
+            {
+              "@type": "WorkflowGroup",
+              "name": "ANY.RUN TI Lookup",
+              "description": "This workflow automatically enriches your IOCs using ANY.RUN's Threat Intelligence Lookup, providing fresh, actionable context from sandbox analyses of the latest malware & phishing attacks across 15,000+ organizations.  \n\nThe playbook lets you pull behavioral details, TTPs, attack patterns, OS events, threat classifications, entity relationships, and metadata (threat level, OS, submission country) directly into your FortiSOAR indicator fields. \n\nAs a result, you get greater incident clarity from precise attack context, broader threat insight through IOC/IOA/IOB relationships, and enhanced threat hunting as enriched IOCs reveal hidden threats. \n\nTo use this workflow, you need a TI Lookup Premium subscription. \n\nFor more information about ANY.RUN’s Threat Intelligence Lookup and query syntax, please visit https://intelligence.any.run/analysis/lookup",
+              "type": "note",
+              "isCollapsed": false,
+              "hasTriggerStep": false,
+              "hideInLogs": true,
+              "metadata": [],
+              "reusable": false,
+              "top": "160",
+              "left": "620",
+              "height": "298",
+              "width": "498",
+              "uuid": "fa9388fa-3ca0-4d38-9c8d-092c92eca65d",
+              "recordTags": []
+            }
+          ],
+          "priority": null,
+          "playbookOrigin": "/api/3/picklists/15c1e8c9-22bf-4e66-8fbb-0a502d4a4a3f",
+          "isEditable": true,
+          "uuid": "e821c155-eb79-485a-9f93-a6bfa36cb9b7",
+          "id": 1374,
+          "owners": [],
+          "isPrivate": false,
+          "deletedAt": null,
+          "importedBy": [],
+          "recordTags": [
+            "anyrun-threat-intelligence-lookup",
+            "Enrichment",
+            "FileHash_Enrichment",
+            "Playbook"
+          ]
+        }
+      ]
+    }
+  ],
+  "exported_tags": [
+    "anyrun-threat-intelligence-lookup",
+    "Enrichment",
+    "File_Enrichment",
+    "Playbook",
+    "URL_Enrichment",
+    "ManualTrigger",
+    "IP_Enrichment",
+    "Domain_Enrichment",
+    "FileHash_Enrichment"
+  ]
+}
