@@ -1,82 +1,254 @@
 {
-    "name": "anyrun-threat-intelligence-lookup",
-    "version": "1.0.0",
-    "label": "ANY.RUN Threat Intelligence Lookup",
-    "description": "ANY.RUN empowers SOC teams to cut MTTD/MTTR with fast IOC enrichment using the Threat Intelligence Lookup. With the ANY.RUN Threat Intelligence Lookup connector for FortiSOAR, your team achieves: \n- Confident response: Query IOCs/IOAs/IOBs for full context based on live attack data from 15K+ SOCs. Accelerate incient mitigation with actionable intel and reduce MTTR by up to 21 minutes. Use obtained data for incident response, to create new rules, train models, update playbooks, etc.",
-    "publisher": "ANY.RUN",
-    "icon_small_name": "small.png",
-    "icon_large_name": "large.png",
-    "configuration": {
-        "fields": [
-            {
-                "title": "API Key",
-                "type": "password",
-                "name": "api_key",
-                "required": true,
-                "visible": true,
-                "editable": true,
-                "tooltip": "ANY.RUN API Key in format: \"NS9Y..FvtEd\""
-            },
-            {
-                "title": "Verify SSL",
-                "type": "checkbox",
-                "name": "verify_ssl",
-                "required": false,
-                "visible": true,
-                "editable": true,
-                "value": true,
-                "tooltip": "Specifies whether the SSL certificate for the server is to be verified. By default, this option is set as True."
-            }
-        ]
-    },
-    "operations": [
+  "name": "anyrun-threat-intelligence-lookup",
+  "version": "1.0.0",
+  "label": "ANY.RUN Threat Intelligence Lookup",
+  "description": "ANY.RUN empowers SOC teams to cut MTTD/MTTR with fast IOC enrichment using the Threat Intelligence Lookup. With the ANY.RUN Threat Intelligence Lookup connector for FortiSOAR, your team achieves: \n- Confident response: Query IOCs/IOAs/IOBs for full context based on live attack data from 15K+ SOCs. Accelerate incient mitigation with actionable intel and reduce MTTR by up to 21 minutes. Use obtained data for incident response, to create new rules, train models, update playbooks, etc.",
+  "publisher": "ANY.RUN",
+  "contributor": "Semen Shalnev",
+  "cs_approved": false,
+  "cs_compatible": true,
+  "category": [
+    "Data Enrichment & Threat Intelligence"
+  ],
+  "help_online": "",
+  "icon_small_name": "small.png",
+  "icon_large_name": "large.png",
+  "configuration": {
+    "fields": [
+      {
+        "title": "API Key",
+        "description": "API Key of the ANY.RUN endpoint server to connect and perform the automated operations.",
+        "type": "password",
+        "name": "api_key",
+        "required": true,
+        "visible": true,
+        "editable": true,
+        "tooltip": "API Key of the ANY.RUN endpoint server to connect and perform the automated operations."
+      },
+      {
+        "title": "Verify SSL",
+        "description": "Specifies whether the SSL certificate for the server is to be verified or not. By default, this option is set as True.",
+        "type": "checkbox",
+        "name": "verify_ssl",
+        "required": false,
+        "visible": true,
+        "editable": true,
+        "value": true,
+        "tooltip": "Specifies whether the SSL certificate for the server is to be verified or not. By default, this option is set as True."
+      }
+    ]
+  },
+  "operations": [
+    {
+      "operation": "get_intelligence",
+      "title": "Lookup IoC in Threat Intelligence",
+      "description": "Retrieves threat intelligence data for a given IoC from the ANY.RUN Threat Intelligence service.",
+      "category": "investigation",
+      "annotation": "get_intelligence",
+      "enabled": true,
+      "parameters": [
         {
-            "operation": "get_intelligence",
-            "title": "Threat Intelligence IOC Lookup",
-            "description": "Perform threat intelligence using specified IOC.",
-            "category": "investigation",
-            "annotation": "get_intelligence",
-            "enabled": true,
-            "parameters": [
-                {
-                    "title": "Query",
-                    "type": "text",
-                    "name": "query",
-                    "required": true,
-                    "visible": true,
-                    "editable": true,
-                    "tooltip": "Query to search for in ANY.RUN Threat Intelligence"
-                },
-                {
-                    "title": "Lookup Depth",
-                    "type": "text",
-                    "name": "lookup_depth",
-                    "required": false,
-                    "visible": true,
-                    "editable": true,
-                    "value": "180",
-                    "tooltip": "Depth of the lookup"
-                }
-            ],
-            "open": false,
-            "output_schema": {
-                "error": "",
-                "data": {
-                    "query": "string",
-                    "results": "string"
-                }
-            }
+          "title": "Query",
+          "description": "Specify your search query. Several queries can be combined together with the AND operator for more specific results.",
+          "type": "text",
+          "name": "query",
+          "required": true,
+          "visible": true,
+          "editable": true,
+          "tooltip": "Specify your search query. Several queries can be combined together with the AND operator for more specific results."
+        },
+        {
+          "title": "Lookup Depth",
+          "description": "Depth of the lookup",
+          "type": "text",
+          "name": "lookup_depth",
+          "required": false,
+          "visible": true,
+          "editable": true,
+          "value": "180",
+          "tooltip": "Depth of the lookup"
         }
-    ],
-    "category": [
-        "Data Enrichment & Threat Intelligence"
-    ],
-    "contributor": null,
-    "active": true,
-    "cs_compatible": true,
-    "system": false,
-    "icon_small": "",
-    "icon_large": "",
-    "help_online": "https://github.com/fortinet-fortisoar/connector-anyrun-threat-intelligence-lookup",
-    "vendor_version": null
+      ],
+      "output_schema": {
+        "summary": {
+          "tags": [],
+          "details": [
+            {
+              "type": "",
+              "count": "",
+              "lastSeen": "",
+              "threatLevel": ""
+            }
+          ],
+          "isTrial": "",
+          "lastSeen": "",
+          "threatLevel": "",
+          "detectedType": ""
+        },
+        "industries": [
+          {
+            "confidence": "",
+            "industryName": ""
+          }
+        ],
+        "relatedDNS": [
+          {
+            "date": "",
+            "isMalconf": "",
+            "domainName": "",
+            "threatName": [],
+            "threatLevel": ""
+          }
+        ],
+        "threatName": [
+          {
+            "count": "",
+            "threatName": ""
+          }
+        ],
+        "totalTasks": "",
+        "relatedURLs": [
+          {
+            "url": "",
+            "date": "",
+            "isMalconf": "",
+            "threatName": [],
+            "threatLevel": ""
+          }
+        ],
+        "sourceTasks": [
+          {
+            "date": "",
+            "tags": [],
+            "uuid": "",
+            "related": "",
+            "mainObject": {
+              "name": "",
+              "type": "",
+              "hashes": {
+                "md5": "",
+                "sha1": "",
+                "sha256": "",
+                "ssdeep": ""
+              }
+            },
+            "threatLevel": ""
+          }
+        ],
+        "lastTaskDate": "",
+        "relatedFiles": [
+          {
+            "task": "",
+            "time": "",
+            "title": "",
+            "hashes": {
+              "md5": "",
+              "sha1": "",
+              "sha256": "",
+              "ssdeep": ""
+            },
+            "process": {
+              "pid": "",
+              "MITRE": [],
+              "scores": {
+                "specs": {
+                  "network": ""
+                }
+              },
+              "imagePath": "",
+              "commandLine": "",
+              "threatLevel": "",
+              "eventsCounters": {
+                "raw": {
+                  "files": "",
+                  "modules": "",
+                  "objects": "",
+                  "registry": ""
+                }
+              }
+            },
+            "fileLink": "",
+            "fileName": "",
+            "fileExtension": ""
+          }
+        ],
+        "relatedTasks": [],
+        "destinationIP": [
+          {
+            "date": "",
+            "isMalconf": "",
+            "threatName": [],
+            "threatLevel": "",
+            "destinationIP": ""
+          }
+        ],
+        "destinationPort": [],
+        "destinationIPgeo": [
+        ],
+        "destinationIpAsn": [
+          {
+            "asn": "",
+            "date": ""
+          }
+        ],
+        "relatedIncidents": [
+          {
+            "task": "",
+            "time": "",
+            "MITRE": [],
+            "event": {
+              "url": "",
+              "domainName": [
+              ],
+              "destinationIP": "",
+              "destinationIPgeo": [
+              ],
+              "destinationIpAsn": [
+              ]
+            },
+            "process": {
+              "pid": "",
+              "MITRE": [],
+              "scores": {
+                "specs": {
+                  "network": ""
+                }
+              },
+              "imagePath": "",
+              "commandLine": "",
+              "threatLevel": "",
+              "eventsCounters": {
+                "raw": {
+                  "files": "",
+                  "modules": "",
+                  "objects": "",
+                  "registry": ""
+                }
+              }
+            }
+          }
+        ],
+        "submissionCountries": [
+          {
+            "count": "",
+            "countryName": ""
+          }
+        ],
+        "relatedNetworkThreats": [
+          {
+            "tags": [
+            ],
+            "task": "",
+            "MITRE": [],
+            "imagePath": "",
+            "suricataID": "",
+            "suricataClass": "",
+            "suricataMessage": "",
+            "suricataThreatLevel": ""
+          }
+        ],
+        "relatedSynchronizationObjects": []
+      }
+    }
+  ]
 }

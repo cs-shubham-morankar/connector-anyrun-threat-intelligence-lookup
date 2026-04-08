@@ -8,10 +8,11 @@
       "visible": true,
       "image": null,
       "uuid": "6ebc7102-7fa9-40d0-bfdc-2762aa5c9cd7",
-      "id": 138,
+      "id": 68,
       "deletedAt": null,
       "importedBy": [],
       "recordTags": [
+        "ANY.RUN",
         "anyrun-threat-intelligence-lookup"
       ],
       "workflows": [
@@ -28,7 +29,7 @@
           "remoteExecutableFlag": false,
           "parameters": [],
           "synchronous": false,
-          "lastModifyDate": 1768383694,
+          "lastModifyDate": 1775644200,
           "collection": "/api/3/workflow_collections/6ebc7102-7fa9-40d0-bfdc-2762aa5c9cd7",
           "versions": [],
           "triggerStep": "/api/3/workflow_steps/a123ecd3-33fd-41fc-8a88-380a7a77d04b",
@@ -415,7 +416,7 @@
           "playbookOrigin": "/api/3/picklists/15c1e8c9-22bf-4e66-8fbb-0a502d4a4a3f",
           "isEditable": true,
           "uuid": "3384e2b1-c9c4-44d3-b4ea-f2180e6e1ccc",
-          "id": 1368,
+          "id": 1250,
           "owners": [],
           "isPrivate": false,
           "deletedAt": null,
@@ -438,9 +439,11 @@
           "debug": false,
           "singleRecordExecution": false,
           "remoteExecutableFlag": false,
-          "parameters": [],
+          "parameters": [
+            "indicator_value"
+          ],
           "synchronous": false,
-          "lastModifyDate": 1768383715,
+          "lastModifyDate": 1775644179,
           "collection": "/api/3/workflow_collections/6ebc7102-7fa9-40d0-bfdc-2762aa5c9cd7",
           "versions": [],
           "triggerStep": "/api/3/workflow_steps/d0059ded-eb1a-455e-9821-dd5f6f04e936",
@@ -796,7 +799,7 @@
           "playbookOrigin": "/api/3/picklists/15c1e8c9-22bf-4e66-8fbb-0a502d4a4a3f",
           "isEditable": true,
           "uuid": "5d6b48f7-f8ed-4a71-b9d8-f3fb9618e2c1",
-          "id": 1369,
+          "id": 1251,
           "owners": [],
           "isPrivate": false,
           "deletedAt": null,
@@ -821,7 +824,7 @@
           "remoteExecutableFlag": false,
           "parameters": [],
           "synchronous": false,
-          "lastModifyDate": 1768383531,
+          "lastModifyDate": 1775644055,
           "collection": "/api/3/workflow_collections/6ebc7102-7fa9-40d0-bfdc-2762aa5c9cd7",
           "versions": [],
           "triggerStep": "/api/3/workflow_steps/e18f131d-4c65-4fe1-851f-4a5e66d8548c",
@@ -1380,7 +1383,7 @@
           "playbookOrigin": "/api/3/picklists/15c1e8c9-22bf-4e66-8fbb-0a502d4a4a3f",
           "isEditable": true,
           "uuid": "6aa9ad58-bbba-4038-aea3-a5b7aac1615a",
-          "id": 1370,
+          "id": 1252,
           "owners": [],
           "isPrivate": false,
           "deletedAt": null,
@@ -1407,7 +1410,7 @@
             "indicator_value"
           ],
           "synchronous": false,
-          "lastModifyDate": 1768387206,
+          "lastModifyDate": 1775644036,
           "collection": "/api/3/workflow_collections/6ebc7102-7fa9-40d0-bfdc-2762aa5c9cd7",
           "versions": [],
           "triggerStep": "/api/3/workflow_steps/89514bcc-0aa8-480a-9967-b44b1fd6a94e",
@@ -1763,7 +1766,7 @@
           "playbookOrigin": "/api/3/picklists/15c1e8c9-22bf-4e66-8fbb-0a502d4a4a3f",
           "isEditable": true,
           "uuid": "9c2c37b9-4759-468b-87de-eb1112ed0413",
-          "id": 1371,
+          "id": 1253,
           "owners": [],
           "isPrivate": false,
           "deletedAt": null,
@@ -1778,7 +1781,7 @@
         {
           "@type": "Workflow",
           "triggerLimit": null,
-          "name": "Threat Intelligence IOC Lookup",
+          "name": "Lookup IOC in Threat Intelligence",
           "aliasName": null,
           "tag": "#ANY.RUN Threat Intelligence Lookup",
           "description": "Perform threat intelligence using specified IOC",
@@ -1788,11 +1791,37 @@
           "remoteExecutableFlag": false,
           "parameters": [],
           "synchronous": false,
-          "lastModifyDate": 1768383890,
+          "lastModifyDate": 1775642569,
           "collection": "/api/3/workflow_collections/6ebc7102-7fa9-40d0-bfdc-2762aa5c9cd7",
           "versions": [],
           "triggerStep": "/api/3/workflow_steps/1d12fa43-0af0-4454-adc3-4be14fa8ed92",
           "steps": [
+            {
+              "@type": "WorkflowStep",
+              "name": "Lookup IOC in Threat Intelligence",
+              "description": null,
+              "arguments": {
+                "name": "ANY.RUN Threat Intelligence Lookup",
+                "config": "c3d2dc17-ca30-4cd0-a483-0ba623b96568",
+                "params": {
+                  "query": "google.com",
+                  "lookup_depth": "180"
+                },
+                "version": "1.0.0",
+                "connector": "anyrun-threat-intelligence-lookup",
+                "operation": "get_intelligence",
+                "operationTitle": "Threat Intelligence IOC Lookup",
+                "step_variables": {
+                  "output_data": "{{vars.result}}"
+                }
+              },
+              "status": null,
+              "top": "165",
+              "left": "125",
+              "stepType": "/api/3/workflow_step_types/0bfed618-0316-11e7-93ae-92361f002671",
+              "group": null,
+              "uuid": "90803239-6d93-414e-948d-f95a30c8e218"
+            },
             {
               "@type": "WorkflowStep",
               "name": "Start",
@@ -1808,36 +1837,11 @@
                 "triggerOnReplicate": false
               },
               "status": null,
-              "top": "20",
-              "left": "20",
+              "top": "30",
+              "left": "125",
               "stepType": "/api/3/workflow_step_types/b348f017-9a94-471f-87f8-ce88b6a7ad62",
               "group": null,
               "uuid": "1d12fa43-0af0-4454-adc3-4be14fa8ed92"
-            },
-            {
-              "@type": "WorkflowStep",
-              "name": "Threat Intelligence IOC Lookup",
-              "description": null,
-              "arguments": {
-                "name": "ANY.RUN Threat Intelligence Lookup",
-                "config": "''",
-                "params": {
-                  "lookup_depth": "180"
-                },
-                "version": "1.0.0",
-                "connector": "anyrun-threat-intelligence-lookup",
-                "operation": "get_intelligence",
-                "operationTitle": "Threat Intelligence IOC Lookup",
-                "step_variables": {
-                  "output_data": "{{vars.result}}"
-                }
-              },
-              "status": null,
-              "top": "120",
-              "left": "188",
-              "stepType": "/api/3/workflow_step_types/0bfed618-0316-11e7-93ae-92361f002671",
-              "group": null,
-              "uuid": "90803239-6d93-414e-948d-f95a30c8e218"
             }
           ],
           "routes": [
@@ -1857,7 +1861,7 @@
           "playbookOrigin": "/api/3/picklists/15c1e8c9-22bf-4e66-8fbb-0a502d4a4a3f",
           "isEditable": true,
           "uuid": "c9afe8c7-8f50-4e1b-8916-586c4b9bd930",
-          "id": 1372,
+          "id": 1254,
           "owners": [],
           "isPrivate": false,
           "deletedAt": null,
@@ -1877,9 +1881,11 @@
           "debug": false,
           "singleRecordExecution": false,
           "remoteExecutableFlag": false,
-          "parameters": [],
+          "parameters": [
+            "indicator_value"
+          ],
           "synchronous": false,
-          "lastModifyDate": 1768383858,
+          "lastModifyDate": 1775644130,
           "collection": "/api/3/workflow_collections/6ebc7102-7fa9-40d0-bfdc-2762aa5c9cd7",
           "versions": [],
           "triggerStep": "/api/3/workflow_steps/d17d72cb-0b25-42cf-8bd3-1aa1885724aa",
@@ -2078,7 +2084,7 @@
                 }
               },
               "status": null,
-              "top": "538",
+              "top": "540",
               "left": "300",
               "stepType": "/api/3/workflow_step_types/0bfed618-0316-11e7-93ae-92361f002671",
               "group": null,
@@ -2235,7 +2241,7 @@
           "playbookOrigin": "/api/3/picklists/15c1e8c9-22bf-4e66-8fbb-0a502d4a4a3f",
           "isEditable": true,
           "uuid": "e7ccbb71-ca7b-42a1-821f-9f518a956e35",
-          "id": 1373,
+          "id": 1255,
           "owners": [],
           "isPrivate": false,
           "deletedAt": null,
@@ -2258,9 +2264,11 @@
           "debug": false,
           "singleRecordExecution": false,
           "remoteExecutableFlag": false,
-          "parameters": [],
+          "parameters": [
+            "indicator_value"
+          ],
           "synchronous": false,
-          "lastModifyDate": 1768383341,
+          "lastModifyDate": 1775644280,
           "collection": "/api/3/workflow_collections/6ebc7102-7fa9-40d0-bfdc-2762aa5c9cd7",
           "versions": [],
           "triggerStep": "/api/3/workflow_steps/9e36a233-4d9b-46c6-9492-b4ff01961238",
@@ -2275,7 +2283,7 @@
               },
               "status": null,
               "top": "403",
-              "left": "300",
+              "left": "723",
               "stepType": "/api/3/workflow_step_types/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
               "group": null,
               "uuid": "789e9b35-f002-4525-acee-f026d0048a6b"
@@ -2296,7 +2304,7 @@
               },
               "status": null,
               "top": "943",
-              "left": "475",
+              "left": "898",
               "stepType": "/api/3/workflow_step_types/0109f35d-090b-4a2b-bd8a-94cbc3508562",
               "group": null,
               "uuid": "3fe6d129-056b-4649-93e6-a5094b3e9a65"
@@ -2330,7 +2338,7 @@
               },
               "status": null,
               "top": "1078",
-              "left": "475",
+              "left": "898",
               "stepType": "/api/3/workflow_step_types/b593663d-7d13-40ce-a3a3-96dece928770",
               "group": null,
               "uuid": "445b3308-45c2-42e6-9893-8f02ecb36a12"
@@ -2358,7 +2366,7 @@
               },
               "status": null,
               "top": "673",
-              "left": "300",
+              "left": "723",
               "stepType": "/api/3/workflow_step_types/12254cf5-5db7-4b1a-8cb1-3af081924b28",
               "group": null,
               "uuid": "6693abb3-0b6a-4df2-8ee0-84064e811a53"
@@ -2377,7 +2385,7 @@
               },
               "status": null,
               "top": "808",
-              "left": "125",
+              "left": "548",
               "stepType": "/api/3/workflow_step_types/0109f35d-090b-4a2b-bd8a-94cbc3508562",
               "group": null,
               "uuid": "83e725f5-18dd-47b8-be60-1272fdcdaa34"
@@ -2396,7 +2404,7 @@
               },
               "status": null,
               "top": "1348",
-              "left": "475",
+              "left": "898",
               "stepType": "/api/3/workflow_step_types/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
               "group": null,
               "uuid": "98d4fc85-aff8-40c9-8d8a-900ab0fb2f1b"
@@ -2412,7 +2420,7 @@
               },
               "status": null,
               "top": "808",
-              "left": "475",
+              "left": "898",
               "stepType": "/api/3/workflow_step_types/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
               "group": null,
               "uuid": "c5e58728-55ed-4571-ace4-4c6f187c8112"
@@ -2433,7 +2441,7 @@
               },
               "status": null,
               "top": "149",
-              "left": "300",
+              "left": "723",
               "stepType": "/api/3/workflow_step_types/b348f017-9a94-471f-87f8-ce88b6a7ad62",
               "group": null,
               "uuid": "9e36a233-4d9b-46c6-9492-b4ff01961238"
@@ -2460,7 +2468,7 @@
               },
               "status": null,
               "top": "538",
-              "left": "300",
+              "left": "723",
               "stepType": "/api/3/workflow_step_types/0bfed618-0316-11e7-93ae-92361f002671",
               "group": null,
               "uuid": "c2a6a872-4f13-41f1-a019-7c13fcc5db1c"
@@ -2495,7 +2503,7 @@
               },
               "status": null,
               "top": "1213",
-              "left": "475",
+              "left": "898",
               "stepType": "/api/3/workflow_step_types/b593663d-7d13-40ce-a3a3-96dece928722",
               "group": null,
               "uuid": "e259fc49-a358-4f49-b9bd-4afdf782d8c8"
@@ -2604,8 +2612,8 @@
               "hideInLogs": true,
               "metadata": [],
               "reusable": false,
-              "top": "160",
-              "left": "620",
+              "top": "149",
+              "left": "249",
               "height": "298",
               "width": "498",
               "uuid": "fa9388fa-3ca0-4d38-9c8d-092c92eca65d",
@@ -2616,7 +2624,7 @@
           "playbookOrigin": "/api/3/picklists/15c1e8c9-22bf-4e66-8fbb-0a502d4a4a3f",
           "isEditable": true,
           "uuid": "e821c155-eb79-485a-9f93-a6bfa36cb9b7",
-          "id": 1374,
+          "id": 1256,
           "owners": [],
           "isPrivate": false,
           "deletedAt": null,
@@ -2632,6 +2640,7 @@
     }
   ],
   "exported_tags": [
+    "ANY.RUN",
     "anyrun-threat-intelligence-lookup",
     "Enrichment",
     "File_Enrichment",
