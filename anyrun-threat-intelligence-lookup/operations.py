@@ -1,17 +1,22 @@
-import traceback
+"""
+Copyright start
+MIT License
+Copyright (c) 2026 Fortinet Inc
+Copyright end
+"""
 
+import traceback
 from connectors.core.connector import ConnectorError, get_logger
 from anyrun import RunTimeException
 from anyrun.connectors.threat_intelligence.lookup_connector import LookupConnector
-
 from .constants import VERSION
-
 
 logger = get_logger('anyrun-threat-intelligence-lookup')
 
 
 def exceptions_handler(function):
     """ Handles errors in functions """
+
     def wrapper(*args, **kwargs):
         try:
             return function(*args, **kwargs)
@@ -37,7 +42,7 @@ def get_intelligence(config, params) -> dict:
 
 
 @exceptions_handler
-def _check_health(config, params) -> dict:
+def _check_health(config) -> dict:
     """ Checks connection to ANY.RUN """
     token = config.get('api_key')
     verify_ssl = config.get('verify_ssl')
