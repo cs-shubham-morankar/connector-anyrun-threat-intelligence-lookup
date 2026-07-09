@@ -10,63 +10,63 @@
   "category": [
     "Data Enrichment & Threat Intelligence"
   ],
-  "help_online": "",
+  "help_online": "https://docs.fortinet.com/document/fortisoar/1.0.0/any-run-threat-intelligence-lookup/100/any-run-threat-intelligence-lookup-v1-0-0",
   "icon_small_name": "small.png",
   "icon_large_name": "large.png",
   "configuration": {
     "fields": [
       {
         "title": "API Key",
-        "description": "API Key of the ANY.RUN endpoint server to connect and perform the automated operations.",
+        "description": "Specify the API key used to authenticate with the ANY.RUN Threat Intelligence Lookup API. The format of the API Key must be: NS9sY..FwvfR.",
         "type": "password",
         "name": "api_key",
         "required": true,
         "visible": true,
         "editable": true,
-        "tooltip": "API Key of the ANY.RUN endpoint server to connect and perform the automated operations."
+        "tooltip": "Specify the API key used to authenticate with the ANY.RUN Threat Intelligence Lookup API. The format of the API Key must be: NS9sY..FwvfR."
       },
       {
         "title": "Verify SSL",
-        "description": "Specifies whether the SSL certificate for the server is to be verified or not. By default, this option is set as True.",
+        "description": "Specifies whether the SSL certificate for the server is to be verified. By default, this option is set to True.",
         "type": "checkbox",
         "name": "verify_ssl",
         "required": false,
         "visible": true,
         "editable": true,
         "value": true,
-        "tooltip": "Specifies whether the SSL certificate for the server is to be verified or not. By default, this option is set as True."
+        "tooltip": "Specifies whether the SSL certificate for the server is to be verified. By default, this option is set to True."
       }
     ]
   },
   "operations": [
     {
       "operation": "get_intelligence",
-      "title": "Lookup IoC in Threat Intelligence",
-      "description": "Retrieves threat intelligence data for a given IoC from the ANY.RUN Threat Intelligence service.",
+      "title": "Lookup IOC in Threat Intelligence",
+      "description": "Retrieves threat intelligence for a specified IOC. This operation requires an ANY.RUN TI Lookup Premium license. For information about supported parameters, see the ANY.RUN Sandbox API documentation.",
       "category": "investigation",
       "annotation": "get_intelligence",
       "enabled": true,
       "parameters": [
         {
           "title": "Query",
-          "description": "Specify your search query. Several queries can be combined together with the AND operator for more specific results.",
+          "description": "Specifies the IOC query and any required filters. Supports the logical operators AND, OR, and NOT, as well as parentheses () for grouping conditions.",
           "type": "text",
           "name": "query",
           "required": true,
           "visible": true,
           "editable": true,
-          "tooltip": "Specify your search query. Several queries can be combined together with the AND operator for more specific results."
+          "tooltip": "Specifies the IOC query and any required filters. Supports the logical operators AND, OR, and NOT, as well as parentheses () for grouping conditions."
         },
         {
           "title": "Lookup Depth",
-          "description": "Depth of the lookup",
+          "description": "(Optional) Specify the number of days, from the current date, to include in the search.",
           "type": "text",
           "name": "lookup_depth",
           "required": false,
           "visible": true,
           "editable": true,
           "value": "180",
-          "tooltip": "Depth of the lookup"
+          "tooltip": "Specify the number of days, from the current date, to include in the search."
         }
       ],
       "output_schema": {
