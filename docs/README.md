@@ -6,11 +6,11 @@ Add the ANY.RUN Threat Intelligence Lookup connector as a step in FortiSOAR™ p
 
 ### Version information
 
-- Connector Version: 1.0.0 
+- Connector Version: 1.1.0 
 - FortiSOAR™ Version Tested on: 7.6.4-5623 
 - Authored By: ANY.RUN 
 
-## Release Notes for version 1.0.0
+## Release Notes for version 1.1.0
 
 - Connector: ANY.RUN Threat Intelligence Lookup. TI Lookup is a searchable database of IOCs, IOAs, IOBs, and events for threat hunting and a service for browsing malicious files by their content.
 - Playbooks: This playbooks automatically enriches your IOCs using ANY.RUN's Threat Intelligence Lookup, providing fresh, actionable context from sandbox analyses of the latest malware & phishing attacks across 15,000+ organizations:
@@ -98,7 +98,7 @@ The output contains the following populated JSON schema:
 
 ## Included playbooks
 
-The `Sample - ANY.RUN Threat Intelligence Lookup - 1.0.0` playbook collection comes bundled with the ANY.RUN Threat Intelligence Lookup connector. 
+The `Sample - ANY.RUN Threat Intelligence Lookup - 1.1.0` playbook collection comes bundled with the ANY.RUN Threat Intelligence Lookup connector. 
   - File/Domain/IP/URL > ANY.RUN Threat Intelligence > Enrichment
   - File > ANY.RUN Threat Intelligence > Enrichment
   - File Hash > ANY.RUN Threat Intelligence > Enrichment
@@ -131,7 +131,7 @@ For more information about ANY.RUN's Threat Intelligence Lookup and query syntax
 
 ## Pluggable Enrichment
 
-`Sample - ANY.RUN Threat Intelligence Lookup - 1.0.0` playbook collection contains pluggable enrichment playbooks that are used to provide verdicts for various indicator types. The indicator can be of any of the following types: File, File Hash, Domain, IP Address, or URL. The pluggable enrichment playbooks are in the format: *<indicator type>* > ANY.RUN Threat Intelligence > Enrichment format. For example, *URL > ANY.RUN Threat Intelligence > Enrichment*. 
+`Sample - ANY.RUN Threat Intelligence Lookup - 1.1.0` playbook collection contains pluggable enrichment playbooks that are used to provide verdicts for various indicator types. The indicator can be of any of the following types: File, File Hash, Domain, IP Address, or URL. The pluggable enrichment playbooks are in the format: *<indicator type>* > ANY.RUN Threat Intelligence > Enrichment format. For example, *URL > ANY.RUN Threat Intelligence > Enrichment*. 
 
 When using these playbooks, indicators are automatically enriched upon creation in the FortiSOAR.
 By default, these playbooks are disabled. After activating this playbooks, you need to update the global variables. To do this, simply run the "Reset Enrichment Global Variables" playbook in your FortiSOAR.

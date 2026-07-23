@@ -3,7 +3,7 @@
   "data": [
     {
       "@type": "WorkflowCollection",
-      "name": "Sample - ANY.RUN Threat Intelligence Lookup - 1.0.0",
+      "name": "Sample - ANY.RUN Threat Intelligence Lookup - 1.1.0",
       "description": "Sample playbooks for \"ANY.RUN Threat Intelligence Lookup\" connector. If you are planning to use any of the sample playbooks in your environment, ensure that you clone those playbooks and move them to a different collection, since the sample playbook collection gets deleted during connector upgrade and delete.",
       "visible": true,
       "image": null,
@@ -239,7 +239,7 @@
                   "query": "{{vars.indicator_value}}",
                   "lookup_depth": "180"
                 },
-                "version": "1.0.0",
+                "version": "1.1.0",
                 "connector": "anyrun-threat-intelligence-lookup",
                 "operation": "get_intelligence",
                 "operationTitle": "Threat Intelligence IoC Lookup",
@@ -632,7 +632,7 @@
                   "query": "{{vars.indicator_value}}",
                   "lookup_depth": "180"
                 },
-                "version": "1.0.0",
+                "version": "1.1.0",
                 "connector": "anyrun-threat-intelligence-lookup",
                 "operation": "get_intelligence",
                 "operationTitle": "Threat Intelligence IoC Lookup",
@@ -1176,7 +1176,7 @@
                   "query": "{{vars.indicator_value}}",
                   "lookup_depth": "180"
                 },
-                "version": "1.0.0",
+                "version": "1.1.0",
                 "connector": "anyrun-threat-intelligence-lookup",
                 "operation": "get_intelligence",
                 "operationTitle": "Threat Intelligence IoC Lookup",
@@ -1599,7 +1599,7 @@
                   "query": "{{vars.indicator_value}}",
                   "lookup_depth": "180"
                 },
-                "version": "1.0.0",
+                "version": "1.1.0",
                 "connector": "anyrun-threat-intelligence-lookup",
                 "operation": "get_intelligence",
                 "operationTitle": "Threat Intelligence IoC Lookup",
@@ -1807,7 +1807,7 @@
                   "query": "google.com",
                   "lookup_depth": "180"
                 },
-                "version": "1.0.0",
+                "version": "1.1.0",
                 "connector": "anyrun-threat-intelligence-lookup",
                 "operation": "get_intelligence",
                 "operationTitle": "Threat Intelligence IOC Lookup",
@@ -2074,7 +2074,7 @@
                   "query": "{{vars.indicator_value}}",
                   "lookup_depth": "180"
                 },
-                "version": "1.0.0",
+                "version": "1.1.0",
                 "connector": "anyrun-threat-intelligence-lookup",
                 "operation": "get_intelligence",
                 "operationTitle": "Threat Intelligence IoC Lookup",
@@ -2457,7 +2457,7 @@
                   "query": "{{vars.indicator_value}}",
                   "lookup_depth": "180"
                 },
-                "version": "1.0.0",
+                "version": "1.1.0",
                 "connector": "anyrun-threat-intelligence-lookup",
                 "operation": "get_intelligence",
                 "operationTitle": "Threat Intelligence IoC Lookup",

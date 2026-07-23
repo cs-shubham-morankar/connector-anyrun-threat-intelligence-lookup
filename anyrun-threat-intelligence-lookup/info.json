@@ -1,6 +1,6 @@
 {
   "name": "anyrun-threat-intelligence-lookup",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "label": "ANY.RUN Threat Intelligence Lookup",
   "description": "ANY.RUN empowers SOC teams to cut MTTD/MTTR with fast IOC enrichment using the Threat Intelligence Lookup. With the ANY.RUN Threat Intelligence Lookup connector for FortiSOAR, your team achieves: \n- Confident response: Query IOCs/IOAs/IOBs for full context based on live attack data from 15K+ SOCs. Accelerate incient mitigation with actionable intel and reduce MTTR by up to 21 minutes. Use obtained data for incident response, to create new rules, train models, update playbooks, etc.",
   "publisher": "ANY.RUN",
@@ -10,7 +10,7 @@
   "category": [
     "Data Enrichment & Threat Intelligence"
   ],
-  "help_online": "https://docs.fortinet.com/document/fortisoar/1.0.0/any-run-threat-intelligence-lookup/100/any-run-threat-intelligence-lookup-v1-0-0",
+  "help_online": "",
   "icon_small_name": "small.png",
   "icon_large_name": "large.png",
   "configuration": {
