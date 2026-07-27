@@ -1,8 +1,9 @@
 #### The following enhancements have been made to the ANY.RUN Threat Intelligence Lookup connector in version 1.1.0:
 
-- The connector has been verified.
-- Following playbooks mark as inactive by default:
-    - URL > ANY.RUN > Enrichment
-    - File > ANY.RUN > Enrichment
-    - Domain > ANY.RUN > Enrichment
-    - File Hash > ANY.RUN > Enrichment
+- Verified the connector.
+- The following playbooks are now marked as Inactive by default:
+    - Domain > ANY.RUN Threat Intelligence > Enrichment
+    - File > ANY.RUN Threat Intelligence > Enrichment
+    - File Hash > ANY.RUN Threat Intelligence > Enrichment
+    - IP > ANY.RUN Threat Intelligence > Enrichment
+    - URL > ANY.RUN Threat Intelligence > Enrichment

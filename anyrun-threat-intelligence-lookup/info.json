@@ -10,7 +10,7 @@
   "category": [
     "Threat Intelligence"
   ],
-  "help_online": "",
+  "help_online": "https://docs.fortinet.com/document/fortisoar/1.1.0/any-run-threat-intelligence-lookup/110/any-run-threat-intelligence-lookup-v1-1-0",
   "icon_small_name": "small.png",
   "icon_large_name": "large.png",
   "configuration": {
