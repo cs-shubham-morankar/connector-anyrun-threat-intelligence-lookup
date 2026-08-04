@@ -8,7 +8,7 @@
       "visible": true,
       "image": null,
       "uuid": "6ebc7102-7fa9-40d0-bfdc-2762aa5c9cd7",
-      "id": 68,
+      "id": 204,
       "deletedAt": null,
       "importedBy": [],
       "recordTags": [
@@ -29,7 +29,7 @@
           "remoteExecutableFlag": false,
           "parameters": [],
           "synchronous": false,
-          "lastModifyDate": 1775644200,
+          "lastModifyDate": 1785842318,
           "collection": "/api/3/workflow_collections/6ebc7102-7fa9-40d0-bfdc-2762aa5c9cd7",
           "versions": [],
           "triggerStep": "/api/3/workflow_steps/a123ecd3-33fd-41fc-8a88-380a7a77d04b",
@@ -50,7 +50,7 @@
               },
               "status": null,
               "top": "403",
-              "left": "300",
+              "left": "723",
               "stepType": "/api/3/workflow_step_types/0109f35d-090b-4a2b-bd8a-94cbc3508562",
               "group": null,
               "uuid": "58b2a566-98f1-4434-aabc-7d4734e85b69"
@@ -65,7 +65,7 @@
               },
               "status": null,
               "top": "538",
-              "left": "300",
+              "left": "723",
               "stepType": "/api/3/workflow_step_types/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
               "group": null,
               "uuid": "4576ff74-ca77-4d29-b6a2-6d0658a34583"
@@ -76,9 +76,9 @@
               "description": null,
               "arguments": {
                 "params": {
-                  "value": "<table class=\"table\" border=\"1\">\n<tbody>\n<tr>\n        <th colspan=\"5\" class=\"no-background padding-0\">\n            <div class=\"font-size-11 ng-binding padding-bottom-sm\">\n                <h4 style=\"color: orange;\"\n                    class=\"body-default-bgcolor margin-bottom-0 padding-bottom-md padding-left-md padding-top-md text-align-left\">\n                    ANY.RUN TI Lookup Summary</h4>\n            </div>\n        </th>\n    </tr>\n<tr>\n<td width=\"200\">Indicator</td>\n<td>{{vars.indicator_value}}</td>\n</tr>\n<tr>\n<tr>\n<td width=\"200\">Verdict</td>\n<td>{{vars.threat_level}}</td>\n</tr>\n<tr>\n<td>LastSeen</td>\n<td>{{vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.lastSeen}}</td>\n</tr>\n<tr>\n<td>Tags</td>\n<td>{{vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.tags}}</td>\n</tr>\n<td>Affected industries</td>\n<td>{{vars.steps.Submit_Indicator_To_TI_Lookup.data.industries\n   | map(attribute='industryName')\n   | list }}</td>\n</tr>\n<tr>\n<td>Link to TI Lookup request</td>\n<td><a href=\"https://intelligence.any.run/analysis/lookup#{% raw %}{%22query%22:%22{% endraw %}{{ vars.indicator_value | default(vars.steps.Compute_Hash.data.sha256, true) }}{% raw %}%22,%22dateRange%22:180}{% endraw %}\">Open ANY.RUN</td> \n</tr>\n</tbody>\n</table>"
+                  "value": "<table class=\"no-border\">\n<tr>\n<th colspan=\"4\" class=\"no-background padding-0\">\n<div class=\"font-size-11 ng-binding padding-bottom-sm\">\n<h4 style=\"color:orange;\"\nclass=\"body-default-bgcolor margin-bottom-0 padding-bottom-md padding-left-md padding-top-md text-align-left\">\nANY.RUN TI Lookup Summary\n</h4>\n</div>\n</th>\n</tr>\n<tr class=\"solid-border\">\n<td>\n<div small class=\"control-label\">Verdict</div>\n<div class=\"card-container-body margin-left-0\" style=\"width:180px;\">\n<div class=\"body-default-bgcolor card-number font-weight-normal padding-5px padding-left-md font-size-14\"\nstyle=\"border-left:5px solid #28a745;\">\n{{vars.threat_level}}\n</div>\n</div>\n</td>\n<td>\n<div small class=\"control-label\">Indicator</div>\n<div class=\"card-container-body margin-left-0\" style=\"width:220px;\">\n<div class=\"body-default-bgcolor card-number font-weight-normal padding-5px padding-left-md font-size-14\">\n{{vars.indicator_value}}\n</div>\n</div>\n</td>\n<td>\n<div small class=\"control-label\">Last Seen</div>\n<div class=\"card-container-body margin-left-0\" style=\"width:160px;\">\n<div class=\"body-default-bgcolor card-number font-weight-normal padding-5px padding-left-md font-size-14\">\n{{ vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.lastSeen if vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.lastSeen else \"No Data Available\" }}\n</div>\n</div>\n</td>\n<td>\n<div small class=\"control-label\">Tags</div>\n<div class=\"card-container-body margin-left-0\" style=\"width:180px;\">\n<div class=\"body-default-bgcolor card-number font-weight-normal padding-5px padding-left-md font-size-14\">\n{% if vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.tags %}\n{{ vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.tags }}\n{% else %}No Data Available{% endif %}\n</div>\n</div>\n</td>\n</tr>\n<tr>\n<td colspan=\"2\">\n<div small class=\"control-label\">Affected Industries</div>\n<div class=\"card-container-body margin-left-0\">\n<div class=\"body-default-bgcolor card-number font-weight-normal padding-5px padding-left-md font-size-12\">\n{{ (vars.steps.Submit_Indicator_To_TI_Lookup.data.industries | map(attribute='industryName') | list) or \"No Data Available\" }}\n</div>\n</div>\n</td>\n<td colspan=\"2\">\n<div small class=\"control-label\">TI Lookup</div>\n<div class=\"card-container-body margin-left-0\">\n<div class=\"body-default-bgcolor card-number font-weight-normal padding-5px padding-left-md font-size-12\">\n<a href=\"https://intelligence.any.run/analysis/lookup#{% raw %}{%22query%22:%22{% endraw %}{{ vars.indicator_value | default(vars.steps.Compute_Hash.data.sha256, true) }}{% raw %}%22,%22dateRange%22:180}{% endraw %}\"\n   style=\"background:#f5a623;\n          color:#000000;\n          padding:8px 16px;\n          text-decoration:none;\n          border-radius:4px;\n          display:inline-block;\n          font-weight:bold;\">\n    Click\n</a>\n</div>\n</div>\n</td>\n</tr>\n</table>"
                 },
-                "version": "3.7.0",
+                "version": "3.7.2",
                 "connector": "cyops_utilities",
                 "operation": "format_richtext",
                 "operationTitle": "Utils: Format as RichText",
@@ -86,44 +86,10 @@
               },
               "status": null,
               "top": "1078",
-              "left": "475",
+              "left": "898",
               "stepType": "/api/3/workflow_step_types/0109f35d-090b-4a2b-bd8a-94cbc3508562",
               "group": null,
               "uuid": "27de45dc-1836-4719-a3c9-8974c414c40f"
-            },
-            {
-              "@type": "WorkflowStep",
-              "name": "Find Existing Description",
-              "description": null,
-              "arguments": {
-                "query": {
-                  "sort": [],
-                  "limit": 30,
-                  "logic": "AND",
-                  "filters": [
-                    {
-                      "type": "primitive",
-                      "field": "id",
-                      "value": "{{vars.input.records[0].id}}",
-                      "operator": "eq",
-                      "_operator": "eq"
-                    }
-                  ],
-                  "__selectFields": [
-                    "description"
-                  ]
-                },
-                "module": "indicators?$limit=30",
-                "ignore_errors": true,
-                "checkboxFields": true,
-                "step_variables": []
-              },
-              "status": null,
-              "top": "1213",
-              "left": "475",
-              "stepType": "/api/3/workflow_step_types/b593663d-7d13-40ce-a3a3-96dece928770",
-              "group": null,
-              "uuid": "d066b3c5-d128-445c-97bc-0b955b8b8767"
             },
             {
               "@type": "WorkflowStep",
@@ -148,7 +114,7 @@
               },
               "status": null,
               "top": "808",
-              "left": "300",
+              "left": "723",
               "stepType": "/api/3/workflow_step_types/12254cf5-5db7-4b1a-8cb1-3af081924b28",
               "group": null,
               "uuid": "f9cf2458-6b09-41e3-87e0-71bfc22192bd"
@@ -167,7 +133,7 @@
               },
               "status": null,
               "top": "943",
-              "left": "125",
+              "left": "548",
               "stepType": "/api/3/workflow_step_types/0109f35d-090b-4a2b-bd8a-94cbc3508562",
               "group": null,
               "uuid": "606b9a58-5179-47e4-bf0b-0c0394a25dad"
@@ -185,8 +151,8 @@
                 "enrichment_summary": "{{vars.steps.Create_Summary.data['formatted_string']}}"
               },
               "status": null,
-              "top": "1483",
-              "left": "475",
+              "top": "1213",
+              "left": "898",
               "stepType": "/api/3/workflow_step_types/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
               "group": null,
               "uuid": "96a02f68-a533-4ab9-baca-998cb3ffbaef"
@@ -202,7 +168,7 @@
               },
               "status": null,
               "top": "943",
-              "left": "475",
+              "left": "898",
               "stepType": "/api/3/workflow_step_types/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
               "group": null,
               "uuid": "a47943ec-7982-4492-90dc-f736adf2fef3"
@@ -223,7 +189,7 @@
               },
               "status": null,
               "top": "149",
-              "left": "300",
+              "left": "723",
               "stepType": "/api/3/workflow_step_types/b348f017-9a94-471f-87f8-ce88b6a7ad62",
               "group": null,
               "uuid": "a123ecd3-33fd-41fc-8a88-380a7a77d04b"
@@ -250,45 +216,10 @@
               },
               "status": null,
               "top": "673",
-              "left": "300",
+              "left": "723",
               "stepType": "/api/3/workflow_step_types/0bfed618-0316-11e7-93ae-92361f002671",
               "group": null,
               "uuid": "8c64c6de-8b47-4b8b-8025-ccf54d787959"
-            },
-            {
-              "@type": "WorkflowStep",
-              "name": "Update Indicator Description",
-              "description": null,
-              "arguments": {
-                "resource": {
-                  "__link": {
-                    "recordTags": "{{vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.tags | list }}"
-                  },
-                  "country": "{% if vars.steps.Submit_Indicator_To_TI_Lookup.data.destinationIPgeo[0] %}\n{{ vars.steps.Submit_Indicator_To_TI_Lookup.data.destinationIPgeo[0] }}\n {% endif %}",
-                  "reputation": "{{(\"IndicatorReputation\" | picklist(vars.Reputation))[\"@id\"]}}",
-                  "sourceData": "{{vars.source_data |toJSON}}",
-                  "description": "{%- set parts = [] -%}\n\n{%- if vars.item.description -%}\n  {%- set _ = parts.append(vars.item.description) -%}\n{%- endif -%}\n\n{%- if vars.steps.Find_Existing_Description\n      and vars.steps.Find_Existing_Description[0].description\n      and vars.steps.Find_Existing_Description[0].description not in parts -%}\n  {%- set _ = parts.append(vars.steps.Find_Existing_Description[0].description) -%}\n{%- endif -%}\n\n{%- if vars.steps.Create_Summary.data['formatted_string'] -%}\n  {%- set _ = parts.append(vars.steps.Create_Summary.data['formatted_string']) -%}\n{%- endif -%}\n\n{{ parts | unique | join('<br>') }}",
-                  "filehashMD5": "{% if vars.steps.Compute_Hash.data.sha256 is defined %} {{ vars.steps.Compute_Hash.data.md5 }} {% endif %}",
-                  "filehashSHA1": "{% if vars.steps.Compute_Hash.data.sha256 is defined %} {{ vars.steps.Compute_Hash.data.sha1 }} {% endif %}",
-                  "filehashSHA256": "{% if vars.steps.Compute_Hash.data.sha256 is defined %} {{ vars.steps.Compute_Hash.data.sha256 }} {% endif %}"
-                },
-                "_showJson": false,
-                "operation": "Append",
-                "collection": "{{vars.indicator_IRI}}",
-                "__recommend": [],
-                "ignore_errors": true,
-                "collectionType": "/api/3/indicators",
-                "fieldOperation": {
-                  "recordTags": "Append"
-                },
-                "step_variables": []
-              },
-              "status": null,
-              "top": "1348",
-              "left": "475",
-              "stepType": "/api/3/workflow_step_types/b593663d-7d13-40ce-a3a3-96dece928722",
-              "group": null,
-              "uuid": "5db5f2e8-5832-4d8b-8d65-be8531ab2d97"
             }
           ],
           "routes": [
@@ -314,23 +245,13 @@
             },
             {
               "@type": "WorkflowRoute",
-              "name": "Create Summary -> Find Existing Description",
-              "targetStep": "/api/3/workflow_steps/d066b3c5-d128-445c-97bc-0b955b8b8767",
+              "name": "Create Summary -> Return Output Data",
+              "targetStep": "/api/3/workflow_steps/96a02f68-a533-4ab9-baca-998cb3ffbaef",
               "sourceStep": "/api/3/workflow_steps/27de45dc-1836-4719-a3c9-8974c414c40f",
               "label": null,
               "isExecuted": false,
               "group": null,
-              "uuid": "76ab089f-c470-4bd7-bff7-7b97c9ea6224"
-            },
-            {
-              "@type": "WorkflowRoute",
-              "name": "Find Existing Description -> Update Indicator Description",
-              "targetStep": "/api/3/workflow_steps/5db5f2e8-5832-4d8b-8d65-be8531ab2d97",
-              "sourceStep": "/api/3/workflow_steps/d066b3c5-d128-445c-97bc-0b955b8b8767",
-              "label": null,
-              "isExecuted": false,
-              "group": null,
-              "uuid": "1b396c81-47db-42b8-b343-4ba0ecb151ee"
+              "uuid": "42578399-c7ae-4179-a4ad-72815c96d7a3"
             },
             {
               "@type": "WorkflowRoute",
@@ -381,16 +302,6 @@
               "isExecuted": false,
               "group": null,
               "uuid": "c44a5b33-e062-4be6-9531-5c3fe559662b"
-            },
-            {
-              "@type": "WorkflowRoute",
-              "name": "Update Indicator Description -> Return Output Data",
-              "targetStep": "/api/3/workflow_steps/96a02f68-a533-4ab9-baca-998cb3ffbaef",
-              "sourceStep": "/api/3/workflow_steps/5db5f2e8-5832-4d8b-8d65-be8531ab2d97",
-              "label": null,
-              "isExecuted": false,
-              "group": null,
-              "uuid": "a65ba245-fb9a-4564-9c17-e2ef4897702f"
             }
           ],
           "groups": [
@@ -404,8 +315,8 @@
               "hideInLogs": true,
               "metadata": [],
               "reusable": false,
-              "top": "140",
-              "left": "620",
+              "top": "149",
+              "left": "249",
               "height": "298",
               "width": "498",
               "uuid": "8ea5c7ed-7e49-4947-be6f-e055db0b4cfc",
@@ -416,16 +327,15 @@
           "playbookOrigin": "/api/3/picklists/15c1e8c9-22bf-4e66-8fbb-0a502d4a4a3f",
           "isEditable": true,
           "uuid": "3384e2b1-c9c4-44d3-b4ea-f2180e6e1ccc",
-          "id": 1250,
+          "id": 3199,
           "owners": [],
           "isPrivate": false,
           "deletedAt": null,
           "importedBy": [],
           "recordTags": [
             "anyrun-threat-intelligence-lookup",
-            "Enrichment",
             "File_Enrichment",
-            "Playbook"
+            "Subroutine"
           ]
         },
         {
@@ -443,7 +353,7 @@
             "indicator_value"
           ],
           "synchronous": false,
-          "lastModifyDate": 1775644179,
+          "lastModifyDate": 1785842207,
           "collection": "/api/3/workflow_collections/6ebc7102-7fa9-40d0-bfdc-2762aa5c9cd7",
           "versions": [],
           "triggerStep": "/api/3/workflow_steps/d0059ded-eb1a-455e-9821-dd5f6f04e936",
@@ -458,7 +368,7 @@
               },
               "status": null,
               "top": "403",
-              "left": "300",
+              "left": "723",
               "stepType": "/api/3/workflow_step_types/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
               "group": null,
               "uuid": "e91c24dd-ad4f-4aa9-8305-a4967f24c600"
@@ -469,9 +379,9 @@
               "description": null,
               "arguments": {
                 "params": {
-                  "value": "<table class=\"table\" border=\"1\">\n<tbody>\n<tr>\n        <th colspan=\"5\" class=\"no-background padding-0\">\n            <div class=\"font-size-11 ng-binding padding-bottom-sm\">\n                <h4 style=\"color: orange;\"\n                    class=\"body-default-bgcolor margin-bottom-0 padding-bottom-md padding-left-md padding-top-md text-align-left\">\n                    ANY.RUN TI Lookup Summary</h4>\n            </div>\n        </th>\n    </tr>\n<tr>\n<td width=\"200\">Indicator</td>\n<td>{{vars.indicator_value}}</td>\n</tr>\n<tr>\n<tr>\n<td width=\"200\">Verdict</td>\n<td>{{vars.threat_level}}</td>\n</tr>\n<tr>\n<td>LastSeen</td>\n<td>{{vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.lastSeen}}</td>\n</tr>\n<tr>\n<td>Tags</td>\n<td>{{vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.tags}}</td>\n</tr>\n<td>Affected industries</td>\n<td>{{vars.steps.Submit_Indicator_To_TI_Lookup.data.industries\n   | map(attribute='industryName')\n   | list }}</td>\n</tr>\n<tr>\n<td>Link to TI Lookup request</td>\n<td><a href=\"https://intelligence.any.run/analysis/lookup#{% raw %}{%22query%22:%22{% endraw %}{{ vars.indicator_value | default(vars.steps.Compute_Hash.data.sha256, true) }}{% raw %}%22,%22dateRange%22:180}{% endraw %}\">Open ANY.RUN</td> \n</tr>\n</tbody>\n</table>"
+                  "value": "<table class=\"no-border\">\n<tr>\n<th colspan=\"4\" class=\"no-background padding-0\">\n<div class=\"font-size-11 ng-binding padding-bottom-sm\">\n<h4 style=\"color:orange;\"\nclass=\"body-default-bgcolor margin-bottom-0 padding-bottom-md padding-left-md padding-top-md text-align-left\">\nANY.RUN TI Lookup Summary\n</h4>\n</div>\n</th>\n</tr>\n<tr class=\"solid-border\">\n<td>\n<div small class=\"control-label\">Verdict</div>\n<div class=\"card-container-body margin-left-0\" style=\"width:180px;\">\n<div class=\"body-default-bgcolor card-number font-weight-normal padding-5px padding-left-md font-size-14\"\nstyle=\"border-left:5px solid #28a745;\">\n{{vars.threat_level}}\n</div>\n</div>\n</td>\n<td>\n<div small class=\"control-label\">Indicator</div>\n<div class=\"card-container-body margin-left-0\" style=\"width:220px;\">\n<div class=\"body-default-bgcolor card-number font-weight-normal padding-5px padding-left-md font-size-14\">\n{{vars.indicator_value}}\n</div>\n</div>\n</td>\n<td>\n<div small class=\"control-label\">Last Seen</div>\n<div class=\"card-container-body margin-left-0\" style=\"width:160px;\">\n<div class=\"body-default-bgcolor card-number font-weight-normal padding-5px padding-left-md font-size-14\">\n{{ vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.lastSeen if vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.lastSeen else \"No Data Available\" }}\n</div>\n</div>\n</td>\n<td>\n<div small class=\"control-label\">Tags</div>\n<div class=\"card-container-body margin-left-0\" style=\"width:180px;\">\n<div class=\"body-default-bgcolor card-number font-weight-normal padding-5px padding-left-md font-size-14\">\n{% if vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.tags %}\n{{ vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.tags }}\n{% else %}No Data Available{% endif %}\n</div>\n</div>\n</td>\n</tr>\n<tr>\n<td colspan=\"2\">\n<div small class=\"control-label\">Affected Industries</div>\n<div class=\"card-container-body margin-left-0\">\n<div class=\"body-default-bgcolor card-number font-weight-normal padding-5px padding-left-md font-size-12\">\n{{ (vars.steps.Submit_Indicator_To_TI_Lookup.data.industries | map(attribute='industryName') | list) or \"No Data Available\" }}\n</div>\n</div>\n</td>\n<td colspan=\"2\">\n<div small class=\"control-label\">TI Lookup</div>\n<div class=\"card-container-body margin-left-0\">\n<div class=\"body-default-bgcolor card-number font-weight-normal padding-5px padding-left-md font-size-12\">\n<a href=\"https://intelligence.any.run/analysis/lookup#{% raw %}{%22query%22:%22{% endraw %}{{ vars.indicator_value | default(vars.steps.Compute_Hash.data.sha256, true) }}{% raw %}%22,%22dateRange%22:180}{% endraw %}\"\n   style=\"background:#f5a623;\n          color:#000000;\n          padding:8px 16px;\n          text-decoration:none;\n          border-radius:4px;\n          display:inline-block;\n          font-weight:bold;\">\n    Click\n</a>\n</div>\n</div>\n</td>\n</tr>\n</table>"
                 },
-                "version": "3.7.0",
+                "version": "3.7.2",
                 "connector": "cyops_utilities",
                 "operation": "format_richtext",
                 "operationTitle": "Utils: Format as RichText",
@@ -479,44 +389,10 @@
               },
               "status": null,
               "top": "943",
-              "left": "475",
+              "left": "898",
               "stepType": "/api/3/workflow_step_types/0109f35d-090b-4a2b-bd8a-94cbc3508562",
               "group": null,
               "uuid": "31aff5c1-c347-4794-a5f1-728691ca775a"
-            },
-            {
-              "@type": "WorkflowStep",
-              "name": "Find Existing Description",
-              "description": null,
-              "arguments": {
-                "query": {
-                  "sort": [],
-                  "limit": 30,
-                  "logic": "AND",
-                  "filters": [
-                    {
-                      "type": "primitive",
-                      "field": "id",
-                      "value": "{{vars.input.records[0].id}}",
-                      "operator": "eq",
-                      "_operator": "eq"
-                    }
-                  ],
-                  "__selectFields": [
-                    "description"
-                  ]
-                },
-                "module": "indicators?$limit=30",
-                "ignore_errors": true,
-                "checkboxFields": true,
-                "step_variables": []
-              },
-              "status": null,
-              "top": "1078",
-              "left": "475",
-              "stepType": "/api/3/workflow_step_types/b593663d-7d13-40ce-a3a3-96dece928770",
-              "group": null,
-              "uuid": "035bcb0c-ec4a-46c4-85a7-d22bfc13b511"
             },
             {
               "@type": "WorkflowStep",
@@ -541,7 +417,7 @@
               },
               "status": null,
               "top": "673",
-              "left": "300",
+              "left": "723",
               "stepType": "/api/3/workflow_step_types/12254cf5-5db7-4b1a-8cb1-3af081924b28",
               "group": null,
               "uuid": "e1cbd553-6542-4553-ad28-6e5758e545a8"
@@ -560,7 +436,7 @@
               },
               "status": null,
               "top": "808",
-              "left": "125",
+              "left": "548",
               "stepType": "/api/3/workflow_step_types/0109f35d-090b-4a2b-bd8a-94cbc3508562",
               "group": null,
               "uuid": "4574d0a6-ca02-4172-a950-798191a8d1ba"
@@ -578,8 +454,8 @@
                 "enrichment_summary": "{{vars.steps.Create_Summary.data['formatted_string']}}"
               },
               "status": null,
-              "top": "1348",
-              "left": "475",
+              "top": "1078",
+              "left": "898",
               "stepType": "/api/3/workflow_step_types/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
               "group": null,
               "uuid": "d8cfd142-f1da-4698-b02c-faa2fe900d45"
@@ -595,7 +471,7 @@
               },
               "status": null,
               "top": "808",
-              "left": "475",
+              "left": "898",
               "stepType": "/api/3/workflow_step_types/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
               "group": null,
               "uuid": "0d49de6a-91a0-4027-8d6a-260b46f52e8f"
@@ -616,7 +492,7 @@
               },
               "status": null,
               "top": "149",
-              "left": "300",
+              "left": "723",
               "stepType": "/api/3/workflow_step_types/b348f017-9a94-471f-87f8-ce88b6a7ad62",
               "group": null,
               "uuid": "d0059ded-eb1a-455e-9821-dd5f6f04e936"
@@ -643,45 +519,10 @@
               },
               "status": null,
               "top": "538",
-              "left": "300",
+              "left": "723",
               "stepType": "/api/3/workflow_step_types/0bfed618-0316-11e7-93ae-92361f002671",
               "group": null,
               "uuid": "16446be0-3fe4-4c17-a1c9-6146db377bbf"
-            },
-            {
-              "@type": "WorkflowStep",
-              "name": "Update Indicator Description",
-              "description": null,
-              "arguments": {
-                "resource": {
-                  "__link": {
-                    "recordTags": "{{vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.tags | list }}"
-                  },
-                  "country": "{% if vars.steps.Submit_Indicator_To_TI_Lookup.data.destinationIPgeo[0] %}\n{{ vars.steps.Submit_Indicator_To_TI_Lookup.data.destinationIPgeo[0] }}\n {% endif %}",
-                  "reputation": "{{(\"IndicatorReputation\" | picklist(vars.Reputation))[\"@id\"]}}",
-                  "sourceData": "{{vars.source_data |toJSON}}",
-                  "description": "{%- set parts = [] -%}\n\n{%- if vars.item.description -%}\n  {%- set _ = parts.append(vars.item.description) -%}\n{%- endif -%}\n\n{%- if vars.steps.Find_Existing_Description\n      and vars.steps.Find_Existing_Description[0].description\n      and vars.steps.Find_Existing_Description[0].description not in parts -%}\n  {%- set _ = parts.append(vars.steps.Find_Existing_Description[0].description) -%}\n{%- endif -%}\n\n{%- if vars.steps.Create_Summary.data['formatted_string'] -%}\n  {%- set _ = parts.append(vars.steps.Create_Summary.data['formatted_string']) -%}\n{%- endif -%}\n\n{{ parts | unique | join('<br>') }}",
-                  "filehashMD5": "{% if vars.steps.Compute_Hash.data.sha256 is defined %} {{ vars.steps.Compute_Hash.data.md5 }} {% endif %}",
-                  "filehashSHA1": "{% if vars.steps.Compute_Hash.data.sha256 is defined %} {{ vars.steps.Compute_Hash.data.sha1 }} {% endif %}",
-                  "filehashSHA256": "{% if vars.steps.Compute_Hash.data.sha256 is defined %} {{ vars.steps.Compute_Hash.data.sha256 }} {% endif %}"
-                },
-                "_showJson": false,
-                "operation": "Append",
-                "collection": "{{vars.indicator_IRI}}",
-                "__recommend": [],
-                "ignore_errors": true,
-                "collectionType": "/api/3/indicators",
-                "fieldOperation": {
-                  "recordTags": "Append"
-                },
-                "step_variables": []
-              },
-              "status": null,
-              "top": "1213",
-              "left": "475",
-              "stepType": "/api/3/workflow_step_types/b593663d-7d13-40ce-a3a3-96dece928722",
-              "group": null,
-              "uuid": "eaa8dc67-1d4e-4329-9503-8bc5259c98ff"
             }
           ],
           "routes": [
@@ -697,23 +538,13 @@
             },
             {
               "@type": "WorkflowRoute",
-              "name": "Create Summary -> Find Existing Description",
-              "targetStep": "/api/3/workflow_steps/035bcb0c-ec4a-46c4-85a7-d22bfc13b511",
+              "name": "Create Summary -> Return Output Data",
+              "targetStep": "/api/3/workflow_steps/d8cfd142-f1da-4698-b02c-faa2fe900d45",
               "sourceStep": "/api/3/workflow_steps/31aff5c1-c347-4794-a5f1-728691ca775a",
               "label": null,
               "isExecuted": false,
               "group": null,
-              "uuid": "89e1b05f-1c6f-4bce-87d0-9f9573fa2962"
-            },
-            {
-              "@type": "WorkflowRoute",
-              "name": "Find Existing Description -> Update Indicator Description",
-              "targetStep": "/api/3/workflow_steps/eaa8dc67-1d4e-4329-9503-8bc5259c98ff",
-              "sourceStep": "/api/3/workflow_steps/035bcb0c-ec4a-46c4-85a7-d22bfc13b511",
-              "label": null,
-              "isExecuted": false,
-              "group": null,
-              "uuid": "fa33f10f-d799-4c9c-96c7-e238be1c32fb"
+              "uuid": "ebbacd45-455f-451c-89c7-00640023b964"
             },
             {
               "@type": "WorkflowRoute",
@@ -764,16 +595,6 @@
               "isExecuted": false,
               "group": null,
               "uuid": "37570042-8242-4127-8a6a-a900f244155e"
-            },
-            {
-              "@type": "WorkflowRoute",
-              "name": "Update Indicator Description -> Return Output Data",
-              "targetStep": "/api/3/workflow_steps/d8cfd142-f1da-4698-b02c-faa2fe900d45",
-              "sourceStep": "/api/3/workflow_steps/eaa8dc67-1d4e-4329-9503-8bc5259c98ff",
-              "label": null,
-              "isExecuted": false,
-              "group": null,
-              "uuid": "0e6e2ea8-b4d0-46c2-9a10-43672e52eeb2"
             }
           ],
           "groups": [
@@ -787,8 +608,8 @@
               "hideInLogs": true,
               "metadata": [],
               "reusable": false,
-              "top": "140",
-              "left": "580",
+              "top": "149",
+              "left": "249",
               "height": "298",
               "width": "498",
               "uuid": "d1f7f774-8c38-45c1-b825-a629440b8d4a",
@@ -799,15 +620,14 @@
           "playbookOrigin": "/api/3/picklists/15c1e8c9-22bf-4e66-8fbb-0a502d4a4a3f",
           "isEditable": true,
           "uuid": "5d6b48f7-f8ed-4a71-b9d8-f3fb9618e2c1",
-          "id": 1251,
+          "id": 3200,
           "owners": [],
           "isPrivate": false,
           "deletedAt": null,
           "importedBy": [],
           "recordTags": [
             "anyrun-threat-intelligence-lookup",
-            "Enrichment",
-            "Playbook",
+            "Subroutine",
             "URL_Enrichment"
           ]
         },
@@ -818,13 +638,13 @@
           "aliasName": null,
           "tag": "#ANY.RUN Threat Intelligence Lookup",
           "description": "Retrieve the reputation of indicator using ANY.RUN Threat Intelligence Lookup",
-          "isActive": true,
+          "isActive": false,
           "debug": false,
           "singleRecordExecution": false,
           "remoteExecutableFlag": false,
           "parameters": [],
           "synchronous": false,
-          "lastModifyDate": 1775644055,
+          "lastModifyDate": 1785842305,
           "collection": "/api/3/workflow_collections/6ebc7102-7fa9-40d0-bfdc-2762aa5c9cd7",
           "versions": [],
           "triggerStep": "/api/3/workflow_steps/e18f131d-4c65-4fe1-851f-4a5e66d8548c",
@@ -871,9 +691,9 @@
               "description": null,
               "arguments": {
                 "params": {
-                  "value": "<table class=\"table\" border=\"1\">\n<tbody>\n<tr>\n        <th colspan=\"5\" class=\"no-background padding-0\">\n            <div class=\"font-size-11 ng-binding padding-bottom-sm\">\n                <h4 style=\"color: orange;\"\n                    class=\"body-default-bgcolor margin-bottom-0 padding-bottom-md padding-left-md padding-top-md text-align-left\">\n                    ANY.RUN TI Lookup Summary</h4>\n            </div>\n        </th>\n    </tr>\n<tr>\n<td width=\"200\">Indicator</td>\n<td>{{vars.indicator_value}}</td>\n</tr>\n<tr>\n<tr>\n<td width=\"200\">Verdict</td>\n<td>{{vars.threat_level}}</td>\n</tr>\n<tr>\n<td>LastSeen</td>\n<td>{{vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.lastSeen}}</td>\n</tr>\n<tr>\n<td>Tags</td>\n<td>{{vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.tags}}</td>\n</tr>\n<td>Affected industries</td>\n<td>{{vars.steps.Submit_Indicator_To_TI_Lookup.data.industries\n   | map(attribute='industryName')\n   | list }}</td>\n</tr>\n<tr>\n<td>Link to TI Lookup request</td>\n<td><a href=\"https://intelligence.any.run/analysis/lookup#{% raw %}{%22query%22:%22{% endraw %}{{ vars.indicator_value | default(vars.steps.Compute_Hash.data.sha256, true) }}{% raw %}%22,%22dateRange%22:180}{% endraw %}\">Open ANY.RUN</td> \n</tr>\n</tbody>\n</table>"
+                  "value": "<table class=\"no-border\">\n<tr>\n<th colspan=\"4\" class=\"no-background padding-0\">\n<div class=\"font-size-11 ng-binding padding-bottom-sm\">\n<h4 style=\"color:orange;\"\nclass=\"body-default-bgcolor margin-bottom-0 padding-bottom-md padding-left-md padding-top-md text-align-left\">\nANY.RUN TI Lookup Summary\n</h4>\n</div>\n</th>\n</tr>\n<tr class=\"solid-border\">\n<td>\n<div small class=\"control-label\">Verdict</div>\n<div class=\"card-container-body margin-left-0\" style=\"width:180px;\">\n<div class=\"body-default-bgcolor card-number font-weight-normal padding-5px padding-left-md font-size-14\"\nstyle=\"border-left:5px solid #28a745;\">\n{{vars.threat_level}}\n</div>\n</div>\n</td>\n<td>\n<div small class=\"control-label\">Indicator</div>\n<div class=\"card-container-body margin-left-0\" style=\"width:220px;\">\n<div class=\"body-default-bgcolor card-number font-weight-normal padding-5px padding-left-md font-size-14\">\n{{vars.indicator_value}}\n</div>\n</div>\n</td>\n<td>\n<div small class=\"control-label\">Last Seen</div>\n<div class=\"card-container-body margin-left-0\" style=\"width:160px;\">\n<div class=\"body-default-bgcolor card-number font-weight-normal padding-5px padding-left-md font-size-14\">\n{{ vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.lastSeen if vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.lastSeen else \"No Data Available\" }}\n</div>\n</div>\n</td>\n<td>\n<div small class=\"control-label\">Tags</div>\n<div class=\"card-container-body margin-left-0\" style=\"width:180px;\">\n<div class=\"body-default-bgcolor card-number font-weight-normal padding-5px padding-left-md font-size-14\">\n{% if vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.tags %}\n{{ vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.tags }}\n{% else %}No Data Available{% endif %}\n</div>\n</div>\n</td>\n</tr>\n<tr>\n<td colspan=\"2\">\n<div small class=\"control-label\">Affected Industries</div>\n<div class=\"card-container-body margin-left-0\">\n<div class=\"body-default-bgcolor card-number font-weight-normal padding-5px padding-left-md font-size-12\">\n{{ (vars.steps.Submit_Indicator_To_TI_Lookup.data.industries | map(attribute='industryName') | list) or \"No Data Available\" }}\n</div>\n</div>\n</td>\n<td colspan=\"2\">\n<div small class=\"control-label\">TI Lookup</div>\n<div class=\"card-container-body margin-left-0\">\n<div class=\"body-default-bgcolor card-number font-weight-normal padding-5px padding-left-md font-size-12\">\n<a href=\"https://intelligence.any.run/analysis/lookup#{% raw %}{%22query%22:%22{% endraw %}{{ vars.indicator_value | default(vars.steps.Compute_Hash.data.sha256, true) }}{% raw %}%22,%22dateRange%22:180}{% endraw %}\"\n   style=\"background:#f5a623;\n          color:#000000;\n          padding:8px 16px;\n          text-decoration:none;\n          border-radius:4px;\n          display:inline-block;\n          font-weight:bold;\">\n    Click\n</a>\n</div>\n</div>\n</td>\n</tr>\n</table>"
                 },
-                "version": "3.7.0",
+                "version": "3.7.2",
                 "connector": "cyops_utilities",
                 "operation": "format_richtext",
                 "operationTitle": "Utils: Format as RichText",
@@ -1383,7 +1203,7 @@
           "playbookOrigin": "/api/3/picklists/15c1e8c9-22bf-4e66-8fbb-0a502d4a4a3f",
           "isEditable": true,
           "uuid": "6aa9ad58-bbba-4038-aea3-a5b7aac1615a",
-          "id": 1252,
+          "id": 3201,
           "owners": [],
           "isPrivate": false,
           "deletedAt": null,
@@ -1391,8 +1211,7 @@
           "recordTags": [
             "anyrun-threat-intelligence-lookup",
             "Enrichment",
-            "ManualTrigger",
-            "Playbook"
+            "ManualTrigger"
           ]
         },
         {
@@ -1410,7 +1229,7 @@
             "indicator_value"
           ],
           "synchronous": false,
-          "lastModifyDate": 1775644036,
+          "lastModifyDate": 1785841985,
           "collection": "/api/3/workflow_collections/6ebc7102-7fa9-40d0-bfdc-2762aa5c9cd7",
           "versions": [],
           "triggerStep": "/api/3/workflow_steps/89514bcc-0aa8-480a-9967-b44b1fd6a94e",
@@ -1425,7 +1244,7 @@
               },
               "status": null,
               "top": "403",
-              "left": "300",
+              "left": "723",
               "stepType": "/api/3/workflow_step_types/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
               "group": null,
               "uuid": "17c66f72-fc65-4b77-b6e7-8bde1d3693a6"
@@ -1436,54 +1255,20 @@
               "description": null,
               "arguments": {
                 "params": {
-                  "value": "<table class=\"table\" border=\"1\">\n<tbody>\n<tr>\n        <th colspan=\"5\" class=\"no-background padding-0\">\n            <div class=\"font-size-11 ng-binding padding-bottom-sm\">\n                <h4 style=\"color: orange;\"\n                    class=\"body-default-bgcolor margin-bottom-0 padding-bottom-md padding-left-md padding-top-md text-align-left\">\n                    ANY.RUN TI Lookup Summary</h4>\n            </div>\n        </th>\n    </tr>\n<tr>\n<td width=\"200\">Indicator</td>\n<td>{{vars.indicator_value}}</td>\n</tr>\n<tr>\n<tr>\n<td width=\"200\">Verdict</td>\n<td>{{vars.threat_level}}</td>\n</tr>\n<tr>\n<td>LastSeen</td>\n<td>{{vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.lastSeen}}</td>\n</tr>\n<tr>\n<td>Tags</td>\n<td>{{vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.tags}}</td>\n</tr>\n<td>Affected industries</td>\n<td>{{vars.steps.Submit_Indicator_To_TI_Lookup.data.industries\n   | map(attribute='industryName')\n   | list }}</td>\n</tr>\n<tr>\n<td>Link to TI Lookup request</td>\n<td><a href=\"https://intelligence.any.run/analysis/lookup#{% raw %}{%22query%22:%22{% endraw %}{{ vars.indicator_value | default(vars.steps.Compute_Hash.data.sha256, true) }}{% raw %}%22,%22dateRange%22:180}{% endraw %}\">Open ANY.RUN</td> \n</tr>\n</tbody>\n</table>"
+                  "value": "<table class=\"no-border\">\n<tr>\n<th colspan=\"4\" class=\"no-background padding-0\">\n<div class=\"font-size-11 ng-binding padding-bottom-sm\">\n<h4 style=\"color:orange;\"\nclass=\"body-default-bgcolor margin-bottom-0 padding-bottom-md padding-left-md padding-top-md text-align-left\">\nANY.RUN TI Lookup Summary\n</h4>\n</div>\n</th>\n</tr>\n<tr class=\"solid-border\">\n<td>\n<div small class=\"control-label\">Verdict</div>\n<div class=\"card-container-body margin-left-0\" style=\"width:180px;\">\n<div class=\"body-default-bgcolor card-number font-weight-normal padding-5px padding-left-md font-size-14\"\nstyle=\"border-left:5px solid #28a745;\">\n{{vars.threat_level}}\n</div>\n</div>\n</td>\n<td>\n<div small class=\"control-label\">Indicator</div>\n<div class=\"card-container-body margin-left-0\" style=\"width:220px;\">\n<div class=\"body-default-bgcolor card-number font-weight-normal padding-5px padding-left-md font-size-14\">\n{{vars.indicator_value}}\n</div>\n</div>\n</td>\n<td>\n<div small class=\"control-label\">Last Seen</div>\n<div class=\"card-container-body margin-left-0\" style=\"width:160px;\">\n<div class=\"body-default-bgcolor card-number font-weight-normal padding-5px padding-left-md font-size-14\">\n{{ vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.lastSeen if vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.lastSeen else \"No Data Available\" }}\n</div>\n</div>\n</td>\n<td>\n<div small class=\"control-label\">Tags</div>\n<div class=\"card-container-body margin-left-0\" style=\"width:180px;\">\n<div class=\"body-default-bgcolor card-number font-weight-normal padding-5px padding-left-md font-size-14\">\n{% if vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.tags %}\n {{ vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.tags }}\n{% else %}No Data Available{% endif %}\n</div>\n</div>\n</td>\n</tr>\n<tr>\n<td colspan=\"2\">\n<div small class=\"control-label\">Affected Industries</div>\n<div class=\"card-container-body margin-left-0\">\n<div class=\"body-default-bgcolor card-number font-weight-normal padding-5px padding-left-md font-size-12\">\n{{ (vars.steps.Submit_Indicator_To_TI_Lookup.data.industries | map(attribute='industryName') | list) or \"No Data Available\" }}\n</div>\n</div>\n</td>\n<td colspan=\"2\">\n<div small class=\"control-label\">TI Lookup</div>\n<div class=\"card-container-body margin-left-0\">\n<div class=\"body-default-bgcolor card-number font-weight-normal padding-5px padding-left-md font-size-12\">\n<a href=\"https://intelligence.any.run/analysis/lookup#{% raw %}{%22query%22:%22{% endraw %}{{ vars.indicator_value | default(vars.steps.Compute_Hash.data.sha256, true) }}{% raw %}%22,%22dateRange%22:180}{% endraw %}\"\n   style=\"background:#f5a623;\n          color:#000000;\n          padding:8px 16px;\n          text-decoration:none;\n          border-radius:4px;\n          display:inline-block;\n          font-weight:bold;\">\n    Click\n</a>\n</div>\n</div>\n</td>\n</tr>\n</table>"
                 },
-                "version": "3.7.0",
+                "version": "3.7.2",
                 "connector": "cyops_utilities",
                 "operation": "format_richtext",
                 "operationTitle": "Utils: Format as RichText",
                 "step_variables": []
               },
               "status": null,
-              "top": "943",
-              "left": "475",
+              "top": "940",
+              "left": "900",
               "stepType": "/api/3/workflow_step_types/0109f35d-090b-4a2b-bd8a-94cbc3508562",
               "group": null,
               "uuid": "095e27e6-54db-4898-b5fa-e804012b441c"
-            },
-            {
-              "@type": "WorkflowStep",
-              "name": "Find Existing Description",
-              "description": null,
-              "arguments": {
-                "query": {
-                  "sort": [],
-                  "limit": 30,
-                  "logic": "AND",
-                  "filters": [
-                    {
-                      "type": "primitive",
-                      "field": "id",
-                      "value": "{{vars.input.records[0].id}}",
-                      "operator": "eq",
-                      "_operator": "eq"
-                    }
-                  ],
-                  "__selectFields": [
-                    "description"
-                  ]
-                },
-                "module": "indicators?$limit=30",
-                "ignore_errors": true,
-                "checkboxFields": true,
-                "step_variables": []
-              },
-              "status": null,
-              "top": "1078",
-              "left": "475",
-              "stepType": "/api/3/workflow_step_types/b593663d-7d13-40ce-a3a3-96dece928770",
-              "group": null,
-              "uuid": "019268d6-1f81-4d6b-8c6f-4e3b8b38f115"
             },
             {
               "@type": "WorkflowStep",
@@ -1508,7 +1293,7 @@
               },
               "status": null,
               "top": "673",
-              "left": "300",
+              "left": "723",
               "stepType": "/api/3/workflow_step_types/12254cf5-5db7-4b1a-8cb1-3af081924b28",
               "group": null,
               "uuid": "da8a94ec-92f5-4d76-90f9-3272e8af90f0"
@@ -1527,7 +1312,7 @@
               },
               "status": null,
               "top": "808",
-              "left": "125",
+              "left": "548",
               "stepType": "/api/3/workflow_step_types/0109f35d-090b-4a2b-bd8a-94cbc3508562",
               "group": null,
               "uuid": "a6608250-8085-40e1-b41e-0ecbfa2980d7"
@@ -1545,8 +1330,8 @@
                 "enrichment_summary": "{{vars.steps.Create_Summary.data['formatted_string']}}"
               },
               "status": null,
-              "top": "1348",
-              "left": "475",
+              "top": "1078",
+              "left": "898",
               "stepType": "/api/3/workflow_step_types/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
               "group": null,
               "uuid": "7ff8a051-da83-4363-a479-dac0657c2790"
@@ -1562,7 +1347,7 @@
               },
               "status": null,
               "top": "808",
-              "left": "475",
+              "left": "898",
               "stepType": "/api/3/workflow_step_types/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
               "group": null,
               "uuid": "79a9a497-b153-4845-b8bd-720e51969862"
@@ -1583,7 +1368,7 @@
               },
               "status": null,
               "top": "149",
-              "left": "300",
+              "left": "723",
               "stepType": "/api/3/workflow_step_types/b348f017-9a94-471f-87f8-ce88b6a7ad62",
               "group": null,
               "uuid": "89514bcc-0aa8-480a-9967-b44b1fd6a94e"
@@ -1610,45 +1395,10 @@
               },
               "status": null,
               "top": "538",
-              "left": "300",
+              "left": "723",
               "stepType": "/api/3/workflow_step_types/0bfed618-0316-11e7-93ae-92361f002671",
               "group": null,
               "uuid": "c1e9fd7d-e074-476d-b1ce-590892e7bcac"
-            },
-            {
-              "@type": "WorkflowStep",
-              "name": "Update Indicator Description",
-              "description": null,
-              "arguments": {
-                "resource": {
-                  "__link": {
-                    "recordTags": "{{vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.tags | list }}"
-                  },
-                  "country": "{% if vars.steps.Submit_Indicator_To_TI_Lookup.data.destinationIPgeo[0] %}\n{{ vars.steps.Submit_Indicator_To_TI_Lookup.data.destinationIPgeo[0] }}\n {% endif %}",
-                  "reputation": "{{(\"IndicatorReputation\" | picklist(vars.Reputation))[\"@id\"]}}",
-                  "sourceData": "{{vars.source_data |toJSON}}",
-                  "description": "{%- set parts = [] -%}\n\n{%- if vars.item.description -%}\n  {%- set _ = parts.append(vars.item.description) -%}\n{%- endif -%}\n\n{%- if vars.steps.Find_Existing_Description\n      and vars.steps.Find_Existing_Description[0].description\n      and vars.steps.Find_Existing_Description[0].description not in parts -%}\n  {%- set _ = parts.append(vars.steps.Find_Existing_Description[0].description) -%}\n{%- endif -%}\n\n{%- if vars.steps.Create_Summary.data['formatted_string'] -%}\n  {%- set _ = parts.append(vars.steps.Create_Summary.data['formatted_string']) -%}\n{%- endif -%}\n\n{{ parts | unique | join('<br>') }}",
-                  "filehashMD5": "{% if vars.steps.Compute_Hash.data.sha256 is defined %} {{ vars.steps.Compute_Hash.data.md5 }} {% endif %}",
-                  "filehashSHA1": "{% if vars.steps.Compute_Hash.data.sha256 is defined %} {{ vars.steps.Compute_Hash.data.sha1 }} {% endif %}",
-                  "filehashSHA256": "{% if vars.steps.Compute_Hash.data.sha256 is defined %} {{ vars.steps.Compute_Hash.data.sha256 }} {% endif %}"
-                },
-                "_showJson": false,
-                "operation": "Append",
-                "collection": "{{vars.indicator_IRI}}",
-                "__recommend": [],
-                "ignore_errors": true,
-                "collectionType": "/api/3/indicators",
-                "fieldOperation": {
-                  "recordTags": "Append"
-                },
-                "step_variables": []
-              },
-              "status": null,
-              "top": "1213",
-              "left": "475",
-              "stepType": "/api/3/workflow_step_types/b593663d-7d13-40ce-a3a3-96dece928722",
-              "group": null,
-              "uuid": "125011fb-54da-4e75-a080-cfde8d6643ec"
             }
           ],
           "routes": [
@@ -1664,23 +1414,13 @@
             },
             {
               "@type": "WorkflowRoute",
-              "name": "Create Summary -> Find Existing Description",
-              "targetStep": "/api/3/workflow_steps/019268d6-1f81-4d6b-8c6f-4e3b8b38f115",
+              "name": "Create Summary -> Return Output Data",
+              "targetStep": "/api/3/workflow_steps/7ff8a051-da83-4363-a479-dac0657c2790",
               "sourceStep": "/api/3/workflow_steps/095e27e6-54db-4898-b5fa-e804012b441c",
               "label": null,
               "isExecuted": false,
               "group": null,
-              "uuid": "57d83b48-5e0b-4783-ac3a-049d8021f0de"
-            },
-            {
-              "@type": "WorkflowRoute",
-              "name": "Find Existing Description -> Update Indicator Description",
-              "targetStep": "/api/3/workflow_steps/125011fb-54da-4e75-a080-cfde8d6643ec",
-              "sourceStep": "/api/3/workflow_steps/019268d6-1f81-4d6b-8c6f-4e3b8b38f115",
-              "label": null,
-              "isExecuted": false,
-              "group": null,
-              "uuid": "63e8987f-a4e9-4014-ba21-01d6e75f9931"
+              "uuid": "00724ba9-d18d-43f4-8570-e94cf6b40411"
             },
             {
               "@type": "WorkflowRoute",
@@ -1731,16 +1471,6 @@
               "isExecuted": false,
               "group": null,
               "uuid": "8d8b7b98-8ea9-4540-9606-9e93f3e3e02a"
-            },
-            {
-              "@type": "WorkflowRoute",
-              "name": "Update Indicator Description -> Return Output Data",
-              "targetStep": "/api/3/workflow_steps/7ff8a051-da83-4363-a479-dac0657c2790",
-              "sourceStep": "/api/3/workflow_steps/125011fb-54da-4e75-a080-cfde8d6643ec",
-              "label": null,
-              "isExecuted": false,
-              "group": null,
-              "uuid": "1e60ce36-9833-40d7-9f52-c28e841d519b"
             }
           ],
           "groups": [
@@ -1754,8 +1484,8 @@
               "hideInLogs": true,
               "metadata": [],
               "reusable": false,
-              "top": "140",
-              "left": "620",
+              "top": "149",
+              "left": "249",
               "height": "298",
               "width": "498",
               "uuid": "c0d1c7ff-e99d-4b09-9c4f-20785e19ebde",
@@ -1766,16 +1496,15 @@
           "playbookOrigin": "/api/3/picklists/15c1e8c9-22bf-4e66-8fbb-0a502d4a4a3f",
           "isEditable": true,
           "uuid": "9c2c37b9-4759-468b-87de-eb1112ed0413",
-          "id": 1253,
+          "id": 3202,
           "owners": [],
           "isPrivate": false,
           "deletedAt": null,
           "importedBy": [],
           "recordTags": [
             "anyrun-threat-intelligence-lookup",
-            "Enrichment",
             "IP_Enrichment",
-            "Playbook"
+            "Subroutine"
           ]
         },
         {
@@ -1861,7 +1590,7 @@
           "playbookOrigin": "/api/3/picklists/15c1e8c9-22bf-4e66-8fbb-0a502d4a4a3f",
           "isEditable": true,
           "uuid": "c9afe8c7-8f50-4e1b-8916-586c4b9bd930",
-          "id": 1254,
+          "id": 3203,
           "owners": [],
           "isPrivate": false,
           "deletedAt": null,
@@ -1885,7 +1614,7 @@
             "indicator_value"
           ],
           "synchronous": false,
-          "lastModifyDate": 1775644130,
+          "lastModifyDate": 1785841976,
           "collection": "/api/3/workflow_collections/6ebc7102-7fa9-40d0-bfdc-2762aa5c9cd7",
           "versions": [],
           "triggerStep": "/api/3/workflow_steps/d17d72cb-0b25-42cf-8bd3-1aa1885724aa",
@@ -1900,7 +1629,7 @@
               },
               "status": null,
               "top": "403",
-              "left": "300",
+              "left": "723",
               "stepType": "/api/3/workflow_step_types/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
               "group": null,
               "uuid": "03719a82-dbfa-4688-8c21-d38c8dc22142"
@@ -1911,9 +1640,9 @@
               "description": null,
               "arguments": {
                 "params": {
-                  "value": "<table class=\"table\" border=\"1\">\n<tbody>\n<tr>\n        <th colspan=\"5\" class=\"no-background padding-0\">\n            <div class=\"font-size-11 ng-binding padding-bottom-sm\">\n                <h4 style=\"color: orange;\"\n                    class=\"body-default-bgcolor margin-bottom-0 padding-bottom-md padding-left-md padding-top-md text-align-left\">\n                    ANY.RUN TI Lookup Summary</h4>\n            </div>\n        </th>\n    </tr>\n<tr>\n<td width=\"200\">Indicator</td>\n<td>{{vars.indicator_value}}</td>\n</tr>\n<tr>\n<tr>\n<td width=\"200\">Verdict</td>\n<td>{{vars.threat_level}}</td>\n</tr>\n<tr>\n<td>LastSeen</td>\n<td>{{vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.lastSeen}}</td>\n</tr>\n<tr>\n<td>Tags</td>\n<td>{{vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.tags}}</td>\n</tr>\n<td>Affected industries</td>\n<td>{{vars.steps.Submit_Indicator_To_TI_Lookup.data.industries\n   | map(attribute='industryName')\n   | list }}</td>\n</tr>\n<tr>\n<td>Link to TI Lookup request</td>\n<td><a href=\"https://intelligence.any.run/analysis/lookup#{% raw %}{%22query%22:%22{% endraw %}{{ vars.indicator_value | default(vars.steps.Compute_Hash.data.sha256, true) }}{% raw %}%22,%22dateRange%22:180}{% endraw %}\">Open ANY.RUN</td> \n</tr>\n</tbody>\n</table>"
+                  "value": "<table class=\"no-border\">\n<tr>\n<th colspan=\"4\" class=\"no-background padding-0\">\n<div class=\"font-size-11 ng-binding padding-bottom-sm\">\n<h4 style=\"color:orange;\"\nclass=\"body-default-bgcolor margin-bottom-0 padding-bottom-md padding-left-md padding-top-md text-align-left\">\nANY.RUN TI Lookup Summary\n</h4>\n</div>\n</th>\n</tr>\n<tr class=\"solid-border\">\n<td>\n<div small class=\"control-label\">Verdict</div>\n<div class=\"card-container-body margin-left-0\" style=\"width:180px;\">\n<div class=\"body-default-bgcolor card-number font-weight-normal padding-5px padding-left-md font-size-14\"\nstyle=\"border-left:5px solid #28a745;\">\n{{vars.threat_level}}\n</div>\n</div>\n</td>\n<td>\n<div small class=\"control-label\">Indicator</div>\n<div class=\"card-container-body margin-left-0\" style=\"width:220px;\">\n<div class=\"body-default-bgcolor card-number font-weight-normal padding-5px padding-left-md font-size-14\">\n{{vars.indicator_value}}\n</div>\n</div>\n</td>\n<td>\n<div small class=\"control-label\">Last Seen</div>\n<div class=\"card-container-body margin-left-0\" style=\"width:160px;\">\n<div class=\"body-default-bgcolor card-number font-weight-normal padding-5px padding-left-md font-size-14\">\n{{ vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.lastSeen if vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.lastSeen else \"No Data Available\" }}\n</div>\n</div>\n</td>\n<td>\n<div small class=\"control-label\">Tags</div>\n<div class=\"card-container-body margin-left-0\" style=\"width:180px;\">\n<div class=\"body-default-bgcolor card-number font-weight-normal padding-5px padding-left-md font-size-14\">\n{% if vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.tags %}\n{{ vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.tags }}\n{% else %}No Data Available{% endif %}\n</div>\n</div>\n</td>\n</tr>\n<tr>\n<td colspan=\"2\">\n<div small class=\"control-label\">Affected Industries</div>\n<div class=\"card-container-body margin-left-0\">\n<div class=\"body-default-bgcolor card-number font-weight-normal padding-5px padding-left-md font-size-12\">\n{{ (vars.steps.Submit_Indicator_To_TI_Lookup.data.industries | map(attribute='industryName') | list) or \"No Data Available\" }}\n</div>\n</div>\n</td>\n<td colspan=\"2\">\n<div small class=\"control-label\">TI Lookup</div>\n<div class=\"card-container-body margin-left-0\">\n<div class=\"body-default-bgcolor card-number font-weight-normal padding-5px padding-left-md font-size-12\">\n<a href=\"https://intelligence.any.run/analysis/lookup#{% raw %}{%22query%22:%22{% endraw %}{{ vars.indicator_value | default(vars.steps.Compute_Hash.data.sha256, true) }}{% raw %}%22,%22dateRange%22:180}{% endraw %}\"\n   style=\"background:#f5a623;\n          color:#000000;\n          padding:8px 16px;\n          text-decoration:none;\n          border-radius:4px;\n          display:inline-block;\n          font-weight:bold;\">\n    Click\n</a>\n</div>\n</div>\n</td>\n</tr>\n</table>"
                 },
-                "version": "3.7.0",
+                "version": "3.7.2",
                 "connector": "cyops_utilities",
                 "operation": "format_richtext",
                 "operationTitle": "Utils: Format as RichText",
@@ -1921,44 +1650,10 @@
               },
               "status": null,
               "top": "943",
-              "left": "475",
+              "left": "898",
               "stepType": "/api/3/workflow_step_types/0109f35d-090b-4a2b-bd8a-94cbc3508562",
               "group": null,
               "uuid": "a634c5a1-c995-41d8-999a-f074f5db1056"
-            },
-            {
-              "@type": "WorkflowStep",
-              "name": "Find Existing Description",
-              "description": null,
-              "arguments": {
-                "query": {
-                  "sort": [],
-                  "limit": 30,
-                  "logic": "AND",
-                  "filters": [
-                    {
-                      "type": "primitive",
-                      "field": "id",
-                      "value": "{{vars.input.records[0].id}}",
-                      "operator": "eq",
-                      "_operator": "eq"
-                    }
-                  ],
-                  "__selectFields": [
-                    "description"
-                  ]
-                },
-                "module": "indicators?$limit=30",
-                "ignore_errors": true,
-                "checkboxFields": true,
-                "step_variables": []
-              },
-              "status": null,
-              "top": "1078",
-              "left": "475",
-              "stepType": "/api/3/workflow_step_types/b593663d-7d13-40ce-a3a3-96dece928770",
-              "group": null,
-              "uuid": "355ca731-905c-4a93-896b-ca465dadb47b"
             },
             {
               "@type": "WorkflowStep",
@@ -1983,7 +1678,7 @@
               },
               "status": null,
               "top": "673",
-              "left": "300",
+              "left": "723",
               "stepType": "/api/3/workflow_step_types/12254cf5-5db7-4b1a-8cb1-3af081924b28",
               "group": null,
               "uuid": "5047fcaa-c3ad-41ce-81cb-31c511f62903"
@@ -2002,7 +1697,7 @@
               },
               "status": null,
               "top": "808",
-              "left": "125",
+              "left": "548",
               "stepType": "/api/3/workflow_step_types/0109f35d-090b-4a2b-bd8a-94cbc3508562",
               "group": null,
               "uuid": "b80ae01a-2f45-4a4b-97c8-b21ae0143321"
@@ -2020,8 +1715,8 @@
                 "enrichment_summary": "{{vars.steps.Create_Summary.data['formatted_string']}}"
               },
               "status": null,
-              "top": "1348",
-              "left": "475",
+              "top": "1078",
+              "left": "898",
               "stepType": "/api/3/workflow_step_types/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
               "group": null,
               "uuid": "f04d7c7d-7924-4e2f-953c-351828f6e723"
@@ -2037,7 +1732,7 @@
               },
               "status": null,
               "top": "808",
-              "left": "475",
+              "left": "898",
               "stepType": "/api/3/workflow_step_types/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
               "group": null,
               "uuid": "0361de68-e3c9-4048-b56e-fe5b5d64663d"
@@ -2058,7 +1753,7 @@
               },
               "status": null,
               "top": "149",
-              "left": "300",
+              "left": "723",
               "stepType": "/api/3/workflow_step_types/b348f017-9a94-471f-87f8-ce88b6a7ad62",
               "group": null,
               "uuid": "d17d72cb-0b25-42cf-8bd3-1aa1885724aa"
@@ -2084,46 +1779,11 @@
                 }
               },
               "status": null,
-              "top": "540",
-              "left": "300",
+              "top": "538",
+              "left": "723",
               "stepType": "/api/3/workflow_step_types/0bfed618-0316-11e7-93ae-92361f002671",
               "group": null,
               "uuid": "d85eb4b8-90f1-4350-80c2-5f2754d3c1ce"
-            },
-            {
-              "@type": "WorkflowStep",
-              "name": "Update Indicator Description",
-              "description": null,
-              "arguments": {
-                "resource": {
-                  "__link": {
-                    "recordTags": "{{vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.tags | list }}"
-                  },
-                  "country": "{% if vars.steps.Submit_Indicator_To_TI_Lookup.data.destinationIPgeo[0] %}\n{{ vars.steps.Submit_Indicator_To_TI_Lookup.data.destinationIPgeo[0] }}\n {% endif %}",
-                  "reputation": "{{(\"IndicatorReputation\" | picklist(vars.Reputation))[\"@id\"]}}",
-                  "sourceData": "{{vars.source_data |toJSON}}",
-                  "description": "{%- set parts = [] -%}\n\n{%- if vars.item.description -%}\n  {%- set _ = parts.append(vars.item.description) -%}\n{%- endif -%}\n\n{%- if vars.steps.Find_Existing_Description\n      and vars.steps.Find_Existing_Description[0].description\n      and vars.steps.Find_Existing_Description[0].description not in parts -%}\n  {%- set _ = parts.append(vars.steps.Find_Existing_Description[0].description) -%}\n{%- endif -%}\n\n{%- if vars.steps.Create_Summary.data['formatted_string'] -%}\n  {%- set _ = parts.append(vars.steps.Create_Summary.data['formatted_string']) -%}\n{%- endif -%}\n\n{{ parts | unique | join('<br>') }}",
-                  "filehashMD5": "{% if vars.steps.Compute_Hash.data.sha256 is defined %} {{ vars.steps.Compute_Hash.data.md5 }} {% endif %}",
-                  "filehashSHA1": "{% if vars.steps.Compute_Hash.data.sha256 is defined %} {{ vars.steps.Compute_Hash.data.sha1 }} {% endif %}",
-                  "filehashSHA256": "{% if vars.steps.Compute_Hash.data.sha256 is defined %} {{ vars.steps.Compute_Hash.data.sha256 }} {% endif %}"
-                },
-                "_showJson": false,
-                "operation": "Append",
-                "collection": "{{vars.indicator_IRI}}",
-                "__recommend": [],
-                "ignore_errors": true,
-                "collectionType": "/api/3/indicators",
-                "fieldOperation": {
-                  "recordTags": "Append"
-                },
-                "step_variables": []
-              },
-              "status": null,
-              "top": "1213",
-              "left": "475",
-              "stepType": "/api/3/workflow_step_types/b593663d-7d13-40ce-a3a3-96dece928722",
-              "group": null,
-              "uuid": "cec18a0b-f89f-4963-b1ac-4450a50f0ce0"
             }
           ],
           "routes": [
@@ -2139,23 +1799,13 @@
             },
             {
               "@type": "WorkflowRoute",
-              "name": "Create Summary -> Find Existing Description",
-              "targetStep": "/api/3/workflow_steps/355ca731-905c-4a93-896b-ca465dadb47b",
+              "name": "Create Summary -> Return Output Data",
+              "targetStep": "/api/3/workflow_steps/f04d7c7d-7924-4e2f-953c-351828f6e723",
               "sourceStep": "/api/3/workflow_steps/a634c5a1-c995-41d8-999a-f074f5db1056",
               "label": null,
               "isExecuted": false,
               "group": null,
-              "uuid": "0b9bf830-a49e-4475-ae11-d8f2f761507b"
-            },
-            {
-              "@type": "WorkflowRoute",
-              "name": "Find Existing Description -> Update Indicator Description",
-              "targetStep": "/api/3/workflow_steps/cec18a0b-f89f-4963-b1ac-4450a50f0ce0",
-              "sourceStep": "/api/3/workflow_steps/355ca731-905c-4a93-896b-ca465dadb47b",
-              "label": null,
-              "isExecuted": false,
-              "group": null,
-              "uuid": "1c6ea40c-44fc-4d9a-b5c7-e34ce16ac0a6"
+              "uuid": "26928994-3a9a-411e-906b-d237f3088776"
             },
             {
               "@type": "WorkflowRoute",
@@ -2206,16 +1856,6 @@
               "isExecuted": false,
               "group": null,
               "uuid": "a74ba61b-4370-4ade-94b1-434fc4d3a273"
-            },
-            {
-              "@type": "WorkflowRoute",
-              "name": "Update Indicator Description -> Return Output Data",
-              "targetStep": "/api/3/workflow_steps/f04d7c7d-7924-4e2f-953c-351828f6e723",
-              "sourceStep": "/api/3/workflow_steps/cec18a0b-f89f-4963-b1ac-4450a50f0ce0",
-              "label": null,
-              "isExecuted": false,
-              "group": null,
-              "uuid": "fabf8483-051e-4d38-8699-0938f8050afc"
             }
           ],
           "groups": [
@@ -2229,8 +1869,8 @@
               "hideInLogs": true,
               "metadata": [],
               "reusable": false,
-              "top": "140",
-              "left": "620",
+              "top": "149",
+              "left": "249",
               "height": "298",
               "width": "498",
               "uuid": "ab655514-4d92-4b57-b49e-ad1992af8187",
@@ -2241,7 +1881,7 @@
           "playbookOrigin": "/api/3/picklists/15c1e8c9-22bf-4e66-8fbb-0a502d4a4a3f",
           "isEditable": true,
           "uuid": "e7ccbb71-ca7b-42a1-821f-9f518a956e35",
-          "id": 1255,
+          "id": 3204,
           "owners": [],
           "isPrivate": false,
           "deletedAt": null,
@@ -2249,8 +1889,7 @@
           "recordTags": [
             "anyrun-threat-intelligence-lookup",
             "Domain_Enrichment",
-            "Enrichment",
-            "Playbook"
+            "Subroutine"
           ]
         },
         {
@@ -2260,7 +1899,7 @@
           "aliasName": null,
           "tag": "#ANY.RUN Threat Intelligence Lookup",
           "description": "Retrieve the reputation of file hash using ANY.RUN Threat Intelligence Lookup",
-          "isActive": false,
+          "isActive": true,
           "debug": false,
           "singleRecordExecution": false,
           "remoteExecutableFlag": false,
@@ -2268,7 +1907,7 @@
             "indicator_value"
           ],
           "synchronous": false,
-          "lastModifyDate": 1775644280,
+          "lastModifyDate": 1785842220,
           "collection": "/api/3/workflow_collections/6ebc7102-7fa9-40d0-bfdc-2762aa5c9cd7",
           "versions": [],
           "triggerStep": "/api/3/workflow_steps/9e36a233-4d9b-46c6-9492-b4ff01961238",
@@ -2294,9 +1933,9 @@
               "description": null,
               "arguments": {
                 "params": {
-                  "value": "<table class=\"table\" border=\"1\">\n<tbody>\n<tr>\n        <th colspan=\"5\" class=\"no-background padding-0\">\n            <div class=\"font-size-11 ng-binding padding-bottom-sm\">\n                <h4 style=\"color: orange;\"\n                    class=\"body-default-bgcolor margin-bottom-0 padding-bottom-md padding-left-md padding-top-md text-align-left\">\n                    ANY.RUN TI Lookup Summary</h4>\n            </div>\n        </th>\n    </tr>\n<tr>\n<td width=\"200\">Indicator</td>\n<td>{{vars.indicator_value}}</td>\n</tr>\n<tr>\n<tr>\n<td width=\"200\">Verdict</td>\n<td>{{vars.threat_level}}</td>\n</tr>\n<tr>\n<td>LastSeen</td>\n<td>{{vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.lastSeen}}</td>\n</tr>\n<tr>\n<td>Tags</td>\n<td>{{vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.tags}}</td>\n</tr>\n<td>Affected industries</td>\n<td>{{vars.steps.Submit_Indicator_To_TI_Lookup.data.industries\n   | map(attribute='industryName')\n   | list }}</td>\n</tr>\n<tr>\n<td>Link to TI Lookup request</td>\n<td><a href=\"https://intelligence.any.run/analysis/lookup#{% raw %}{%22query%22:%22{% endraw %}{{ vars.indicator_value | default(vars.steps.Compute_Hash.data.sha256, true) }}{% raw %}%22,%22dateRange%22:180}{% endraw %}\">Open ANY.RUN</td> \n</tr>\n</tbody>\n</table>"
+                  "value": "<table class=\"no-border\">\n<tr>\n<th colspan=\"4\" class=\"no-background padding-0\">\n<div class=\"font-size-11 ng-binding padding-bottom-sm\">\n<h4 style=\"color:orange;\"\nclass=\"body-default-bgcolor margin-bottom-0 padding-bottom-md padding-left-md padding-top-md text-align-left\">\nANY.RUN TI Lookup Summary\n</h4>\n</div>\n</th>\n</tr>\n<tr class=\"solid-border\">\n<td>\n<div small class=\"control-label\">Verdict</div>\n<div class=\"card-container-body margin-left-0\" style=\"width:180px;\">\n<div class=\"body-default-bgcolor card-number font-weight-normal padding-5px padding-left-md font-size-14\"\nstyle=\"border-left:5px solid #28a745;\">\n{{vars.threat_level}}\n</div>\n</div>\n</td>\n<td>\n<div small class=\"control-label\">Indicator</div>\n<div class=\"card-container-body margin-left-0\" style=\"width:220px;\">\n<div class=\"body-default-bgcolor card-number font-weight-normal padding-5px padding-left-md font-size-14\">\n{{vars.indicator_value}}\n</div>\n</div>\n</td>\n<td>\n<div small class=\"control-label\">Last Seen</div>\n<div class=\"card-container-body margin-left-0\" style=\"width:160px;\">\n<div class=\"body-default-bgcolor card-number font-weight-normal padding-5px padding-left-md font-size-14\">\n{{ vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.lastSeen if vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.lastSeen else \"No Data Available\" }}\n</div>\n</div>\n</td>\n<td>\n<div small class=\"control-label\">Tags</div>\n<div class=\"card-container-body margin-left-0\" style=\"width:180px;\">\n<div class=\"body-default-bgcolor card-number font-weight-normal padding-5px padding-left-md font-size-14\">\n{% if vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.tags %}\n{{ vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.tags }}\n{% else %}No Data Available{% endif %}\n</div>\n</div>\n</td>\n</tr>\n<tr>\n<td colspan=\"2\">\n<div small class=\"control-label\">Affected Industries</div>\n<div class=\"card-container-body margin-left-0\">\n<div class=\"body-default-bgcolor card-number font-weight-normal padding-5px padding-left-md font-size-12\">\n{{ (vars.steps.Submit_Indicator_To_TI_Lookup.data.industries | map(attribute='industryName') | list) or \"No Data Available\" }}\n</div>\n</div>\n</td>\n<td colspan=\"2\">\n<div small class=\"control-label\">TI Lookup</div>\n<div class=\"card-container-body margin-left-0\">\n<div class=\"body-default-bgcolor card-number font-weight-normal padding-5px padding-left-md font-size-12\">\n<a href=\"https://intelligence.any.run/analysis/lookup#{% raw %}{%22query%22:%22{% endraw %}{{ vars.indicator_value | default(vars.steps.Compute_Hash.data.sha256, true) }}{% raw %}%22,%22dateRange%22:180}{% endraw %}\"\n   style=\"background:#f5a623;\n          color:#000000;\n          padding:8px 16px;\n          text-decoration:none;\n          border-radius:4px;\n          display:inline-block;\n          font-weight:bold;\">\n    Click\n</a>\n</div>\n</div>\n</td>\n</tr>\n</table>"
                 },
-                "version": "3.7.0",
+                "version": "3.7.2",
                 "connector": "cyops_utilities",
                 "operation": "format_richtext",
                 "operationTitle": "Utils: Format as RichText",
@@ -2308,40 +1947,6 @@
               "stepType": "/api/3/workflow_step_types/0109f35d-090b-4a2b-bd8a-94cbc3508562",
               "group": null,
               "uuid": "3fe6d129-056b-4649-93e6-a5094b3e9a65"
-            },
-            {
-              "@type": "WorkflowStep",
-              "name": "Find Existing Description",
-              "description": null,
-              "arguments": {
-                "query": {
-                  "sort": [],
-                  "limit": 30,
-                  "logic": "AND",
-                  "filters": [
-                    {
-                      "type": "primitive",
-                      "field": "id",
-                      "value": "{{vars.input.records[0].id}}",
-                      "operator": "eq",
-                      "_operator": "eq"
-                    }
-                  ],
-                  "__selectFields": [
-                    "description"
-                  ]
-                },
-                "module": "indicators?$limit=30",
-                "ignore_errors": true,
-                "checkboxFields": true,
-                "step_variables": []
-              },
-              "status": null,
-              "top": "1078",
-              "left": "898",
-              "stepType": "/api/3/workflow_step_types/b593663d-7d13-40ce-a3a3-96dece928770",
-              "group": null,
-              "uuid": "445b3308-45c2-42e6-9893-8f02ecb36a12"
             },
             {
               "@type": "WorkflowStep",
@@ -2403,7 +2008,7 @@
                 "enrichment_summary": "{{vars.steps.Create_Summary.data['formatted_string']}}"
               },
               "status": null,
-              "top": "1348",
+              "top": "1078",
               "left": "898",
               "stepType": "/api/3/workflow_step_types/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
               "group": null,
@@ -2472,41 +2077,6 @@
               "stepType": "/api/3/workflow_step_types/0bfed618-0316-11e7-93ae-92361f002671",
               "group": null,
               "uuid": "c2a6a872-4f13-41f1-a019-7c13fcc5db1c"
-            },
-            {
-              "@type": "WorkflowStep",
-              "name": "Update Indicator Description",
-              "description": null,
-              "arguments": {
-                "resource": {
-                  "__link": {
-                    "recordTags": "{{vars.steps.Submit_Indicator_To_TI_Lookup.data.summary.tags | list }}"
-                  },
-                  "country": "{% if vars.steps.Submit_Indicator_To_TI_Lookup.data.destinationIPgeo[0] %}\n{{ vars.steps.Submit_Indicator_To_TI_Lookup.data.destinationIPgeo[0] }}\n {% endif %}",
-                  "reputation": "{{(\"IndicatorReputation\" | picklist(vars.Reputation))[\"@id\"]}}",
-                  "sourceData": "{{vars.source_data |toJSON}}",
-                  "description": "{%- set parts = [] -%}\n\n{%- if vars.item.description -%}\n  {%- set _ = parts.append(vars.item.description) -%}\n{%- endif -%}\n\n{%- if vars.steps.Find_Existing_Description\n      and vars.steps.Find_Existing_Description[0].description\n      and vars.steps.Find_Existing_Description[0].description not in parts -%}\n  {%- set _ = parts.append(vars.steps.Find_Existing_Description[0].description) -%}\n{%- endif -%}\n\n{%- if vars.steps.Create_Summary.data['formatted_string'] -%}\n  {%- set _ = parts.append(vars.steps.Create_Summary.data['formatted_string']) -%}\n{%- endif -%}\n\n{{ parts | unique | join('<br>') }}",
-                  "filehashMD5": "{% if vars.steps.Compute_Hash.data.sha256 is defined %} {{ vars.steps.Compute_Hash.data.md5 }} {% endif %}",
-                  "filehashSHA1": "{% if vars.steps.Compute_Hash.data.sha256 is defined %} {{ vars.steps.Compute_Hash.data.sha1 }} {% endif %}",
-                  "filehashSHA256": "{% if vars.steps.Compute_Hash.data.sha256 is defined %} {{ vars.steps.Compute_Hash.data.sha256 }} {% endif %}"
-                },
-                "_showJson": false,
-                "operation": "Append",
-                "collection": "{{vars.indicator_IRI}}",
-                "__recommend": [],
-                "ignore_errors": true,
-                "collectionType": "/api/3/indicators",
-                "fieldOperation": {
-                  "recordTags": "Append"
-                },
-                "step_variables": []
-              },
-              "status": null,
-              "top": "1213",
-              "left": "898",
-              "stepType": "/api/3/workflow_step_types/b593663d-7d13-40ce-a3a3-96dece928722",
-              "group": null,
-              "uuid": "e259fc49-a358-4f49-b9bd-4afdf782d8c8"
             }
           ],
           "routes": [
@@ -2522,23 +2092,13 @@
             },
             {
               "@type": "WorkflowRoute",
-              "name": "Create Summary -> Find Existing Description",
-              "targetStep": "/api/3/workflow_steps/445b3308-45c2-42e6-9893-8f02ecb36a12",
+              "name": "Create Summary -> Return Output Data",
+              "targetStep": "/api/3/workflow_steps/98d4fc85-aff8-40c9-8d8a-900ab0fb2f1b",
               "sourceStep": "/api/3/workflow_steps/3fe6d129-056b-4649-93e6-a5094b3e9a65",
               "label": null,
               "isExecuted": false,
               "group": null,
-              "uuid": "7e85f03e-1fbe-4c26-9e94-da57b292d128"
-            },
-            {
-              "@type": "WorkflowRoute",
-              "name": "Find Existing Description -> Update Indicator Description",
-              "targetStep": "/api/3/workflow_steps/e259fc49-a358-4f49-b9bd-4afdf782d8c8",
-              "sourceStep": "/api/3/workflow_steps/445b3308-45c2-42e6-9893-8f02ecb36a12",
-              "label": null,
-              "isExecuted": false,
-              "group": null,
-              "uuid": "dcfbef52-f47a-4023-8739-87d51dad5978"
+              "uuid": "c607ff24-91b7-4776-a06f-4c2c50f7160e"
             },
             {
               "@type": "WorkflowRoute",
@@ -2589,16 +2149,6 @@
               "isExecuted": false,
               "group": null,
               "uuid": "5ad5000a-776a-46f0-b7fd-5541288424a5"
-            },
-            {
-              "@type": "WorkflowRoute",
-              "name": "Update Indicator Description -> Return Output Data",
-              "targetStep": "/api/3/workflow_steps/98d4fc85-aff8-40c9-8d8a-900ab0fb2f1b",
-              "sourceStep": "/api/3/workflow_steps/e259fc49-a358-4f49-b9bd-4afdf782d8c8",
-              "label": null,
-              "isExecuted": false,
-              "group": null,
-              "uuid": "d17e9eab-aad1-4264-bec3-cc10b5a6662e"
             }
           ],
           "groups": [
@@ -2624,16 +2174,15 @@
           "playbookOrigin": "/api/3/picklists/15c1e8c9-22bf-4e66-8fbb-0a502d4a4a3f",
           "isEditable": true,
           "uuid": "e821c155-eb79-485a-9f93-a6bfa36cb9b7",
-          "id": 1256,
+          "id": 3205,
           "owners": [],
           "isPrivate": false,
           "deletedAt": null,
           "importedBy": [],
           "recordTags": [
             "anyrun-threat-intelligence-lookup",
-            "Enrichment",
             "FileHash_Enrichment",
-            "Playbook"
+            "Subroutine"
           ]
         }
       ]
@@ -2642,10 +2191,10 @@
   "exported_tags": [
     "ANY.RUN",
     "anyrun-threat-intelligence-lookup",
-    "Enrichment",
     "File_Enrichment",
-    "Playbook",
+    "Subroutine",
     "URL_Enrichment",
+    "Enrichment",
     "ManualTrigger",
     "IP_Enrichment",
     "Domain_Enrichment",
