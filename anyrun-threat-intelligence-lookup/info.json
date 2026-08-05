@@ -68,13 +68,13 @@
         {
           "title": "Lookup Depth",
           "description": "(Optional) Specify the number of days, from the current date, to include in the search.",
-          "type": "text",
+          "type": "integer",
           "name": "lookup_depth",
           "required": false,
           "visible": true,
           "editable": true,
-          "value": "180",
-          "tooltip": "Specify the number of days, from the current date, to include in the search."
+          "value": 180,
+          "tooltip": "Specify the number of days, from the current date, to include in the search. By default, set as 180 days."
         }
       ],
       "output_schema": {
