@@ -57,3 +57,6 @@ class Any_run(Connector):  # noqa: N801
 
     def on_delete_config(self, config):
         self.del_micro(config)
+
+    def teardown(self, config):
+        self.del_micro(config)
